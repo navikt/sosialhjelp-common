@@ -3,10 +3,10 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 object Versions {
     const val kotlin = "1.3.72"
+    const val coroutines = "1.3.7"
 
     // Test only
     const val junitJupiter = "5.6.0"
-    const val mockk = "1.9.3"
 }
 
 plugins {
@@ -46,9 +46,6 @@ subprojects {
     configurations {
         "testImplementation" {
             exclude(group = "junit", module = "junit")
-            exclude(group = "org.hamcrest", module = "hamcrest-library")
-            exclude(group = "org.hamcrest", module = "hamcrest-core")
-            exclude(group = "org.mockito", module = "mockito-core}")
         }
     }
 
@@ -56,10 +53,12 @@ subprojects {
         implementation(kotlin("stdlib"))
         implementation(kotlin("reflect"))
 
+//        Coroutines
+        implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:${Versions.coroutines}")
+
     //    Test
         testImplementation("org.jetbrains.kotlin:kotlin-test:${Versions.kotlin}")
         testImplementation("org.junit.jupiter:junit-jupiter:${Versions.junitJupiter}")
-        testImplementation("io.mockk:mockk:${Versions.mockk}")
     }
 
     tasks {
