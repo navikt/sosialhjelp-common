@@ -59,9 +59,7 @@ subprojects {
         }
 
         withType<Test> {
-            useJUnitPlatform {
-                includeEngines("junit-jupiter")
-            }
+            useJUnitPlatform()
             testLogging {
                 events("passed", "skipped", "failed")
             }
