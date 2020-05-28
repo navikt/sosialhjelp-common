@@ -8,6 +8,10 @@ object Versions {
     const val kluent = "1.61"
 }
 
+repositories {
+    mavenCentral()
+}
+
 plugins {
     kotlin("jvm") version "1.3.72"
 }
@@ -23,16 +27,11 @@ allprojects {
 }
 
 dependencies {
-    implementation(kotlin("stdlib"))
+    implementation(kotlin("stdlib-jdk8"))
 }
 
 subprojects {
     apply(plugin = "org.jetbrains.kotlin.jvm")
-
-    java {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
-    }
 
     configurations {
         "testImplementation" {
@@ -54,7 +53,7 @@ subprojects {
     tasks {
         withType<KotlinCompile> {
             kotlinOptions {
-                jvmTarget = "11"
+                jvmTarget = "1.8"
             }
         }
 
