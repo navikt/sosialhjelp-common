@@ -1,4 +1,3 @@
-rootProject.name = "sosialhjelp-utils"
-
-include("selftest")
+rootProject.name = "sosialhjelp-common"
+include("sosialhjelp-common-selftest")
 

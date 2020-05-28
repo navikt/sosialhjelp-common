@@ -1,6 +1,6 @@
 package no.nav.sosialhjelp.selftest
 
-import org.junit.jupiter.api.Assertions.*
+import org.amshove.kluent.shouldBeEqualTo
 import org.junit.jupiter.api.Test
 
 internal class SelftestServiceTest {
@@ -14,21 +14,21 @@ internal class SelftestServiceTest {
     internal fun `result OK - ingen checks feiler`() {
         val result = service.getSelftest(appName, version, listOf(A()))
 
-        assertEquals(Result.OK, result.result)
+        result.result shouldBeEqualTo Result.OK
     }
 
     @Test
     internal fun `result WARNING - ikke critical check feiler`() {
         val result = service.getSelftest(appName, version, listOf(A(), B()))
 
-        assertEquals(Result.WARNING, result.result)
+        result.result shouldBeEqualTo Result.WARNING
     }
 
     @Test
     internal fun `result ERROR - critical check feiler`() {
         val result = service.getSelftest(appName, version, listOf(A(), B(), C()))
 
-        assertEquals(Result.ERROR, result.result)
+        result.result shouldBeEqualTo Result.ERROR
     }
 }
 
