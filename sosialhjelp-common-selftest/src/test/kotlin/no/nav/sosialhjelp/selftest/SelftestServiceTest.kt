@@ -5,28 +5,30 @@ import org.junit.jupiter.api.Test
 
 internal class SelftestServiceTest {
 
-    private val service = SelftestService()
-
     private val appName = "app"
     private val version = "1.0"
 
     @Test
     internal fun `result OK - ingen checks feiler`() {
-        val result = service.getSelftest(appName, version, listOf(A()))
+        val service = SelftestService(appName, version, listOf(A()))
+
+        val result = service.getSelftest()
 
         result.result shouldBeEqualTo Result.OK
     }
 
     @Test
     internal fun `result WARNING - ikke critical check feiler`() {
-        val result = service.getSelftest(appName, version, listOf(A(), B()))
+        val service = SelftestService(appName, version, listOf(A(), B()))
+        val result = service.getSelftest()
 
         result.result shouldBeEqualTo Result.WARNING
     }
 
     @Test
     internal fun `result ERROR - critical check feiler`() {
-        val result = service.getSelftest(appName, version, listOf(A(), B(), C()))
+        val service = SelftestService(appName, version, listOf(A(), B(), C()))
+        val result = service.getSelftest()
 
         result.result shouldBeEqualTo Result.ERROR
     }

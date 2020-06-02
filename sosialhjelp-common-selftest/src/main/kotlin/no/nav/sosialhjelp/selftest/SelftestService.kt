@@ -6,9 +6,13 @@ import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
 
 
-class SelftestService {
+class SelftestService(
+        private val appName: String,
+        private val version: String,
+        private val dependencyChecks: List<DependencyCheck>
+) {
 
-    fun getSelftest(appName: String, version: String, dependencyChecks: List<DependencyCheck>): SelftestResult {
+    fun getSelftest(): SelftestResult {
         val results = runBlocking { checkDependencies(dependencyChecks) }
         return SelftestResult(
                 appName = appName,
