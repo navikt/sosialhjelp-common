@@ -23,7 +23,7 @@ jobs:
           key: ${{ runner.os }}-gradle-wrapper-${{ hashFiles('gradle/wrapper/gradle-wrapper.properties') }}
           restore-keys: ${{ runner.os }}-gradle-wrapper-
       - name: test and build
-        run: ./gradlew -Pversion="1.$(echo $GITHUB_SHA | cut -c1-7)-SNAPSHOT" build
+        run: ./gradlew -Pversion="1.$(echo $GITHUB_SHA | cut -c1-7)-SNAPSHOT" build --debug
       - name: upload artifact
         run: ./gradlew -Pversion="1.$(echo $GITHUB_SHA | cut -c1-7)-SNAPSHOT" publish
         env:
