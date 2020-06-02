@@ -15,7 +15,7 @@ plugins {
 }
 
 allprojects {
-    group = "no.nav.sosialhjelp-common"
+    group = "no.nav.sosialhjelp"
     version = properties["version"] ?: "local-build"
 
     repositories {
