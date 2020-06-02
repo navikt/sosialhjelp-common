@@ -8,7 +8,7 @@ Felles-komponenter for applikasjoner i sosialhjelp-domenet.
 ---
 
 # Henvendelser
-Spørsmål knyttet til koden eller prosjektet kan stilles til teamdigisos@nav.no
+Spørsmål knyttet til koden eller prosjektet kan stilles til teamdigisos@nav.no.
 
 ## For NAV-ansatte
 
