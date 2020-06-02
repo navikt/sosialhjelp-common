@@ -1,11 +1,13 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 object Versions {
-    const val coroutines = "1.3.7"
-
     // Test only
     const val junitJupiter = "5.6.0"
     const val kluent = "1.61"
+}
+
+repositories {
+    mavenCentral()
 }
 
 plugins {
@@ -29,11 +31,6 @@ dependencies {
 subprojects {
     apply(plugin = "org.jetbrains.kotlin.jvm")
 
-    java {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
-    }
-
     configurations {
         "testImplementation" {
             exclude(group = "junit", module = "junit")
@@ -43,8 +40,6 @@ subprojects {
     dependencies {
         implementation(kotlin("stdlib"))
         implementation(kotlin("reflect"))
-
-        implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:${Versions.coroutines}")
 
 //        Test
         testImplementation("org.junit.jupiter:junit-jupiter:${Versions.junitJupiter}")
@@ -61,7 +56,7 @@ subprojects {
         withType<Test> {
             useJUnitPlatform()
             testLogging {
-                events("skipped", "failed")
+                events("passed", "skipped", "failed")
             }
         }
     }
