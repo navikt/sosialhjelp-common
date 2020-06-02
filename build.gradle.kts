@@ -24,10 +24,6 @@ allprojects {
     }
 }
 
-dependencies {
-    implementation(kotlin("stdlib"))
-}
-
 subprojects {
     apply(plugin = "org.jetbrains.kotlin.jvm")
 
