@@ -1,4 +1,4 @@
-package no.nav.sosialhjelp.idporten.klient
+package no.nav.sosialhjelp.idporten.client
 
 data class IdPortenProperties(
     val idPortenTokenUrl: String,

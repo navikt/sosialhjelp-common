@@ -1,4 +1,4 @@
-package no.nav.sosialhjelp.idporten.klient
+package no.nav.sosialhjelp.idporten.client
 
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties

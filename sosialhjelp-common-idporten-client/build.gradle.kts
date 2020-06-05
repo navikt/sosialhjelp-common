@@ -1,6 +1,5 @@
 object Versions {
     const val jackson = "2.11.0"
-    const val coroutines = "1.3.7"
     const val spring = "5.2.6.RELEASE"
     const val nimbusds = "8.19"
 }
@@ -16,9 +15,6 @@ dependencies {
 
 //    Jackson
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin:${Versions.jackson}")
-
-//    Coroutines
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:${Versions.coroutines}")
 
 //    Spring web
     implementation("org.springframework:spring-web:${Versions.spring}")
@@ -43,7 +39,7 @@ publishing {
         create<MavenPublication>("mavenJava") {
 
             pom {
-                name.set("sosialhjelp-common-idporten-klient")
+                name.set("sosialhjelp-common-idporten-client")
                 description.set("Bibliotek for selftest i sosialhjelp-domene")
                 url.set("https://github.com/navikt/sosialhjelp-common")
                 licenses {

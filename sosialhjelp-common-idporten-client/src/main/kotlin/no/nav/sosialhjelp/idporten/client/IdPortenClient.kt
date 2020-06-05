@@ -1,4 +1,4 @@
-package no.nav.sosialhjelp.idporten.klient
+package no.nav.sosialhjelp.idporten.client
 
 import com.fasterxml.jackson.databind.DeserializationFeature
 import com.fasterxml.jackson.databind.ObjectMapper
@@ -28,10 +28,11 @@ import java.security.PrivateKey
 import java.security.cert.X509Certificate
 import java.util.*
 
-class IdPortenService(
+class IdPortenClient(
         properties: IdPortenProperties,
         private val restTemplate: RestTemplate
 ) {
+
     private val tokenUrl = properties.idPortenTokenUrl
     private val clientId = properties.idPortenClientId
     private val idPortenScope = properties.idPortenScope
