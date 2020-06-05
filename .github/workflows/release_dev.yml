@@ -3,6 +3,7 @@ on:
   push:
     branches:
       - '*'
+      - '*/*' # in case a branch uses this naming pattern
       - '!master'
 jobs:
   build_and_release:

@@ -1,6 +1,6 @@
 package no.nav.sosialhjelp.selftest
 
-import org.amshove.kluent.shouldBeEqualTo
+import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 
 internal class SelftestServiceTest {
@@ -14,7 +14,7 @@ internal class SelftestServiceTest {
 
         val result = service.getSelftest()
 
-        result.result shouldBeEqualTo Result.OK
+        assertEquals(Result.OK, result.result)
     }
 
     @Test
@@ -22,7 +22,7 @@ internal class SelftestServiceTest {
         val service = SelftestService(appName, version, listOf(A(), B()))
         val result = service.getSelftest()
 
-        result.result shouldBeEqualTo Result.WARNING
+        assertEquals(Result.WARNING, result.result)
     }
 
     @Test
@@ -30,7 +30,7 @@ internal class SelftestServiceTest {
         val service = SelftestService(appName, version, listOf(A(), B(), C()))
         val result = service.getSelftest()
 
-        result.result shouldBeEqualTo Result.ERROR
+        assertEquals(Result.ERROR, result.result)
     }
 }
 
