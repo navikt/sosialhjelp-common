@@ -10,10 +10,10 @@ plugins {
 
 dependencies {
 //    Coroutines
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:${Versions.coroutines}")
+    api("org.jetbrains.kotlinx:kotlinx-coroutines-core:${Versions.coroutines}")
 
 //    Slf4j
-    implementation("org.slf4j:slf4j-api:${Versions.slf4j}")
+    api("org.slf4j:slf4j-api:${Versions.slf4j}")
 
 }
 
