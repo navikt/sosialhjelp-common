@@ -3,7 +3,6 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 object Versions {
     // Test only
     const val junitJupiter = "5.6.0"
-    const val kluent = "1.61"
 }
 
 repositories {
@@ -43,7 +42,6 @@ subprojects {
 
 //        Test
         testImplementation("org.junit.jupiter:junit-jupiter:${Versions.junitJupiter}")
-        testImplementation("org.amshove.kluent:kluent:${Versions.kluent}")
     }
 
     tasks {
