@@ -14,13 +14,13 @@ dependencies {
     implementation(project(":sosialhjelp-common-kotlin-utils"))
 
 //    Jackson
-    implementation("com.fasterxml.jackson.module:jackson-module-kotlin:${Versions.jackson}")
+    api("com.fasterxml.jackson.module:jackson-module-kotlin:${Versions.jackson}")
 
 //    Spring web
-    implementation("org.springframework:spring-web:${Versions.spring}")
+    api("org.springframework:spring-web:${Versions.spring}")
 
 //    Nimbusds
-    implementation("com.nimbusds:nimbus-jose-jwt:${Versions.nimbusds}")
+    api("com.nimbusds:nimbus-jose-jwt:${Versions.nimbusds}")
 
 }
 
