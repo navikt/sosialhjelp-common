@@ -1,5 +1,4 @@
 object Versions {
-    const val coroutines = "1.3.7"
     const val jackson = "2.11.0"
 }
 
@@ -9,11 +8,11 @@ plugins {
 }
 
 dependencies {
-//    Coroutines
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:${Versions.coroutines}")
+//    kotlin-utils
+    implementation(project(":sosialhjelp-common-kotlin-utils"))
 
 //    Jackson
-    implementation("com.fasterxml.jackson.module:jackson-module-kotlin:${Versions.jackson}")
+    api("com.fasterxml.jackson.module:jackson-module-kotlin:${Versions.jackson}")
 
 }
 
