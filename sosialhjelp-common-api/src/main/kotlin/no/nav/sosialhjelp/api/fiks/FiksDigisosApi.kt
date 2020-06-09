@@ -54,10 +54,24 @@ data class KommuneInfo(
         val kanOppdatereStatus: Boolean,
         val harMidlertidigDeaktivertMottak: Boolean,
         val harMidlertidigDeaktivertOppdateringer: Boolean,
-        val kontaktPersoner: Kontaktpersoner?
+        val kontaktPersoner: Kontaktpersoner?,
+        val harNksTilgang: Boolean,
+        val behandlingsansvarlig: String?
 )
 
 data class Kontaktpersoner(
         val fagansvarligEpost: List<String>,
         val tekniskAnsvarligEpost: List<String>
+)
+
+data class ErrorMessage(
+        val error: String?,
+        val errorCode: Any?,
+        val errorId: String?,
+        val errorJson: Any?,
+        val message: String?,
+        val originalPath: String?,
+        val path: String?,
+        val status: Int?,
+        val timestamp: Long?
 )
