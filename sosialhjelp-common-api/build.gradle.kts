@@ -1,5 +1,5 @@
 object Versions {
-    const val jackson = "2.11.0"
+
 }
 
 plugins {
@@ -26,7 +26,7 @@ publishing {
 
             pom {
                 name.set("sosialhjelp-common-api")
-                description.set("Bibliotek for api-modeller i sosialhjelp-domene")
+                description.set("Bibliotek med felles api-modeller i sosialhjelp-domene")
                 url.set("https://github.com/navikt/sosialhjelp-common")
                 licenses {
                     license {
