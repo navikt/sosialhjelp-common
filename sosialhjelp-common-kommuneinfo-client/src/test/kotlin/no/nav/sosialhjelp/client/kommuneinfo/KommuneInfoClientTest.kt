@@ -1,4 +1,4 @@
-package no.nav.sosialhjelp.kommuneinfo
+package no.nav.sosialhjelp.client.kommuneinfo
 
 import io.mockk.every
 import io.mockk.mockk

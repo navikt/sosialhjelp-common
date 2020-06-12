@@ -1,4 +1,4 @@
-package no.nav.sosialhjelp.kommuneinfo
+package no.nav.sosialhjelp.client.kommuneinfo
 
 import no.nav.sosialhjelp.api.fiks.KommuneInfo
 import no.nav.sosialhjelp.client.utils.typeRef

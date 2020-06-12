@@ -1,4 +1,4 @@
-package no.nav.sosialhjelp.kommuneinfo
+package no.nav.sosialhjelp.client.kommuneinfo
 
 data class FiksProperties(
         val hentKommuneInfoUrl: String,
