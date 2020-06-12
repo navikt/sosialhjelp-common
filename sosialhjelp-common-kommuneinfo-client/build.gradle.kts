@@ -1,5 +1,8 @@
 object Versions {
     const val jackson = "2.11.0"
+    const val spring = "5.2.7.RELEASE"
+
+    const val mockk = "1.10.0"
 }
 
 plugins {
@@ -9,9 +12,12 @@ plugins {
 
 dependencies {
     implementation(project(":sosialhjelp-common-api"))
+    implementation(project(":sosialhjelp-common-client-utils"))
 
-    //    Jackson
     api("com.fasterxml.jackson.module:jackson-module-kotlin:${Versions.jackson}")
+    api("org.springframework:spring-web:${Versions.spring}")
+
+    testImplementation("io.mockk:mockk:${Versions.mockk}")
 }
 
 publishing {

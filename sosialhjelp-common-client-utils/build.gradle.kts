@@ -8,7 +8,7 @@ plugins {
 }
 
 dependencies {
-    api("org.springframework:spring-web:${Versions.spring}")
+    implementation("org.springframework:spring-web:${Versions.spring}")
 }
 
 publishing {
