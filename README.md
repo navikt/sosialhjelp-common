@@ -24,3 +24,11 @@ Felles api-modeller for integrasjoner mot eksterne tjenester:
 ### sosialhjelp-common-selftest
 
 Selftest-bibliotek. SelftestService gir en rapport over avhengigheter som implementerer `DependencyCheck`.
+
+### sosialhjelp-common-kommuneinfo-client
+
+Klient for å kunne hente KommunenInfo fra Fiks.
+
+### sosialhjelp-common-client-utils
+
+Hjelpemetoder og felles funksjonalitet for klient-moduler i repoet.
