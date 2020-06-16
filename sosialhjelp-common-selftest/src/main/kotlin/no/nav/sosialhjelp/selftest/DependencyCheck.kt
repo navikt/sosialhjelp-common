@@ -2,14 +2,14 @@ package no.nav.sosialhjelp.selftest
 
 import java.util.concurrent.TimeoutException
 
-abstract class DependencyCheck(
-        protected val type: DependencyType,
-        private val name: String,
-        protected val address: String,
-        private val importance: Importance
-) {
+interface DependencyCheck {
 
-    protected abstract fun doCheck()
+    val type: DependencyType
+    val name: String
+    val address: String
+    val importance: Importance
+
+    fun doCheck()
 
     fun check(): DependencyCheckResult {
         val startTime = System.currentTimeMillis()
@@ -28,7 +28,8 @@ abstract class DependencyCheck(
 
         return DependencyCheckResult(
                 endpoint = name,
-                result = throwable?.let { if (importance == Importance.CRITICAL) Result.ERROR else Result.WARNING } ?: Result.OK,
+                result = throwable?.let { if (importance == Importance.CRITICAL) Result.ERROR else Result.WARNING }
+                        ?: Result.OK,
                 address = address,
                 errorMessage = throwable?.let { "Call to dependency=$name timed out or circuitbreaker tripped. Errormessage=${getErrorMessageFromThrowable(it)}" },
                 type = type,
@@ -44,5 +45,4 @@ abstract class DependencyCheck(
         }
         return if (e.cause == null) e.message else e.cause!!.message
     }
-
 }
