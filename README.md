@@ -13,3 +13,14 @@ Spørsmål knyttet til koden eller prosjektet kan stilles til teamdigisos@nav.no
 ## For NAV-ansatte
 
 Interne henvendelser kan sendes via Slack i kanalen #digisos.
+
+# Innhold
+
+### sosialhjelp-common-api
+
+Felles api-modeller for integrasjoner mot eksterne tjenester:
+- Fiks API
+
+### sosialhjelp-common-selftest
+
+Selftest-bibliotek. Service for å gi en rapport over avhengigheter som implementerer `DependencyCheck`.
