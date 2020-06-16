@@ -23,4 +23,4 @@ Felles api-modeller for integrasjoner mot eksterne tjenester:
 
 ### sosialhjelp-common-selftest
 
-Selftest-bibliotek. Service for å gi en rapport over avhengigheter som implementerer `DependencyCheck`.
+Selftest-bibliotek. SelftestService gir en rapport over avhengigheter som implementerer `DependencyCheck`.
