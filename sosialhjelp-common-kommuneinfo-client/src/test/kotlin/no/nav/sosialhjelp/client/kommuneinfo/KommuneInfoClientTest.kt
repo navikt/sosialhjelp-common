@@ -20,7 +20,19 @@ internal class KommuneInfoClientTest {
     private val restTemplate: RestTemplate = mockk()
     private val fiksProperties = FiksProperties("a", "b")
 
-    private val client = KommuneInfoClient(restTemplate, fiksProperties)
+    private class Client(
+            override val restTemplate: RestTemplate,
+            override val fiksProperties: FiksProperties
+    ) : KommuneInfoClient {
+        override fun get(kommunenummer: String): KommuneInfo {
+            TODO("Not yet implemented")
+        }
+        override fun getAll(): List<KommuneInfo> {
+            TODO("Not yet implemented")
+        }
+    }
+
+    private val client = Client(restTemplate, fiksProperties)
 
     private val mockKommuneInfo: KommuneInfo = mockk()
 

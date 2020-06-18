@@ -8,10 +8,14 @@ import org.springframework.http.HttpMethod
 import org.springframework.web.client.RestTemplate
 
 
-class KommuneInfoClient(
-        private val restTemplate: RestTemplate,
-        private val fiksProperties: FiksProperties
-) {
+interface KommuneInfoClient {
+
+    val restTemplate: RestTemplate
+    val fiksProperties: FiksProperties
+
+    fun get(kommunenummer: String): KommuneInfo
+
+    fun getAll(): List<KommuneInfo>
 
     fun hentKommuneInfo(kommunenummer: String, headers: HttpHeaders): KommuneInfo {
         val vars = mapOf("kommunenummer" to kommunenummer)
