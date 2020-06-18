@@ -23,7 +23,14 @@ internal class KommuneInfoClientTest {
     private class Client(
             override val restTemplate: RestTemplate,
             override val fiksProperties: FiksProperties
-    ) : KommuneInfoClient
+    ) : KommuneInfoClient {
+        override fun get(kommunenummer: String): KommuneInfo {
+            TODO("Not yet implemented")
+        }
+        override fun getAll(): List<KommuneInfo> {
+            TODO("Not yet implemented")
+        }
+    }
 
     private val client = Client(restTemplate, fiksProperties)
 
