@@ -34,19 +34,34 @@ internal class SelftestServiceTest {
     }
 }
 
-internal class A : DependencyCheck(DependencyType.REST, "A", "A", Importance.WARNING) {
+internal class A : DependencyCheck {
+    override val type: DependencyType = DependencyType.REST
+    override val name: String = "A"
+    override val address: String = "A"
+    override val importance: Importance = Importance.WARNING
+
     override fun doCheck() {
 
     }
 }
 
-internal class B : DependencyCheck(DependencyType.REST, "B", "B", Importance.WARNING) {
+internal class B : DependencyCheck {
+    override val type: DependencyType = DependencyType.REST
+    override val name: String = "B"
+    override val address: String = "B"
+    override val importance: Importance = Importance.WARNING
+
     override fun doCheck() {
         throw RuntimeException("oops")
     }
 }
 
-internal class C : DependencyCheck(DependencyType.REST, "C", "C", Importance.CRITICAL) {
+internal class C : DependencyCheck {
+    override val type: DependencyType = DependencyType.REST
+    override val name: String = "C"
+    override val address: String = "C"
+    override val importance: Importance = Importance.CRITICAL
+
     override fun doCheck() {
         throw RuntimeException("oops")
     }
