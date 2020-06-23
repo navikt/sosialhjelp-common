@@ -13,6 +13,8 @@ plugins {
 dependencies {
     implementation(project(":sosialhjelp-common-api"))
     implementation(project(":sosialhjelp-common-client-utils"))
+    implementation(project(":sosialhjelp-common-kotlin-utils"))
+    implementation(project(":sosialhjelp-common-idporten-client"))
 
     api("com.fasterxml.jackson.module:jackson-module-kotlin:${Versions.jackson}")
     api("org.springframework:spring-web:${Versions.spring}")
