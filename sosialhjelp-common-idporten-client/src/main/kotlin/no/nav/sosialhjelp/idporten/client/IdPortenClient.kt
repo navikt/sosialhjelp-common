@@ -27,19 +27,14 @@ import java.util.*
 
 class IdPortenClient(
         private val restTemplate: RestTemplate,
-        properties: IdPortenProperties
+        private val properties: IdPortenProperties
 ) {
-
-    private val tokenUrl = properties.idPortenTokenUrl
-    private val clientId = properties.idPortenClientId
-    private val idPortenScope = properties.idPortenScope
-    private val configUrl = properties.idPortenConfigUrl
-    private val virksomhetSertifikatPath: String = properties.virksomhetSertifikatPath
 
     private val idPortenOidcConfiguration: IdPortenOidcConfiguration
 
     init {
         idPortenOidcConfiguration = runBlocking {
+            val configUrl = properties.idPortenConfigUrl
             log.debug("Forsøker å hente idporten-config fra $configUrl")
             val response = restTemplate.exchange(configUrl, HttpMethod.GET, HttpEntity<Nothing>(HttpHeaders()), IdPortenOidcConfiguration::class.java)
             log.info("Hentet idporten-config fra $configUrl")
@@ -53,7 +48,7 @@ class IdPortenClient(
             retry(attempts = attempts, retryableExceptions = *arrayOf(HttpServerErrorException::class)) {
                 val jws = createJws()
                 log.info("Got jws, getting token (virksomhetssertifikat)")
-                val uriComponents = UriComponentsBuilder.fromHttpUrl(tokenUrl).build()
+                val uriComponents = UriComponentsBuilder.fromHttpUrl(properties.idPortenTokenUrl).build()
                 val body = LinkedMultiValueMap<String, String>()
                 body.add(GRANT_TYPE_PARAM, GRANT_TYPE)
                 body.add(ASSERTION_PARAM, jws.token)
@@ -63,13 +58,12 @@ class IdPortenClient(
 
     fun createJws(
             expirySeconds: Int = 100,
-            issuer: String = clientId,
-            scope: String = idPortenScope
+            issuer: String = properties.idPortenClientId,
+            scope: String = properties.idPortenScope
     ): Jws {
         require(expirySeconds <= MAX_EXPIRY_SECONDS) {
             "IdPorten: JWT expiry cannot be greater than $MAX_EXPIRY_SECONDS seconds (was $expirySeconds)"
         }
-
 
         val date = Date()
         val expDate: Date = Calendar.getInstance().let {
@@ -78,12 +72,12 @@ class IdPortenClient(
             it.time
         }
         val virksertCredentials = objectMapper.readValue<VirksertCredentials>(
-                File("$virksomhetSertifikatPath/credentials.json").readText(Charsets.UTF_8)
+                File("${properties.virksomhetSertifikatPath}/credentials.json").readText(Charsets.UTF_8)
         )
 
-        val pair = KeyStore.getInstance("PKCS12").let { keyStore ->
+        val pair = KeyStore.getInstance(properties.truststoreType).let { keyStore ->
             keyStore.load(
-                    java.util.Base64.getDecoder().decode(File("$virksomhetSertifikatPath/key.p12.b64").readText(Charsets.UTF_8)).inputStream(),
+                    java.util.Base64.getDecoder().decode(File("${properties.virksomhetSertifikatPath}/${properties.truststoreFilepath}").readText(Charsets.UTF_8)).inputStream(),
                     virksertCredentials.password.toCharArray()
             )
             val cert = keyStore.getCertificate(virksertCredentials.alias) as X509Certificate
@@ -96,7 +90,6 @@ class IdPortenClient(
                     ) as PrivateKey
             ) to cert.encoded
         }
-
 
         log.info("Public certificate length ${pair.first.public.encoded.size} (virksomhetssertifikat)")
 
