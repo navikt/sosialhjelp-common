@@ -1,9 +1,9 @@
 package no.nav.sosialhjelp.client.kommuneinfo
 
 import kotlinx.coroutines.runBlocking
-import no.nav.sosialhjelp.api.fiks.FiksClientException
-import no.nav.sosialhjelp.api.fiks.FiksException
-import no.nav.sosialhjelp.api.fiks.FiksServerException
+import no.nav.sosialhjelp.api.fiks.exceptions.FiksClientException
+import no.nav.sosialhjelp.api.fiks.exceptions.FiksException
+import no.nav.sosialhjelp.api.fiks.exceptions.FiksServerException
 import no.nav.sosialhjelp.api.fiks.KommuneInfo
 import no.nav.sosialhjelp.client.utils.Constants.BEARER
 import no.nav.sosialhjelp.client.utils.typeRef

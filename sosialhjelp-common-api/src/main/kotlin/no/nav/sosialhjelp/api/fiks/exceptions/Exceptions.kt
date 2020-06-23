@@ -1,4 +1,4 @@
-package no.nav.sosialhjelp.api.fiks
+package no.nav.sosialhjelp.api.fiks.exceptions
 
 class FiksException(
         override val message: String?,

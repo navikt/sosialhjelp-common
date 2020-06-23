@@ -3,8 +3,8 @@ package no.nav.sosialhjelp.client.kommuneinfo
 import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.mockk
-import no.nav.sosialhjelp.api.fiks.FiksClientException
-import no.nav.sosialhjelp.api.fiks.FiksServerException
+import no.nav.sosialhjelp.api.fiks.exceptions.FiksClientException
+import no.nav.sosialhjelp.api.fiks.exceptions.FiksServerException
 import no.nav.sosialhjelp.api.fiks.KommuneInfo
 import no.nav.sosialhjelp.client.utils.typeRef
 import no.nav.sosialhjelp.idporten.client.IdPortenClient
