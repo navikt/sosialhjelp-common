@@ -32,3 +32,11 @@ Klient for å kunne hente KommunenInfo fra Fiks.
 ### sosialhjelp-common-client-utils
 
 Hjelpemetoder og felles funksjonalitet for klient-moduler i repoet.
+
+### sosialhjelp-common-idporten-client
+
+Klient for å hente virksomhetstoken fra IdPorten.
+
+### sosialhjelp-common-kotlin-utils
+
+Felles hjelpemetoder
