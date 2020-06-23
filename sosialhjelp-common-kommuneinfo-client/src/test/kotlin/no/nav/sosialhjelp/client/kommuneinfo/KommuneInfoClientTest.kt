@@ -26,7 +26,7 @@ internal class KommuneInfoClientTest {
     private val fiksProperties = FiksProperties("a", "b", "id", "pw")
     private val idPortenClient: IdPortenClient = mockk()
 
-    private val client = KommuneInfoClientImpl(restTemplate, fiksProperties, idPortenClient)
+    private val kommuneInfoClient = KommuneInfoClientImpl(restTemplate, fiksProperties, idPortenClient)
 
     private val mockKommuneInfo: KommuneInfo = mockk()
 
@@ -47,7 +47,7 @@ internal class KommuneInfoClientTest {
             )
         } returns ResponseEntity.ok(mockKommuneInfo)
 
-        val kommuneInfo = client.get("1234")
+        val kommuneInfo = kommuneInfoClient.get("1234")
 
         assertNotNull(kommuneInfo)
     }
@@ -64,7 +64,7 @@ internal class KommuneInfoClientTest {
             )
         } throws HttpClientErrorException(HttpStatus.NOT_FOUND, "not found")
 
-        assertThrows<FiksClientException> { client.get("1234") }
+        assertThrows<FiksClientException> { kommuneInfoClient.get("1234") }
     }
 
     @Test
@@ -79,7 +79,7 @@ internal class KommuneInfoClientTest {
             )
         } throws HttpServerErrorException(HttpStatus.INTERNAL_SERVER_ERROR, "error")
 
-        assertThrows<FiksServerException> { client.get("1234") }
+        assertThrows<FiksServerException> { kommuneInfoClient.get("1234") }
     }
 
     @Test
@@ -93,7 +93,7 @@ internal class KommuneInfoClientTest {
             )
         } returns ResponseEntity.ok(listOf(mockKommuneInfo))
 
-        val list = client.getAll()
+        val list = kommuneInfoClient.getAll()
 
         assertEquals(1, list.size)
     }
