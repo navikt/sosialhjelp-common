@@ -3,6 +3,8 @@ package no.nav.sosialhjelp.client.kommuneinfo
 import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.mockk
+import no.nav.sosialhjelp.api.fiks.FiksClientException
+import no.nav.sosialhjelp.api.fiks.FiksServerException
 import no.nav.sosialhjelp.api.fiks.KommuneInfo
 import no.nav.sosialhjelp.client.utils.typeRef
 import no.nav.sosialhjelp.idporten.client.IdPortenClient
@@ -15,6 +17,7 @@ import org.springframework.http.HttpMethod
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.client.HttpClientErrorException
+import org.springframework.web.client.HttpServerErrorException
 import org.springframework.web.client.RestTemplate
 
 internal class KommuneInfoClientTest {
@@ -61,7 +64,22 @@ internal class KommuneInfoClientTest {
             )
         } throws HttpClientErrorException(HttpStatus.NOT_FOUND, "not found")
 
-        assertThrows<HttpClientErrorException> { client.get("1234") }
+        assertThrows<FiksClientException> { client.get("1234") }
+    }
+
+    @Test
+    fun `500 internal server error - kaster feil`() {
+        every {
+            restTemplate.exchange(
+                    any(),
+                    HttpMethod.GET,
+                    any(),
+                    KommuneInfo::class.java,
+                    any()
+            )
+        } throws HttpServerErrorException(HttpStatus.INTERNAL_SERVER_ERROR, "error")
+
+        assertThrows<FiksServerException> { client.get("1234") }
     }
 
     @Test

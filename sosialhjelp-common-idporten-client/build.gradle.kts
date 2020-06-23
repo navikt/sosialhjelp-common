@@ -10,8 +10,8 @@ plugins {
 }
 
 dependencies {
-//    kotlin-utils
     implementation(project(":sosialhjelp-common-kotlin-utils"))
+    implementation(project(":sosialhjelp-common-client-utils"))
 
 //    Jackson
     api("com.fasterxml.jackson.module:jackson-module-kotlin:${Versions.jackson}")

@@ -1,9 +1,5 @@
 package no.nav.sosialhjelp.idporten.client
 
-import com.fasterxml.jackson.databind.DeserializationFeature
-import com.fasterxml.jackson.databind.ObjectMapper
-import com.fasterxml.jackson.databind.SerializationFeature
-import com.fasterxml.jackson.module.kotlin.KotlinModule
 import com.fasterxml.jackson.module.kotlin.readValue
 import com.nimbusds.jose.JWSAlgorithm
 import com.nimbusds.jose.JWSHeader
@@ -12,6 +8,7 @@ import com.nimbusds.jose.util.Base64
 import com.nimbusds.jwt.JWTClaimsSet
 import com.nimbusds.jwt.SignedJWT
 import kotlinx.coroutines.runBlocking
+import no.nav.sosialhjelp.client.utils.objectMapper
 import no.nav.sosialhjelp.kotlin.utils.logger
 import no.nav.sosialhjelp.kotlin.utils.retry
 import org.springframework.http.HttpEntity
@@ -40,11 +37,6 @@ class IdPortenClient(
     private val virksomhetSertifikatPath: String = properties.virksomhetSertifikatPath
 
     private val idPortenOidcConfiguration: IdPortenOidcConfiguration
-
-    private val objectMapper = ObjectMapper()
-            .registerModules(KotlinModule())
-            .configure(SerializationFeature.INDENT_OUTPUT, true)
-            .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
 
     init {
         idPortenOidcConfiguration = runBlocking {

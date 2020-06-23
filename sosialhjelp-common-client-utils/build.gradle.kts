@@ -1,5 +1,6 @@
 object Versions {
     const val spring = "5.2.7.RELEASE"
+    const val jackson = "2.11.0"
 }
 
 plugins {
@@ -8,7 +9,8 @@ plugins {
 }
 
 dependencies {
-    implementation("org.springframework:spring-web:${Versions.spring}")
+    api("org.springframework:spring-web:${Versions.spring}")
+    api("com.fasterxml.jackson.module:jackson-module-kotlin:${Versions.jackson}")
 }
 
 publishing {
