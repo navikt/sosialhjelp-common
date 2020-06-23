@@ -17,10 +17,10 @@ data class IdPortenOidcConfiguration(
         @JsonProperty(value = "token_endpoint", required = true) val tokenEndpoint: String
 )
 
-class AccessToken(val token: String) {
-    override fun toString(): String = token
-}
+data class AccessToken(
+        val token: String
+)
 
-class Jws(val token: String) {
-    override fun toString(): String = token
-}
+data class Jws(
+        val token: String
+)

@@ -29,16 +29,15 @@ import java.security.cert.X509Certificate
 import java.util.*
 
 class IdPortenClient(
-        properties: IdPortenProperties,
-        private val restTemplate: RestTemplate
+        private val restTemplate: RestTemplate,
+        properties: IdPortenProperties
 ) {
 
     private val tokenUrl = properties.idPortenTokenUrl
     private val clientId = properties.idPortenClientId
     private val idPortenScope = properties.idPortenScope
     private val configUrl = properties.idPortenConfigUrl
-
-    private val VIRKSERT_STI: String? = properties.virksomhetSertifikatPath
+    private val virksomhetSertifikatPath: String = properties.virksomhetSertifikatPath
 
     private val idPortenOidcConfiguration: IdPortenOidcConfiguration
 
@@ -50,8 +49,7 @@ class IdPortenClient(
     init {
         idPortenOidcConfiguration = runBlocking {
             log.debug("Forsøker å hente idporten-config fra $configUrl")
-            val uriComponents = UriComponentsBuilder.fromHttpUrl(configUrl).build()
-            val response = restTemplate.exchange(uriComponents.toUriString(), HttpMethod.GET, HttpEntity<Nothing>(HttpHeaders()), IdPortenOidcConfiguration::class.java)
+            val response = restTemplate.exchange(configUrl, HttpMethod.GET, HttpEntity<Nothing>(HttpHeaders()), IdPortenOidcConfiguration::class.java)
             log.info("Hentet idporten-config fra $configUrl")
             response.body!!
         }.also {
@@ -88,12 +86,12 @@ class IdPortenClient(
             it.time
         }
         val virksertCredentials = objectMapper.readValue<VirksertCredentials>(
-                File("$VIRKSERT_STI/credentials.json").readText(Charsets.UTF_8)
+                File("$virksomhetSertifikatPath/credentials.json").readText(Charsets.UTF_8)
         )
 
         val pair = KeyStore.getInstance("PKCS12").let { keyStore ->
             keyStore.load(
-                    java.util.Base64.getDecoder().decode(File("$VIRKSERT_STI/key.p12.b64").readText(Charsets.UTF_8)).inputStream(),
+                    java.util.Base64.getDecoder().decode(File("$virksomhetSertifikatPath/key.p12.b64").readText(Charsets.UTF_8)).inputStream(),
                     virksertCredentials.password.toCharArray()
             )
             val cert = keyStore.getCertificate(virksertCredentials.alias) as X509Certificate
