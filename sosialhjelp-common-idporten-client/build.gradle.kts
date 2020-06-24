@@ -1,6 +1,7 @@
 object Versions {
-    const val spring = "5.2.7.RELEASE"
     const val jackson = "2.11.0"
+    const val spring = "5.2.6.RELEASE"
+    const val nimbusds = "8.19"
 }
 
 plugins {
@@ -9,9 +10,20 @@ plugins {
 }
 
 dependencies {
-    api("org.springframework:spring-web:${Versions.spring}")
+    implementation(project(":sosialhjelp-common-kotlin-utils"))
+    implementation(project(":sosialhjelp-common-client-utils"))
+
+//    Jackson
     api("com.fasterxml.jackson.module:jackson-module-kotlin:${Versions.jackson}")
+
+//    Spring web
+    api("org.springframework:spring-web:${Versions.spring}")
+
+//    Nimbusds
+    api("com.nimbusds:nimbus-jose-jwt:${Versions.nimbusds}")
+
 }
+
 
 publishing {
     repositories {
@@ -27,8 +39,8 @@ publishing {
         create<MavenPublication>("mavenJava") {
 
             pom {
-                name.set("sosialhjelp-common-client-utils")
-                description.set("Felles util-metoder for klienter")
+                name.set("sosialhjelp-common-idporten-client")
+                description.set("Bibliotek for selftest i sosialhjelp-domene")
                 url.set("https://github.com/navikt/sosialhjelp-common")
                 licenses {
                     license {

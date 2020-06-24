@@ -1,5 +1,6 @@
 package no.nav.sosialhjelp.selftest
 
+import no.nav.sosialhjelp.kotlin.utils.logger
 import java.util.concurrent.TimeoutException
 
 interface DependencyCheck {
@@ -19,7 +20,7 @@ interface DependencyCheck {
         try {
             doCheck()
         } catch (t: Throwable) {
-//            log.warn("Call to dependency=$name with type=$type at url=$address timed out or circuitbreaker was tripped.", throwable)
+            log.warn("Call to dependency=$name with type=$type at url=$address timed out or circuitbreaker was tripped.", throwable)
             throwable = t
         }
 
@@ -44,5 +45,9 @@ interface DependencyCheck {
             return "Call to dependency timed out by circuitbreaker"
         }
         return if (e.cause == null) e.message else e.cause!!.message
+    }
+
+    companion object {
+        private val log by logger()
     }
 }

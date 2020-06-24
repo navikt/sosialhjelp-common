@@ -1,6 +1,6 @@
 object Versions {
-    const val spring = "5.2.7.RELEASE"
-    const val jackson = "2.11.0"
+    const val coroutines = "1.3.7"
+    const val slf4j = "1.7.30"
 }
 
 plugins {
@@ -9,9 +9,14 @@ plugins {
 }
 
 dependencies {
-    api("org.springframework:spring-web:${Versions.spring}")
-    api("com.fasterxml.jackson.module:jackson-module-kotlin:${Versions.jackson}")
+//    Coroutines
+    api("org.jetbrains.kotlinx:kotlinx-coroutines-core:${Versions.coroutines}")
+
+//    Slf4j
+    api("org.slf4j:slf4j-api:${Versions.slf4j}")
+
 }
+
 
 publishing {
     repositories {
@@ -27,8 +32,8 @@ publishing {
         create<MavenPublication>("mavenJava") {
 
             pom {
-                name.set("sosialhjelp-common-client-utils")
-                description.set("Felles util-metoder for klienter")
+                name.set("sosialhjelp-common-kotlin-utils")
+                description.set("Bibliotek for selftest i sosialhjelp-domene")
                 url.set("https://github.com/navikt/sosialhjelp-common")
                 licenses {
                     license {
