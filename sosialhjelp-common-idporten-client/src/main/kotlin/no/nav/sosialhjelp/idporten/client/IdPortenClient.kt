@@ -27,14 +27,14 @@ import java.util.*
 
 class IdPortenClient(
         private val restTemplate: RestTemplate,
-        private val properties: IdPortenProperties
+        private val idPortenProperties: IdPortenProperties
 ) {
 
     private val idPortenOidcConfiguration: IdPortenOidcConfiguration
 
     init {
         idPortenOidcConfiguration = runBlocking {
-            val configUrl = properties.idPortenConfigUrl
+            val configUrl = idPortenProperties.configUrl
             log.debug("Forsøker å hente idporten-config fra $configUrl")
             val response = restTemplate.exchange(configUrl, HttpMethod.GET, HttpEntity<Nothing>(HttpHeaders()), IdPortenOidcConfiguration::class.java)
             log.info("Hentet idporten-config fra $configUrl")
@@ -48,7 +48,7 @@ class IdPortenClient(
             retry(attempts = attempts, retryableExceptions = *arrayOf(HttpServerErrorException::class)) {
                 val jws = createJws()
                 log.info("Got jws, getting token (virksomhetssertifikat)")
-                val uriComponents = UriComponentsBuilder.fromHttpUrl(properties.idPortenTokenUrl).build()
+                val uriComponents = UriComponentsBuilder.fromHttpUrl(idPortenProperties.tokenUrl).build()
                 val body = LinkedMultiValueMap<String, String>()
                 body.add(GRANT_TYPE_PARAM, GRANT_TYPE)
                 body.add(ASSERTION_PARAM, jws.token)
@@ -58,8 +58,8 @@ class IdPortenClient(
 
     fun createJws(
             expirySeconds: Int = 100,
-            issuer: String = properties.idPortenClientId,
-            scope: String = properties.idPortenScope
+            issuer: String = idPortenProperties.clientId,
+            scope: String = idPortenProperties.scope
     ): Jws {
         require(expirySeconds <= MAX_EXPIRY_SECONDS) {
             "IdPorten: JWT expiry cannot be greater than $MAX_EXPIRY_SECONDS seconds (was $expirySeconds)"
@@ -72,12 +72,12 @@ class IdPortenClient(
             it.time
         }
         val virksertCredentials = objectMapper.readValue<VirksertCredentials>(
-                File("${properties.virksomhetSertifikatPath}/credentials.json").readText(Charsets.UTF_8)
+                File("${idPortenProperties.virksomhetSertifikatPath}/credentials.json").readText(Charsets.UTF_8)
         )
 
-        val pair = KeyStore.getInstance(properties.truststoreType).let { keyStore ->
+        val pair = KeyStore.getInstance(idPortenProperties.truststoreType).let { keyStore ->
             keyStore.load(
-                    java.util.Base64.getDecoder().decode(File("${properties.virksomhetSertifikatPath}/${properties.truststoreFilepath}").readText(Charsets.UTF_8)).inputStream(),
+                    java.util.Base64.getDecoder().decode(File("${idPortenProperties.virksomhetSertifikatPath}/${idPortenProperties.truststoreFilepath}").readText(Charsets.UTF_8)).inputStream(),
                     virksertCredentials.password.toCharArray()
             )
             val cert = keyStore.getCertificate(virksertCredentials.alias) as X509Certificate

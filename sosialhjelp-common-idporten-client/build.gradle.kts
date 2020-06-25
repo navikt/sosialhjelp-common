@@ -1,6 +1,6 @@
 object Versions {
     const val jackson = "2.11.0"
-    const val spring = "5.2.6.RELEASE"
+    const val spring = "5.2.7.RELEASE"
     const val nimbusds = "8.19"
 }
 
@@ -13,13 +13,8 @@ dependencies {
     implementation(project(":sosialhjelp-common-kotlin-utils"))
     implementation(project(":sosialhjelp-common-client-utils"))
 
-//    Jackson
     api("com.fasterxml.jackson.module:jackson-module-kotlin:${Versions.jackson}")
-
-//    Spring web
     api("org.springframework:spring-web:${Versions.spring}")
-
-//    Nimbusds
     api("com.nimbusds:nimbus-jose-jwt:${Versions.nimbusds}")
 
 }
