@@ -15,7 +15,6 @@ dependencies {
 
     api("com.fasterxml.jackson.module:jackson-module-kotlin:${Versions.jackson}")
     api("org.springframework:spring-web:${Versions.spring}")
-    api("org.springframework:spring-context:${Versions.spring}")
     api("com.nimbusds:nimbus-jose-jwt:${Versions.nimbusds}")
 
 }
