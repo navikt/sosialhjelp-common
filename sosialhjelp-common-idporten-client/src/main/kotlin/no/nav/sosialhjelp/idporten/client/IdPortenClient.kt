@@ -27,8 +27,7 @@ import java.util.*
 
 class IdPortenClient(
         private val restTemplate: RestTemplate,
-        private val idPortenProperties: IdPortenProperties,
-        private val virksomhetSertifikatPath: String
+        private val idPortenProperties: IdPortenProperties
 ) {
 
     private val idPortenOidcConfiguration: IdPortenOidcConfiguration
@@ -73,12 +72,12 @@ class IdPortenClient(
             it.time
         }
         val virksertCredentials = objectMapper.readValue<VirksertCredentials>(
-                File("$virksomhetSertifikatPath/credentials.json").readText(Charsets.UTF_8)
+                File("${idPortenProperties.virksomhetSertifikatPath}/credentials.json").readText(Charsets.UTF_8)
         )
 
         val pair = KeyStore.getInstance(idPortenProperties.truststoreType).let { keyStore ->
             keyStore.load(
-                    java.util.Base64.getDecoder().decode(File("$virksomhetSertifikatPath/${idPortenProperties.truststoreFilepath}").readText(Charsets.UTF_8)).inputStream(),
+                    java.util.Base64.getDecoder().decode(File("${idPortenProperties.virksomhetSertifikatPath}/${idPortenProperties.truststoreFilepath}").readText(Charsets.UTF_8)).inputStream(),
                     virksertCredentials.password.toCharArray()
             )
             val cert = keyStore.getCertificate(virksertCredentials.alias) as X509Certificate
