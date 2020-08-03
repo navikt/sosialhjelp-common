@@ -1,32 +1,10 @@
 object Versions {
     const val slf4j = "1.7.30"
-
-    const val kotlin = "1.3.70"
     const val coroutines = "1.3.7"
     const val springBoot = "2.3.1.RELEASE"
-    const val sosialhjelpCommon = "1.a615c63"
-    const val logback = "1.2.3"
-    const val logstash = "6.3"
-    const val filformat = "1.2020.01.09-15.55-f18d10d7d76a"
-    const val micrometerRegistry = "1.5.1"
-    const val prometheus = "0.8.1"
     const val tokenValidation = "latest.release"
     const val jackson = "2.11.0"
-    const val guava = "28.2-jre"
-    const val swagger = "2.9.2"
-    const val konfig = "1.6.10.0"
-    const val commonsCodec = "1.14"
-    const val commonsIo = "2.6"
-    const val fileUpload = "1.4"
-    const val tika = "1.23"
-    const val pdfBox = "2.0.19"
-    const val fiksKryptering = "1.0.9"
-    const val lettuce = "5.3.1.RELEASE"
-    const val nettyCodec = "4.1.50.Final"
-    const val ksFiksClient = "1.0.15"
     const val jjwtVersion = "0.10.7"
-    const val nimbusJoseVersion = "7.7"
-    const val auth0Version = "0.8.3"
 }
 
 plugins {
@@ -62,7 +40,6 @@ dependencies {
     //    Sosialhjelp-common
     implementation(project(":sosialhjelp-common-kotlin-utils"))
     implementation(project(":sosialhjelp-common-client-utils"))
-
 }
 
 publishing {
