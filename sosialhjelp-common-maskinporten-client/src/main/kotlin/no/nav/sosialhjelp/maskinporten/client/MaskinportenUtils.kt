@@ -1,6 +1,5 @@
 package no.nav.sosialhjelp.maskinporten.client
 
-import org.springframework.core.ParameterizedTypeReference
 import java.io.File
 import java.io.FileNotFoundException
 
