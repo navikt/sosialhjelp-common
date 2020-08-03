@@ -71,7 +71,7 @@ class MaskinportenClient(
                                 JwsHeader.ALGORITHM to keys.map { it.alg }.single()
                         )
                 )
-                .setAudience("https://oidc-ver2.difi.no/idporten-oidc-provider/") // Only need issuer
+                .setAudience(maskinportenProperties.delegation_audience)
                 .claim("scope", testClientScopes)
                 .setIssuer(maskinportenProperties.clientId)
                 .setExpiration(Date(Clock.systemUTC().millis() + 120000))
