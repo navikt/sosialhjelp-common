@@ -62,7 +62,6 @@ class MaskinportenClient(
     }
 
     fun generatePrivateJWT(): Jws {
-        val testClientScopes = maskinportenProperties.scope
         val keys = getKeys(maskinportenProperties.public_jwk).keys
         return Jws(Jwts.builder()
                 .setHeaderParams(
@@ -72,7 +71,7 @@ class MaskinportenClient(
                         )
                 )
                 .setAudience(maskinportenProperties.delegation_audience)
-                .claim("scope", testClientScopes)
+                .claim("scope", maskinportenProperties.scope)
                 .setIssuer(maskinportenProperties.clientId)
                 .setExpiration(Date(Clock.systemUTC().millis() + 120000))
                 .setIssuedAt(Date(Clock.systemUTC().millis()))
