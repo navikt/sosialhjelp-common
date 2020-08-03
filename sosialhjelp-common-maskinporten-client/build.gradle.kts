@@ -60,30 +60,9 @@ dependencies {
     implementation("io.jsonwebtoken:jjwt-impl:${Versions.jjwtVersion}")
 
     //    Sosialhjelp-common
-    implementation("no.nav.sosialhjelp:sosialhjelp-common-selftest:${Versions.sosialhjelpCommon}")
-    implementation("no.nav.sosialhjelp:sosialhjelp-common-api:${Versions.sosialhjelpCommon}")
-    implementation("no.nav.sosialhjelp:sosialhjelp-common-client-utils:${Versions.sosialhjelpCommon}")
-    implementation("no.nav.sosialhjelp:sosialhjelp-common-kommuneinfo-client:${Versions.sosialhjelpCommon}")
-    implementation("no.nav.sosialhjelp:sosialhjelp-common-idporten-client:${Versions.sosialhjelpCommon}")
-    implementation("no.nav.sosialhjelp:sosialhjelp-common-kotlin-utils:${Versions.sosialhjelpCommon}")
+    implementation(project(":sosialhjelp-common-kotlin-utils"))
+    implementation(project(":sosialhjelp-common-client-utils"))
 
-}
-
-val githubUser: String by project
-val githubPassword: String by project
-
-repositories {
-    mavenCentral()
-    jcenter()
-    maven("https://plugins.gradle.org/m2/")
-    maven("https://repo.spring.io/plugins-release/")
-    maven {
-        url = uri("https://maven.pkg.github.com/navikt/sosialhjelp-common")
-        credentials {
-            username = githubUser
-            password = githubPassword
-        }
-    }
 }
 
 publishing {
