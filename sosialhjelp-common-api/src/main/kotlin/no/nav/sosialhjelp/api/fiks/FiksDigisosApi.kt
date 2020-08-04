@@ -54,7 +54,7 @@ data class KommuneInfo(
         val kanOppdatereStatus: Boolean,
         val harMidlertidigDeaktivertMottak: Boolean,
         val harMidlertidigDeaktivertOppdateringer: Boolean,
-        val kontaktPersoner: Kontaktpersoner?,
+        val kontaktpersoner: Kontaktpersoner?,
         val harNksTilgang: Boolean,
         val behandlingsansvarlig: String?
 )
