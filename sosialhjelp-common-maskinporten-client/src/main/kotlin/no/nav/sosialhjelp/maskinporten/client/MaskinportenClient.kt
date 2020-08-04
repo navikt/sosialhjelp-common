@@ -44,7 +44,6 @@ class MaskinportenClient(
     //Denne kalles for å anskaffe token
     fun requestToken(): AccessToken {
                 val jws = generatePrivateJWT()
-                log.info("Got jws")
                 val uriComponents = UriComponentsBuilder.fromHttpUrl(maskinportenProperties.tokenUrl).build()
                 val body = LinkedMultiValueMap<String, String>()
                 body.add(GRANT_TYPE_PARAM, GRANT_TYPE)
@@ -54,7 +53,6 @@ class MaskinportenClient(
             }
 
     internal fun base64ToPrivateKey(privateBase64: String): PrivateKey? {
-        log.info("From base64 key to PrivateKey")
         val keyBytes: ByteArray = Base64.getDecoder().decode(privateBase64)
         val keySpec = PKCS8EncodedKeySpec(keyBytes)
         val fact: KeyFactory = KeyFactory.getInstance("RSA")
