@@ -1,4 +1,4 @@
-package com.sosialhjelp.adminpanelapi.client.maskinporten
+package no.nav.sosialhjelp.maskinporten.client
 
 data class MaskinportenProperties(
     val tokenUrl: String,

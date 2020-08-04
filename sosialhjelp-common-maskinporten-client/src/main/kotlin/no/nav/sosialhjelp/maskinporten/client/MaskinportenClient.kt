@@ -1,4 +1,4 @@
-package com.sosialhjelp.adminpanelapi.client.maskinporten
+package no.nav.sosialhjelp.maskinporten.client
 
 import com.fasterxml.jackson.module.kotlin.readValue
 import no.nav.sosialhjelp.kotlin.utils.logger

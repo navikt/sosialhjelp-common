@@ -1,4 +1,4 @@
-package com.sosialhjelp.adminpanelapi.client.maskinporten
+package no.nav.sosialhjelp.maskinporten.client
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.annotation.JsonProperty
