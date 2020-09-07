@@ -14,6 +14,7 @@ import no.nav.sosialhjelp.kotlin.utils.retry
 import org.springframework.http.HttpEntity
 import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpMethod
+import org.springframework.http.MediaType
 import org.springframework.util.LinkedMultiValueMap
 import org.springframework.web.client.HttpServerErrorException
 import org.springframework.web.client.RestTemplate
@@ -52,7 +53,7 @@ class IdPortenClient(
                 val body = LinkedMultiValueMap<String, String>()
                 body.add(GRANT_TYPE_PARAM, GRANT_TYPE)
                 body.add(ASSERTION_PARAM, jws.token)
-                val response = restTemplate.exchange(uriComponents.toUriString(), HttpMethod.POST, HttpEntity(body, HttpHeaders()), IdPortenAccessTokenResponse::class.java)
+                val response = restTemplate.exchange(uriComponents.toUriString(), HttpMethod.POST, HttpEntity(body, idPortenHeaders()), IdPortenAccessTokenResponse::class.java)
                 AccessToken(response.body!!.accessToken)
             }
 
@@ -109,6 +110,12 @@ class IdPortenClient(
             log.info("Serialized jws (virksomhetssertifikat)")
             jws
         }
+    }
+
+    private fun idPortenHeaders(): HttpHeaders {
+        val headers = HttpHeaders()
+        headers.contentType = MediaType.APPLICATION_FORM_URLENCODED
+        return headers
     }
 
     companion object {
