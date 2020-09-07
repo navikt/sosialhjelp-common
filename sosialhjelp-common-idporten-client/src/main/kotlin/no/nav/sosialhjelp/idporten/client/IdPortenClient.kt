@@ -115,6 +115,7 @@ class IdPortenClient(
     private fun idPortenHeaders(): HttpHeaders {
         val headers = HttpHeaders()
         headers.contentType = MediaType.APPLICATION_FORM_URLENCODED
+        headers.accept = listOf(MediaType.APPLICATION_JSON)
         return headers
     }
 
