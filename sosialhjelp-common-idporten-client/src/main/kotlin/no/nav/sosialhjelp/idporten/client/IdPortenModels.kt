@@ -18,7 +18,8 @@ data class IdPortenOidcConfiguration(
 )
 
 data class AccessToken(
-        val token: String
+        val token: String,
+        val expiresIn: Int
 )
 
 data class Jws(
