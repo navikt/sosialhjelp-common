@@ -53,7 +53,7 @@ class IdPortenClient(
                 body.add(GRANT_TYPE_PARAM, GRANT_TYPE)
                 body.add(ASSERTION_PARAM, jws.token)
                 val response = restTemplate.exchange(uriComponents.toUriString(), HttpMethod.POST, HttpEntity(body, HttpHeaders()), IdPortenAccessTokenResponse::class.java)
-                AccessToken(response.body!!.accessToken)
+                AccessToken(response.body!!.accessToken, response.body!!.expiresIn)
             }
 
     fun createJws(
