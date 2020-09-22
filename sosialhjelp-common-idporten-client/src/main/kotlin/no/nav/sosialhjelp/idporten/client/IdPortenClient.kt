@@ -56,6 +56,17 @@ class IdPortenClient(
                 AccessToken(response.body!!.accessToken)
             }
 
+    fun requestTokenUtenSuspendOgRetry(): AccessToken {
+        val jws = createJws()
+        log.info("Got jws, getting token (virksomhetssertifikat)")
+        val uriComponents = UriComponentsBuilder.fromHttpUrl(idPortenProperties.tokenUrl).build()
+        val body = LinkedMultiValueMap<String, String>()
+        body.add(GRANT_TYPE_PARAM, GRANT_TYPE)
+        body.add(ASSERTION_PARAM, jws.token)
+        val response = restTemplate.exchange(uriComponents.toUriString(), HttpMethod.POST, HttpEntity(body, HttpHeaders()), IdPortenAccessTokenResponse::class.java)
+        return AccessToken(response.body!!.accessToken)
+    }
+
     fun createJws(
             expirySeconds: Int = 100,
             issuer: String = idPortenProperties.clientId,
