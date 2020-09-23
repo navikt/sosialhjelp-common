@@ -44,7 +44,7 @@ class IdPortenClient(
         }
     }
 
-    suspend fun requestToken(attempts: Int = 10): AccessToken =
+    suspend fun requestToken(attempts: Int = 10, headers: HttpHeaders? = null): AccessToken =
             retry(attempts = attempts, retryableExceptions = *arrayOf(HttpServerErrorException::class)) {
                 val jws = createJws()
                 log.info("Got jws, getting token (virksomhetssertifikat)")
@@ -52,7 +52,7 @@ class IdPortenClient(
                 val body = LinkedMultiValueMap<String, String>()
                 body.add(GRANT_TYPE_PARAM, GRANT_TYPE)
                 body.add(ASSERTION_PARAM, jws.token)
-                val response = restTemplate.exchange(uriComponents.toUriString(), HttpMethod.POST, HttpEntity(body, HttpHeaders()), IdPortenAccessTokenResponse::class.java)
+                val response = restTemplate.exchange(uriComponents.toUriString(), HttpMethod.POST, HttpEntity(body, headers ?: HttpHeaders()), IdPortenAccessTokenResponse::class.java)
                 AccessToken(response.body!!.accessToken)
             }
 
