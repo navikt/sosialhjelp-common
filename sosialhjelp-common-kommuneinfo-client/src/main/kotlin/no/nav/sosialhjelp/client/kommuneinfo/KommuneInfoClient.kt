@@ -1,13 +1,11 @@
 package no.nav.sosialhjelp.client.kommuneinfo
 
-import kotlinx.coroutines.runBlocking
+import no.nav.sosialhjelp.api.fiks.KommuneInfo
 import no.nav.sosialhjelp.api.fiks.exceptions.FiksClientException
 import no.nav.sosialhjelp.api.fiks.exceptions.FiksException
 import no.nav.sosialhjelp.api.fiks.exceptions.FiksServerException
-import no.nav.sosialhjelp.api.fiks.KommuneInfo
 import no.nav.sosialhjelp.client.utils.Constants.BEARER
 import no.nav.sosialhjelp.client.utils.typeRef
-import no.nav.sosialhjelp.idporten.client.IdPortenClient
 import no.nav.sosialhjelp.kotlin.utils.logger
 import org.springframework.http.HttpEntity
 import org.springframework.http.HttpHeaders
@@ -20,20 +18,19 @@ import java.util.*
 
 interface KommuneInfoClient {
 
-    fun get(kommunenummer: String): KommuneInfo
+    fun get(kommunenummer: String, token: String): KommuneInfo
 
-    fun getAll(): List<KommuneInfo>
+    fun getAll(token: String): List<KommuneInfo>
 }
 
 class KommuneInfoClientImpl(
         private val restTemplate: RestTemplate,
-        private val fiksProperties: FiksProperties,
-        private val idPortenClient: IdPortenClient
+        private val fiksProperties: FiksProperties
 ) : KommuneInfoClient {
 
-    override fun get(kommunenummer: String): KommuneInfo {
+    override fun get(kommunenummer: String, token: String): KommuneInfo {
         try {
-            val headers = fiksHeaders(fiksProperties, getToken())
+            val headers = fiksHeaders(fiksProperties, token)
             val vars = mapOf("kommunenummer" to kommunenummer)
             val response = restTemplate.exchange(
                     fiksProperties.hentKommuneInfoUrl,
@@ -60,9 +57,9 @@ class KommuneInfoClientImpl(
         }
     }
 
-    override fun getAll(): List<KommuneInfo> {
+    override fun getAll(token: String): List<KommuneInfo> {
         try {
-            val headers = fiksHeaders(fiksProperties, getToken())
+            val headers = fiksHeaders(fiksProperties, token)
             val response = restTemplate.exchange(
                     fiksProperties.hentAlleKommuneInfoUrl,
                     HttpMethod.GET,
@@ -91,15 +88,10 @@ class KommuneInfoClientImpl(
     private fun fiksHeaders(fiksProperties: FiksProperties, token: String): HttpHeaders {
         val headers = HttpHeaders()
         headers.accept = Collections.singletonList(MediaType.APPLICATION_JSON)
-        headers.set(HttpHeaders.AUTHORIZATION, token)
+        headers.set(HttpHeaders.AUTHORIZATION, BEARER + token)
         headers.set(HEADER_INTEGRASJON_ID, fiksProperties.fiksIntegrasjonId)
         headers.set(HEADER_INTEGRASJON_PASSORD, fiksProperties.fiksIntegrasjonPassord)
         return headers
-    }
-
-    private fun getToken(): String {
-        val virksomhetstoken = runBlocking { idPortenClient.requestToken() }
-        return BEARER + virksomhetstoken.token
     }
 
     companion object {

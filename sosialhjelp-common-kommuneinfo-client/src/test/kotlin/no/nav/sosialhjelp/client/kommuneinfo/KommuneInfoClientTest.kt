@@ -1,13 +1,12 @@
 package no.nav.sosialhjelp.client.kommuneinfo
 
-import io.mockk.coEvery
+import io.mockk.clearAllMocks
 import io.mockk.every
 import io.mockk.mockk
+import no.nav.sosialhjelp.api.fiks.KommuneInfo
 import no.nav.sosialhjelp.api.fiks.exceptions.FiksClientException
 import no.nav.sosialhjelp.api.fiks.exceptions.FiksServerException
-import no.nav.sosialhjelp.api.fiks.KommuneInfo
 import no.nav.sosialhjelp.client.utils.typeRef
-import no.nav.sosialhjelp.idporten.client.IdPortenClient
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.BeforeEach
@@ -24,15 +23,16 @@ internal class KommuneInfoClientTest {
 
     private val restTemplate: RestTemplate = mockk()
     private val fiksProperties = FiksProperties("a", "b", "id", "pw")
-    private val idPortenClient: IdPortenClient = mockk()
 
-    private val kommuneInfoClient = KommuneInfoClientImpl(restTemplate, fiksProperties, idPortenClient)
+    private val kommuneInfoClient = KommuneInfoClientImpl(restTemplate, fiksProperties)
 
     private val mockKommuneInfo: KommuneInfo = mockk()
 
+    private val token = "token"
+
     @BeforeEach
     internal fun setUp() {
-        coEvery { idPortenClient.requestToken().token } returns "token"
+        clearAllMocks()
     }
 
     @Test
@@ -47,7 +47,7 @@ internal class KommuneInfoClientTest {
             )
         } returns ResponseEntity.ok(mockKommuneInfo)
 
-        val kommuneInfo = kommuneInfoClient.get("1234")
+        val kommuneInfo = kommuneInfoClient.get("1234", token)
 
         assertNotNull(kommuneInfo)
     }
@@ -64,7 +64,7 @@ internal class KommuneInfoClientTest {
             )
         } throws HttpClientErrorException(HttpStatus.NOT_FOUND, "not found")
 
-        assertThrows<FiksClientException> { kommuneInfoClient.get("1234") }
+        assertThrows<FiksClientException> { kommuneInfoClient.get("1234", token) }
     }
 
     @Test
@@ -79,7 +79,7 @@ internal class KommuneInfoClientTest {
             )
         } throws HttpServerErrorException(HttpStatus.INTERNAL_SERVER_ERROR, "error")
 
-        assertThrows<FiksServerException> { kommuneInfoClient.get("1234") }
+        assertThrows<FiksServerException> { kommuneInfoClient.get("1234", token) }
     }
 
     @Test
@@ -93,7 +93,7 @@ internal class KommuneInfoClientTest {
             )
         } returns ResponseEntity.ok(listOf(mockKommuneInfo))
 
-        val list = kommuneInfoClient.getAll()
+        val list = kommuneInfoClient.getAll(token)
 
         assertEquals(1, list.size)
     }
