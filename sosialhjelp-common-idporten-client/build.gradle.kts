@@ -1,6 +1,6 @@
 object Versions {
     const val jackson = "2.11.0"
-    const val spring = "5.2.8.RELEASE"
+    const val spring = "5.2.9.RELEASE"
     const val nimbusds = "8.19"
 }
 
