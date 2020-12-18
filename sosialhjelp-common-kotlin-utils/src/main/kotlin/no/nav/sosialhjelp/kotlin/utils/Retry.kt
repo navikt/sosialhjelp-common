@@ -8,7 +8,7 @@ suspend fun <T> retry(
         initialDelay: Long = 100L,
         maxDelay: Long = 1000L,
         factor: Double = 2.0,
-        vararg retryableExceptions: KClass<out Throwable> = arrayOf(),
+        retryableExceptions: Array<KClass<out Throwable>> = arrayOf(),
         block: suspend () -> T
 ): T {
     var currentDelay = initialDelay

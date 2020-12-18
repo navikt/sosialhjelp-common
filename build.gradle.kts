@@ -2,7 +2,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 object Versions {
     // Test only
-    const val junitJupiter = "5.6.0"
+    const val junitJupiter = "5.7.0"
 }
 
 repositories {
@@ -10,7 +10,7 @@ repositories {
 }
 
 plugins {
-    kotlin("jvm") version "1.3.72"
+    kotlin("jvm") version "1.4.21"
 }
 
 allprojects {
