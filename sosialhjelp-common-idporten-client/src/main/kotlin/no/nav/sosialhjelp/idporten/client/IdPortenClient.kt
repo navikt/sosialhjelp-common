@@ -45,7 +45,7 @@ class IdPortenClient(
     }
 
     suspend fun requestToken(attempts: Int = 10, headers: HttpHeaders = HttpHeaders()): AccessToken =
-            retry(attempts = attempts, retryableExceptions = *arrayOf(HttpServerErrorException::class)) {
+            retry(attempts = attempts, retryableExceptions = arrayOf(HttpServerErrorException::class)) {
                 val jws = createJws()
                 log.info("Got jws, getting token (virksomhetssertifikat)")
                 val uriComponents = UriComponentsBuilder.fromHttpUrl(idPortenProperties.tokenUrl).build()
