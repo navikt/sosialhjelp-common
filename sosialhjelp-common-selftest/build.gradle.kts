@@ -1,5 +1,5 @@
 object Versions {
-    const val jackson = "2.12.0"
+    const val jackson = "2.12.1"
 }
 
 plugins {
