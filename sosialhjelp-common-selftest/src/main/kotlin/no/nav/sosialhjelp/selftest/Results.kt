@@ -3,22 +3,22 @@ package no.nav.sosialhjelp.selftest
 import com.fasterxml.jackson.annotation.JsonIgnore
 
 data class DependencyCheckResult(
-        val endpoint: String?,
-        val result: Result?,
-        val address: String?,
+        val endpoint: String,
+        val result: Result,
+        val address: String,
         val errorMessage: String?,
-        val type: DependencyType?,
-        val importance: Importance?,
+        val type: DependencyType,
+        val importance: Importance,
         val responseTime: String?,
         @JsonIgnore
         val throwable: Throwable?
 )
 
 data class SelftestResult(
-        val appName: String?,
-        val version: String?,
-        val result: Result?,
-        val dependencyCheckResults: List<DependencyCheckResult>?
+        val appName: String,
+        val version: String,
+        val result: Result,
+        val dependencyCheckResults: List<DependencyCheckResult>
 )
 
 enum class DependencyType {
@@ -30,5 +30,5 @@ enum class Importance {
 }
 
 enum class Result {
-    UNPINGABLE, OK, WARNING, ERROR
+    OK, WARNING, ERROR
 }
