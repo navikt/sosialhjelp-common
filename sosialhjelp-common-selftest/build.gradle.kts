@@ -1,5 +1,6 @@
 object Versions {
     const val jackson = "2.12.1"
+    const val micrometer = "1.6.2"
 }
 
 plugins {
@@ -13,6 +14,8 @@ dependencies {
 
 //    Jackson
     api("com.fasterxml.jackson.module:jackson-module-kotlin:${Versions.jackson}")
+//    Micrometer
+    api("io.micrometer:micrometer-core:${Versions.micrometer}")
 
 }
 
