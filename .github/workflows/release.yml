@@ -2,7 +2,7 @@ name: Publish artifacts
 on:
   push:
     branches:
-      - master
+      - main
 jobs:
   build_and_release:
     runs-on: ubuntu-latest

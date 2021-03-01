@@ -1,4 +1,4 @@
-![](https://github.com/navikt/sosialhjelp-common/workflows/Publish%20artifacts/badge.svg?branch=master)
+![](https://github.com/navikt/sosialhjelp-common/workflows/Publish%20artifacts/badge.svg?branch=main)
 
 Sosialhjelp-common
 ================
