@@ -30,24 +30,20 @@ class IdPortenClient(
         private val idPortenProperties: IdPortenProperties
 ) {
 
-    private val idPortenOidcConfiguration: IdPortenOidcConfiguration
-
-    init {
-        idPortenOidcConfiguration = runBlocking {
-            val configUrl = idPortenProperties.configUrl
-            log.debug("Forsøker å hente idporten-config fra $configUrl")
-            val response = restTemplate.exchange(configUrl, HttpMethod.GET, HttpEntity<Nothing>(HttpHeaders()), IdPortenOidcConfiguration::class.java)
-            log.info("Hentet idporten-config fra $configUrl")
-            response.body!!
-        }.also {
-            log.info("idporten-config: OIDC configuration initialized")
-        }
+    private val idPortenOidcConfiguration: IdPortenOidcConfiguration = runBlocking {
+        val configUrl = idPortenProperties.configUrl
+        log.debug("Forsøker å hente idporten-config fra $configUrl")
+        val response = restTemplate.exchange(configUrl, HttpMethod.GET, HttpEntity<Nothing>(HttpHeaders()), IdPortenOidcConfiguration::class.java)
+        log.info("Hentet idporten-config fra $configUrl")
+        response.body!!
+    }.also {
+        log.info("idporten-config: OIDC configuration initialized")
     }
 
     suspend fun requestToken(attempts: Int = 10, headers: HttpHeaders = HttpHeaders()): AccessToken =
             retry(attempts = attempts, retryableExceptions = arrayOf(HttpServerErrorException::class)) {
                 val jws = createJws()
-                log.info("Got jws, getting token (virksomhetssertifikat)")
+                log.debug("Got jws, getting token (virksomhetssertifikat)")
                 val uriComponents = UriComponentsBuilder.fromHttpUrl(idPortenProperties.tokenUrl).build()
                 val body = LinkedMultiValueMap<String, String>()
                 body.add(GRANT_TYPE_PARAM, GRANT_TYPE)
@@ -56,7 +52,7 @@ class IdPortenClient(
                 AccessToken(response.body!!.accessToken, response.body!!.expiresIn)
             }
 
-    fun createJws(
+    private fun createJws(
             expirySeconds: Int = 100,
             issuer: String = idPortenProperties.clientId,
             scope: String = idPortenProperties.scope
@@ -91,7 +87,7 @@ class IdPortenClient(
             ) to cert.encoded
         }
 
-        log.info("Public certificate length ${pair.first.public.encoded.size} (virksomhetssertifikat)")
+        log.debug("Public certificate length ${pair.first.public.encoded.size} (virksomhetssertifikat)")
 
         return SignedJWT(
                 JWSHeader.Builder(JWSAlgorithm.RS256).x509CertChain(mutableListOf(Base64.encode(pair.second))).build(),
@@ -106,7 +102,7 @@ class IdPortenClient(
         ).run {
             sign(RSASSASigner(pair.first.private))
             val jws = Jws(serialize())
-            log.info("Serialized jws (virksomhetssertifikat)")
+            log.debug("Serialized jws (virksomhetssertifikat)")
             jws
         }
     }
