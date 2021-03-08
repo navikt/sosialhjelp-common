@@ -1,8 +1,8 @@
 object Versions {
     const val slf4j = "1.7.30"
     const val coroutines = "1.4.2"
-    const val springBoot = "2.4.2"
-    const val tokenValidation = "1.3.2"
+    const val springBoot = "2.4.3"
+    const val tokenValidation = "1.3.3"
     const val jackson = "2.12.1"
     const val jjwtVersion = "0.10.7"
 }
@@ -21,7 +21,6 @@ dependencies {
 
     //    Spring
     implementation("org.springframework.boot:spring-boot-starter-web:${Versions.springBoot}")
-    implementation("org.springframework.boot:spring-boot-starter-jetty:${Versions.springBoot}")
     implementation("org.springframework.boot:spring-boot-starter-actuator:${Versions.springBoot}")
     implementation("org.springframework.boot:spring-boot-starter-logging:${Versions.springBoot}")
     implementation("org.springframework.boot:spring-boot-starter-validation:${Versions.springBoot}")
