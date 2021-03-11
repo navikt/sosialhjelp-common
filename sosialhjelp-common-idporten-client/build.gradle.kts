@@ -14,7 +14,7 @@ dependencies {
     implementation(project(":sosialhjelp-common-client-utils"))
 
     api("com.fasterxml.jackson.module:jackson-module-kotlin:${Versions.jackson}")
-    api("org.springframework:spring-web:${Versions.spring}")
+    api("org.springframework:spring-webflux:${Versions.spring}")
     api("com.nimbusds:nimbus-jose-jwt:${Versions.nimbusds}")
 
 }
