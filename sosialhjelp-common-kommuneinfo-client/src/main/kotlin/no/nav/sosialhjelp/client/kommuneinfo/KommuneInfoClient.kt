@@ -2,19 +2,16 @@ package no.nav.sosialhjelp.client.kommuneinfo
 
 import no.nav.sosialhjelp.api.fiks.KommuneInfo
 import no.nav.sosialhjelp.api.fiks.exceptions.FiksClientException
-import no.nav.sosialhjelp.api.fiks.exceptions.FiksException
 import no.nav.sosialhjelp.api.fiks.exceptions.FiksServerException
 import no.nav.sosialhjelp.client.utils.Constants.BEARER
-import no.nav.sosialhjelp.client.utils.typeRef
 import no.nav.sosialhjelp.kotlin.utils.logger
-import org.springframework.http.HttpEntity
 import org.springframework.http.HttpHeaders
-import org.springframework.http.HttpMethod
+import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
-import org.springframework.web.client.HttpClientErrorException
-import org.springframework.web.client.HttpServerErrorException
-import org.springframework.web.client.RestTemplate
-import java.util.*
+import org.springframework.web.reactive.function.client.WebClient
+import org.springframework.web.reactive.function.client.WebClientResponseException
+import org.springframework.web.reactive.function.client.bodyToMono
+import java.util.Collections
 
 interface KommuneInfoClient {
 
@@ -24,65 +21,58 @@ interface KommuneInfoClient {
 }
 
 class KommuneInfoClientImpl(
-        private val restTemplate: RestTemplate,
-        private val fiksProperties: FiksProperties
+    private val webClient: WebClient,
+    private val fiksProperties: FiksProperties
 ) : KommuneInfoClient {
 
     override fun get(kommunenummer: String, token: String): KommuneInfo {
-        try {
-            val headers = fiksHeaders(fiksProperties, token)
-            val vars = mapOf("kommunenummer" to kommunenummer)
-            val response = restTemplate.exchange(
-                    fiksProperties.hentKommuneInfoUrl,
-                    HttpMethod.GET,
-                    HttpEntity<Nothing>(headers),
-                    KommuneInfo::class.java,
-                    vars
-            )
+        val kommuneInfo = webClient.get()
+            .uri(fiksProperties.hentKommuneInfoUrl, "kommunenummer" to kommunenummer)
+            .headers { it.addAll(fiksHeaders(fiksProperties, token)) }
+            .retrieve()
+            .onStatus(HttpStatus::is4xxClientError) {
+                it.createException()
+                    .map { e ->
+                        log.warn("Fiks - hentKommuneInfo feilet - ${messageUtenFnr(e)}", e)
+                        FiksClientException(e.rawStatusCode, e.message?.feilmeldingUtenFnr, e)
+                    }
+            }
+            .onStatus(HttpStatus::is5xxServerError) {
+                it.createException()
+                    .map { e ->
+                        log.warn("Fiks - hentKommuneInfo feilet - ${messageUtenFnr(e)}", e)
+                        throw FiksServerException(e.rawStatusCode, e.message?.feilmeldingUtenFnr, e)
+                    }
+            }
+            .bodyToMono<KommuneInfo>()
+            .block()
 
-            return response.body!!
-        } catch (e: HttpClientErrorException) {
-            val fiksErrorMessage = e.toFiksErrorMessage()?.feilmeldingUtenFnr
-            val message = e.message?.feilmeldingUtenFnr
-            log.warn("Fiks - hentKommuneInfo feilet - $message - $fiksErrorMessage", e)
-            throw FiksClientException(e.rawStatusCode, message, e)
-        } catch (e: HttpServerErrorException) {
-            val fiksErrorMessage = e.toFiksErrorMessage()?.feilmeldingUtenFnr
-            val message = e.message?.feilmeldingUtenFnr
-            log.warn("Fiks - hentKommuneInfo feilet - $message - $fiksErrorMessage", e)
-            throw FiksServerException(e.rawStatusCode, message, e)
-        } catch (e: Exception) {
-            log.warn("Fiks - hentKommuneInfo feilet", e)
-            throw FiksException(e.message?.feilmeldingUtenFnr, e)
-        }
+        return kommuneInfo!!
     }
 
     override fun getAll(token: String): List<KommuneInfo> {
-        try {
-            val headers = fiksHeaders(fiksProperties, token)
-            val response = restTemplate.exchange(
-                    fiksProperties.hentAlleKommuneInfoUrl,
-                    HttpMethod.GET,
-                    HttpEntity<Nothing>(headers),
-                    typeRef<List<KommuneInfo>>()
-            )
+        val list = webClient.get()
+            .uri(fiksProperties.hentAlleKommuneInfoUrl)
+            .headers { it.addAll(fiksHeaders(fiksProperties, token)) }
+            .retrieve()
+            .onStatus(HttpStatus::is4xxClientError) {
+                it.createException()
+                    .map { e ->
+                        log.warn("Fiks - hentKommuneInfoForAlle feilet - ${messageUtenFnr(e)}", e)
+                        FiksClientException(e.rawStatusCode, e.message?.feilmeldingUtenFnr, e)
+                    }
+            }
+            .onStatus(HttpStatus::is5xxServerError) {
+                it.createException()
+                    .map { e ->
+                        log.warn("Fiks - hentKommuneInfoForAlle feilet - ${messageUtenFnr(e)}", e)
+                        throw FiksServerException(e.rawStatusCode, e.message?.feilmeldingUtenFnr, e)
+                    }
+            }
+            .bodyToMono<List<KommuneInfo>>()
+            .block()
 
-            return response.body!!
-
-        } catch (e: HttpClientErrorException) {
-            val fiksErrorMessage = e.toFiksErrorMessage()?.feilmeldingUtenFnr
-            val message = e.message?.feilmeldingUtenFnr
-            log.warn("Fiks - hentKommuneInfoForAlle feilet - $message - $fiksErrorMessage", e)
-            throw FiksClientException(e.rawStatusCode, message, e)
-        } catch (e: HttpServerErrorException) {
-            val fiksErrorMessage = e.toFiksErrorMessage()?.feilmeldingUtenFnr
-            val message = e.message?.feilmeldingUtenFnr
-            log.warn("Fiks - hentKommuneInfoForAlle feilet - $message - $fiksErrorMessage", e)
-            throw FiksServerException(e.rawStatusCode, message, e)
-        } catch (e: Exception) {
-            log.warn("Fiks - hentKommuneInfoForAlle feilet", e)
-            throw FiksException(e.message?.feilmeldingUtenFnr, e)
-        }
+        return list!!
     }
 
     private fun fiksHeaders(fiksProperties: FiksProperties, token: String): HttpHeaders {
@@ -99,5 +89,11 @@ class KommuneInfoClientImpl(
 
         private const val HEADER_INTEGRASJON_ID = "IntegrasjonId"
         private const val HEADER_INTEGRASJON_PASSORD = "IntegrasjonPassord"
+
+        private fun messageUtenFnr(e: WebClientResponseException): String {
+            val fiksErrorMessage = e.toFiksErrorMessage()?.feilmeldingUtenFnr
+            val message = e.message?.feilmeldingUtenFnr
+            return "$message - $fiksErrorMessage"
+        }
     }
 }
