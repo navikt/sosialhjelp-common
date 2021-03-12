@@ -35,14 +35,14 @@ class IdPortenClient(
 ) {
 
     private val idPortenOidcConfiguration: IdPortenOidcConfiguration = runBlocking {
-        val configUrl = idPortenProperties.configUrl
-        log.debug("Forsøker å hente idporten-config fra $configUrl")
+        log.debug("Forsøker å hente idporten-config fra ${idPortenProperties.configUrl}")
         webClient.get()
-            .uri(configUrl)
+            .uri(idPortenProperties.configUrl)
             .retrieve()
             .awaitBody<IdPortenOidcConfiguration>()
-    }.also {
-        log.info("idporten-config: OIDC configuration initialized")
+            .also {
+                log.info("idporten-config: OIDC configuration initialized")
+            }
     }
 
     suspend fun requestToken(attempts: Int = 10, headers: HttpHeaders = HttpHeaders()): AccessToken =
@@ -120,6 +120,7 @@ class IdPortenClient(
     }
 
     companion object {
+
         private const val MAX_EXPIRY_SECONDS = 120
         private const val CLAIMS_SCOPE = "scope"
         private const val GRANT_TYPE = "urn:ietf:params:oauth:grant-type:jwt-bearer"
