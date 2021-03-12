@@ -9,7 +9,7 @@ plugins {
 }
 
 dependencies {
-    api("org.springframework:spring-web:${Versions.spring}")
+    api("org.springframework:spring-core:${Versions.spring}")
     api("com.fasterxml.jackson.module:jackson-module-kotlin:${Versions.jackson}")
 }
 
