@@ -4,6 +4,7 @@ import no.nav.sosialhjelp.api.fiks.KommuneInfo
 import no.nav.sosialhjelp.api.fiks.exceptions.FiksClientException
 import no.nav.sosialhjelp.api.fiks.exceptions.FiksServerException
 import no.nav.sosialhjelp.client.utils.Constants.BEARER
+import no.nav.sosialhjelp.client.utils.typeRef
 import no.nav.sosialhjelp.kotlin.utils.logger
 import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpStatus
@@ -69,7 +70,7 @@ class KommuneInfoClientImpl(
                         throw FiksServerException(e.rawStatusCode, e.message?.feilmeldingUtenFnr, e)
                     }
             }
-            .bodyToMono<List<KommuneInfo>>()
+            .bodyToMono(typeRef<List<KommuneInfo>>())
             .block()
 
         return list!!
