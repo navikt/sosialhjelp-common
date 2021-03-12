@@ -12,6 +12,8 @@ import no.nav.sosialhjelp.client.utils.objectMapper
 import no.nav.sosialhjelp.kotlin.utils.logger
 import no.nav.sosialhjelp.kotlin.utils.retry
 import org.springframework.http.HttpHeaders
+import org.springframework.util.LinkedMultiValueMap
+import org.springframework.web.reactive.function.BodyInserters
 import org.springframework.web.reactive.function.client.WebClient
 import org.springframework.web.reactive.function.client.WebClientResponseException.BadGateway
 import org.springframework.web.reactive.function.client.WebClientResponseException.GatewayTimeout
@@ -50,9 +52,13 @@ class IdPortenClient(
             val jws = createJws()
             log.debug("Got jws, getting token (virksomhetssertifikat)")
 
+            val body = LinkedMultiValueMap<String, String>()
+            body.add(GRANT_TYPE_PARAM, GRANT_TYPE)
+            body.add(ASSERTION_PARAM, jws.token)
+
             val response = webClient.post()
                 .uri(idPortenProperties.tokenUrl)
-                .bodyValue(linkedMapOf(GRANT_TYPE_PARAM to GRANT_TYPE, ASSERTION_PARAM to jws.token))
+                .body(BodyInserters.fromFormData(body))
                 .headers { it.addAll(headers) }
                 .retrieve()
                 .awaitBody<IdPortenAccessTokenResponse>()
