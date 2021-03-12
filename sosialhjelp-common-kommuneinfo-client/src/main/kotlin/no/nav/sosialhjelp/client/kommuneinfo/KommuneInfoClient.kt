@@ -28,7 +28,7 @@ class KommuneInfoClientImpl(
 
     override fun get(kommunenummer: String, token: String): KommuneInfo {
         val kommuneInfo = webClient.get()
-            .uri(fiksProperties.hentKommuneInfoUrl, "kommunenummer" to kommunenummer)
+            .uri(fiksProperties.hentKommuneInfoUrl, kommunenummer)
             .headers { it.addAll(fiksHeaders(fiksProperties, token)) }
             .retrieve()
             .onStatus(HttpStatus::is4xxClientError) {
