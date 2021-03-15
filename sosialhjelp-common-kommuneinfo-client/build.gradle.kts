@@ -16,7 +16,7 @@ dependencies {
     implementation(project(":sosialhjelp-common-kotlin-utils"))
 
     api("com.fasterxml.jackson.module:jackson-module-kotlin:${Versions.jackson}")
-    api("org.springframework:spring-web:${Versions.spring}")
+    api("org.springframework:spring-webflux:${Versions.spring}")
 
     testImplementation("io.mockk:mockk:${Versions.mockk}")
 }
