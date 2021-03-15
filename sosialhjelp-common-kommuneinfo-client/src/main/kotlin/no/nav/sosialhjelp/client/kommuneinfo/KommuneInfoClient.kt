@@ -42,7 +42,7 @@ class KommuneInfoClientImpl(
                 it.createException()
                     .map { e ->
                         log.warn("Fiks - hentKommuneInfo feilet - ${messageUtenFnr(e)}", e)
-                        throw FiksServerException(e.rawStatusCode, e.message?.feilmeldingUtenFnr, e)
+                        FiksServerException(e.rawStatusCode, e.message?.feilmeldingUtenFnr, e)
                     }
             }
             .bodyToMono<KommuneInfo>()
@@ -67,7 +67,7 @@ class KommuneInfoClientImpl(
                 it.createException()
                     .map { e ->
                         log.warn("Fiks - hentKommuneInfoForAlle feilet - ${messageUtenFnr(e)}", e)
-                        throw FiksServerException(e.rawStatusCode, e.message?.feilmeldingUtenFnr, e)
+                        FiksServerException(e.rawStatusCode, e.message?.feilmeldingUtenFnr, e)
                     }
             }
             .bodyToMono(typeRef<List<KommuneInfo>>())
