@@ -14,6 +14,7 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import org.springframework.http.HttpStatus
 import org.springframework.web.reactive.function.client.WebClient
+import org.springframework.web.reactive.function.client.WebClientResponseException
 import org.springframework.web.reactive.function.client.bodyToMono
 
 internal class KommuneInfoClientTest {
@@ -39,9 +40,8 @@ internal class KommuneInfoClientTest {
                 .uri(any(), any<String>())
                 .headers(any())
                 .retrieve()
-                .onStatus(any(), any())
-                .onStatus(any(), any())
                 .bodyToMono<KommuneInfo>()
+                .onErrorMap(WebClientResponseException::class.java, any())
                 .block()
         } returns mockKommuneInfo
 
@@ -57,9 +57,8 @@ internal class KommuneInfoClientTest {
                 .uri(any(), any<String>())
                 .headers(any())
                 .retrieve()
-                .onStatus(any(), any())
-                .onStatus(any(), any())
                 .bodyToMono<KommuneInfo>()
+                .onErrorMap(WebClientResponseException::class.java, any())
                 .block()
         } throws FiksClientException(HttpStatus.NOT_FOUND.value(), "not found", null)
 
@@ -73,9 +72,8 @@ internal class KommuneInfoClientTest {
                 .uri(any(), any<String>())
                 .headers(any())
                 .retrieve()
-                .onStatus(any(), any())
-                .onStatus(any(), any())
                 .bodyToMono<KommuneInfo>()
+                .onErrorMap(WebClientResponseException::class.java, any())
                 .block()
         } throws FiksServerException(HttpStatus.INTERNAL_SERVER_ERROR.value(), "error", null)
 
@@ -89,9 +87,8 @@ internal class KommuneInfoClientTest {
                 .uri(any<String>())
                 .headers(any())
                 .retrieve()
-                .onStatus(any(), any())
-                .onStatus(any(), any())
                 .bodyToMono(typeRef<List<KommuneInfo>>())
+                .onErrorMap(WebClientResponseException::class.java, any())
                 .block()
         } returns listOf(mockKommuneInfo)
 

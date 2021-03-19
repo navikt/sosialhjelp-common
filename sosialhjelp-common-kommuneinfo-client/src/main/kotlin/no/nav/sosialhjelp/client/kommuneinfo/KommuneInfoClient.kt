@@ -1,17 +1,19 @@
 package no.nav.sosialhjelp.client.kommuneinfo
 
+import no.nav.sosialhjelp.api.fiks.ErrorMessage
 import no.nav.sosialhjelp.api.fiks.KommuneInfo
 import no.nav.sosialhjelp.api.fiks.exceptions.FiksClientException
 import no.nav.sosialhjelp.api.fiks.exceptions.FiksServerException
 import no.nav.sosialhjelp.client.utils.Constants.BEARER
+import no.nav.sosialhjelp.client.utils.objectMapper
 import no.nav.sosialhjelp.client.utils.typeRef
 import no.nav.sosialhjelp.kotlin.utils.logger
 import org.springframework.http.HttpHeaders
-import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
 import org.springframework.web.reactive.function.client.WebClient
 import org.springframework.web.reactive.function.client.WebClientResponseException
 import org.springframework.web.reactive.function.client.bodyToMono
+import java.io.IOException
 import java.util.Collections
 
 interface KommuneInfoClient {
@@ -31,21 +33,14 @@ class KommuneInfoClientImpl(
             .uri(fiksProperties.hentKommuneInfoUrl, kommunenummer)
             .headers { it.addAll(fiksHeaders(fiksProperties, token)) }
             .retrieve()
-            .onStatus(HttpStatus::is4xxClientError) {
-                it.createException()
-                    .map { e ->
-                        log.warn("Fiks - hentKommuneInfo feilet - ${messageUtenFnr(e)}", e)
-                        FiksClientException(e.rawStatusCode, e.message?.feilmeldingUtenFnr, e)
-                    }
-            }
-            .onStatus(HttpStatus::is5xxServerError) {
-                it.createException()
-                    .map { e ->
-                        log.warn("Fiks - hentKommuneInfo feilet - ${messageUtenFnr(e)}", e)
-                        FiksServerException(e.rawStatusCode, e.message?.feilmeldingUtenFnr, e)
-                    }
-            }
             .bodyToMono<KommuneInfo>()
+            .onErrorMap(WebClientResponseException::class.java) { e ->
+                log.warn("Fiks - hentKommuneInfo feilet - ${messageUtenFnr(e)}", e)
+                when {
+                    e.statusCode.is4xxClientError -> FiksClientException(e.rawStatusCode, e.message?.feilmeldingUtenFnr, e)
+                    else -> FiksServerException(e.rawStatusCode, e.message?.feilmeldingUtenFnr, e)
+                }
+            }
             .block()
 
         return kommuneInfo!!
@@ -56,21 +51,14 @@ class KommuneInfoClientImpl(
             .uri(fiksProperties.hentAlleKommuneInfoUrl)
             .headers { it.addAll(fiksHeaders(fiksProperties, token)) }
             .retrieve()
-            .onStatus(HttpStatus::is4xxClientError) {
-                it.createException()
-                    .map { e ->
-                        log.warn("Fiks - hentKommuneInfoForAlle feilet - ${messageUtenFnr(e)}", e)
-                        FiksClientException(e.rawStatusCode, e.message?.feilmeldingUtenFnr, e)
-                    }
-            }
-            .onStatus(HttpStatus::is5xxServerError) {
-                it.createException()
-                    .map { e ->
-                        log.warn("Fiks - hentKommuneInfoForAlle feilet - ${messageUtenFnr(e)}", e)
-                        FiksServerException(e.rawStatusCode, e.message?.feilmeldingUtenFnr, e)
-                    }
-            }
             .bodyToMono(typeRef<List<KommuneInfo>>())
+            .onErrorMap(WebClientResponseException::class.java) { e ->
+                log.warn("Fiks - hentKommuneInfoForAlle feilet - ${messageUtenFnr(e)}", e)
+                when {
+                    e.statusCode.is4xxClientError -> FiksClientException(e.rawStatusCode, e.message?.feilmeldingUtenFnr, e)
+                    else -> FiksServerException(e.rawStatusCode, e.message?.feilmeldingUtenFnr, e)
+                }
+            }
             .block()
 
         return list!!
@@ -96,5 +84,23 @@ class KommuneInfoClientImpl(
             val message = e.message?.feilmeldingUtenFnr
             return "$message - $fiksErrorMessage"
         }
+
+        private fun <T : WebClientResponseException> T.toFiksErrorMessage(): ErrorMessage? {
+            return try {
+                objectMapper.readValue(this.responseBodyAsByteArray, ErrorMessage::class.java)
+            } catch (e: IOException) {
+                null
+            }
+        }
+
+        private val ErrorMessage.feilmeldingUtenFnr: String?
+            get() {
+                return this.message?.feilmeldingUtenFnr
+            }
+
+        private val String.feilmeldingUtenFnr: String?
+            get() {
+                return this.replace(Regex("""\b[0-9]{11}\b"""), "[FNR]")
+            }
     }
 }
