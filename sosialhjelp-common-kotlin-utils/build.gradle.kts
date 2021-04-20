@@ -14,9 +14,7 @@ dependencies {
 
 //    Slf4j
     api("org.slf4j:slf4j-api:${Versions.slf4j}")
-
 }
-
 
 publishing {
     repositories {

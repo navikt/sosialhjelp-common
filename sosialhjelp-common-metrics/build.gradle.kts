@@ -24,7 +24,6 @@ dependencies {
     api("org.aspectj:aspectjrt:${Versions.aspectj}")
 
     runtimeOnly("org.aspectj:aspectjweaver:${Versions.aspectj}")
-
 }
 
 publishing {

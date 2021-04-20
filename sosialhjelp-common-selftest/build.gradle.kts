@@ -16,7 +16,6 @@ dependencies {
     api("com.fasterxml.jackson.module:jackson-module-kotlin:${Versions.jackson}")
 //    Micrometer
     api("io.micrometer:micrometer-core:${Versions.micrometer}")
-
 }
 
 publishing {

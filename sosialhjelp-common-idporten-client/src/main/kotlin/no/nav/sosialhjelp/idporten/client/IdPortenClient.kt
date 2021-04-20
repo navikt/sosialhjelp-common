@@ -150,5 +150,4 @@ class IdPortenClient(
         val password: String,
         val type: String
     )
-
 }

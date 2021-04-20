@@ -28,15 +28,15 @@ interface DependencyCheck {
         val responseTime = endTime - startTime
 
         return DependencyCheckResult(
-                endpoint = name,
-                result = throwable?.let { if (importance == Importance.CRITICAL) Result.ERROR else Result.WARNING }
-                        ?: Result.OK,
-                address = address,
-                errorMessage = throwable?.let { "Call to dependency=$name timed out or circuitbreaker tripped. Errormessage=${getErrorMessageFromThrowable(it)}" },
-                type = type,
-                importance = importance,
-                responseTime = "$responseTime ms",
-                throwable = throwable
+            endpoint = name,
+            result = throwable?.let { if (importance == Importance.CRITICAL) Result.ERROR else Result.WARNING }
+                ?: Result.OK,
+            address = address,
+            errorMessage = throwable?.let { "Call to dependency=$name timed out or circuitbreaker tripped. Errormessage=${getErrorMessageFromThrowable(it)}" },
+            type = type,
+            importance = importance,
+            responseTime = "$responseTime ms",
+            throwable = throwable
         )
     }
 

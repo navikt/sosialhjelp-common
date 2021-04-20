@@ -5,20 +5,19 @@ import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
 
-
 class SelftestService(
-        private val appName: String,
-        private val version: String,
-        private val dependencyChecks: List<DependencyCheck>
+    private val appName: String,
+    private val version: String,
+    private val dependencyChecks: List<DependencyCheck>
 ) {
 
     fun getSelftest(): SelftestResult {
         val results = runBlocking { checkDependencies(dependencyChecks) }
         return SelftestResult(
-                appName = appName,
-                version = version,
-                result = getOverallSelftestResult(results),
-                dependencyCheckResults = results
+            appName = appName,
+            version = version,
+            result = getOverallSelftestResult(results),
+            dependencyCheckResults = results
         )
     }
 

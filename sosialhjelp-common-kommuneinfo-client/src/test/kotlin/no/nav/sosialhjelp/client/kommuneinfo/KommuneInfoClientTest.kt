@@ -97,4 +97,3 @@ internal class KommuneInfoClientTest {
         assertEquals(1, list.size)
     }
 }
-

@@ -4,12 +4,12 @@ import kotlinx.coroutines.delay
 import kotlin.reflect.KClass
 
 suspend fun <T> retry(
-        attempts: Int = 10,
-        initialDelay: Long = 100L,
-        maxDelay: Long = 1000L,
-        factor: Double = 2.0,
-        retryableExceptions: Array<KClass<out Throwable>> = arrayOf(),
-        block: suspend () -> T
+    attempts: Int = 10,
+    initialDelay: Long = 100L,
+    maxDelay: Long = 1000L,
+    factor: Double = 2.0,
+    retryableExceptions: Array<KClass<out Throwable>> = arrayOf(),
+    block: suspend () -> T
 ): T {
     var currentDelay = initialDelay
     repeat(attempts - 1) {
@@ -38,4 +38,4 @@ private fun countAndRethrowError(e: Throwable, block: () -> Any?): Nothing {
 }
 
 internal suspend inline fun <T> timed(crossinline block: suspend () -> T) =
-        block()
+    block()
