@@ -34,6 +34,7 @@ dependencies {
 
 subprojects {
     apply(plugin = "org.jetbrains.kotlin.jvm")
+    apply(plugin = "org.jlleitschuh.gradle.ktlint")
 
     configurations {
         "testImplementation" {
