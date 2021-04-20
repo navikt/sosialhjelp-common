@@ -11,6 +11,11 @@ repositories {
 
 plugins {
     kotlin("jvm") version "1.4.21"
+    id("org.jlleitschuh.gradle.ktlint") version "10.0.0"
+}
+
+ktlint {
+    this.version.set("0.41.0")
 }
 
 allprojects {

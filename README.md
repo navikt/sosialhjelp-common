@@ -47,3 +47,18 @@ Klient for å hente access-token fra maskinporten til ønsket scope.
 Krever registrering av applikasjon i [navikt/nav-maskinporten](https://github.com/navikt/nav-maskinporten) for å lage nødvendige secrets i vault.  
 Etter den er registert i nav-maskinporten må applikasjonen registreres med tilgang til managed secrets knyttet til
 maskinporten i [navikt/vault-iac](https://github.com/navikt/vault-iac).  
+
+## Ktlint
+Hvordan kjøre Ktlint:
+* Fra IDEA: Kjør Gradle Task: sosialhjelp-common -> Tasks -> formatting -> ktlintFormat
+* Fra terminal:
+    * Kun formater: `./gradlew ktlintFormat`
+    * Formater og bygg: `./gradlew ktlintFormat build`
+    * Hvis IntelliJ begynner å hikke, kan en kjøre `./gradlew clean ktlintFormat build`
+
+Endre IntelliJ autoformateringskonfigurasjon for dette prosjektet:
+* `./gradlew ktlintApplyToIdea`
+
+Legg til pre-commit check/format hooks:
+* `./gradlew addKtlintCheckGitPreCommitHook`
+* `./gradlew addKtlintFormatGitPreCommitHook`
