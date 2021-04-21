@@ -41,7 +41,6 @@ internal class A : DependencyCheck {
     override val importance: Importance = Importance.WARNING
 
     override fun doCheck() {
-
     }
 }
 

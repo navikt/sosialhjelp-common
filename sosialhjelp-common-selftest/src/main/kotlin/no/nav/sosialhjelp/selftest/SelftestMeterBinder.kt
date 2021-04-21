@@ -5,13 +5,13 @@ import io.micrometer.core.instrument.MeterRegistry
 import io.micrometer.core.instrument.binder.MeterBinder
 
 class SelftestMeterBinder(
-        private val selftestService: SelftestService
+    private val selftestService: SelftestService
 ) : MeterBinder {
 
     override fun bindTo(registry: MeterRegistry) {
         Gauge.builder("selftests_aggregate_result_status") { getAggregateResult() }
-                .description("aggregert status for alle selftester. 0=ok, 1=kritisk feil, 2=ikke-kritisk feil")
-                .register(registry)
+            .description("aggregert status for alle selftester. 0=ok, 1=kritisk feil, 2=ikke-kritisk feil")
+            .register(registry)
     }
 
     private fun getAggregateResult(): Int {

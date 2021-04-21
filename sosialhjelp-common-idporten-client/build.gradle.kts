@@ -16,9 +16,7 @@ dependencies {
     api("com.fasterxml.jackson.module:jackson-module-kotlin:${Versions.jackson}")
     api("org.springframework:spring-webflux:${Versions.spring}")
     api("com.nimbusds:nimbus-jose-jwt:${Versions.nimbusds}")
-
 }
-
 
 publishing {
     repositories {
