@@ -19,7 +19,7 @@ jobs:
         uses: snyk/actions/gradle-jdk11@master
         with:
           command: monitor
-          args: --all-sub-projects --org=teamdigisos --project-name=${{ env.REPOSITORY_NAME }} --remote-repo-url=${{ env.REPOSITORY_NAME }}
+          args: --all-sub-projects --org=teamdigisos --remote-repo-url=${{ env.REPOSITORY_NAME }}
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
           ORG_GRADLE_PROJECT_githubUser: x-access-token
