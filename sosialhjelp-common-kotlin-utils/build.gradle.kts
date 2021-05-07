@@ -1,5 +1,5 @@
 object Versions {
-    const val coroutines = "1.4.2"
+    const val coroutines = "1.4.3"
     const val slf4j = "1.7.30"
 }
 
