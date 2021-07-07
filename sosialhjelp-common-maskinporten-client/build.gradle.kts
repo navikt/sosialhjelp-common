@@ -1,8 +1,8 @@
 object Versions {
     const val slf4j = "1.7.30"
     const val coroutines = "1.5.0"
-    const val springBoot = "2.4.5"
-    const val tokenValidation = "1.3.7"
+    const val springBoot = "2.5.1"
+    const val tokenValidation = "1.3.8"
     const val jackson = "2.12.3"
     const val jjwtVersion = "0.10.7"
 }
