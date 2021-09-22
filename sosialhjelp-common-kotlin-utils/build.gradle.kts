@@ -1,6 +1,6 @@
 object Versions {
-    const val coroutines = "1.5.0"
-    const val slf4j = "1.7.30"
+    const val coroutines = "1.5.2"
+    const val slf4j = "1.7.32"
 }
 
 plugins {
