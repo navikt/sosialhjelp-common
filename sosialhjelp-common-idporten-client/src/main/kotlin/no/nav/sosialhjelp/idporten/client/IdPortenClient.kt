@@ -85,10 +85,10 @@ class IdPortenClient(
             File("${idPortenProperties.virksomhetSertifikatPath}/credentials.json").readText(Charsets.UTF_8)
         )
 
-        val pair = KeyStore.getInstance(idPortenProperties.truststoreType).let { keyStore ->
+        val pair = KeyStore.getInstance(virksertCredentials.type).let { keyStore ->
             keyStore.load(
                 java.util.Base64.getDecoder().decode(
-                    File("${idPortenProperties.virksomhetSertifikatPath}/${idPortenProperties.truststoreFilepath}").readText(
+                    File("${idPortenProperties.virksomhetSertifikatPath}/${idPortenProperties.truststoreFilename}").readText(
                         Charsets.UTF_8
                     )
                 ).inputStream(),
