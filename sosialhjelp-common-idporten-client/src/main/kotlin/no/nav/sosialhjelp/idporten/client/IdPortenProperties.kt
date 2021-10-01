@@ -5,6 +5,5 @@ data class IdPortenProperties(
     val clientId: String,
     val scope: String,
     val configUrl: String,
-    val truststoreFilename: String,
     val virksomhetSertifikatPath: String
 )
