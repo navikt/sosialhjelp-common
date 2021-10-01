@@ -81,16 +81,15 @@ class IdPortenClient(
             it.add(Calendar.SECOND, expirySeconds)
             it.time
         }
+
         val virksertCredentials = objectMapper.readValue<VirksertCredentials>(
-            File("${idPortenProperties.virksomhetSertifikatPath}/credentials.json").readText(Charsets.UTF_8)
+            File("${idPortenProperties.virksomhetSertifikatPath}/$credentialsJson").readText(Charsets.UTF_8)
         )
 
-        val pair = KeyStore.getInstance(idPortenProperties.truststoreType).let { keyStore ->
+        val pair = KeyStore.getInstance(virksertCredentials.type).let { keyStore ->
             keyStore.load(
                 java.util.Base64.getDecoder().decode(
-                    File("${idPortenProperties.virksomhetSertifikatPath}/${idPortenProperties.truststoreFilepath}").readText(
-                        Charsets.UTF_8
-                    )
+                    File("${idPortenProperties.virksomhetSertifikatPath}/$truststoreFile").readText(Charsets.UTF_8)
                 ).inputStream(),
                 virksertCredentials.password.toCharArray()
             )
@@ -126,6 +125,9 @@ class IdPortenClient(
     }
 
     companion object {
+
+        private const val credentialsJson = "credentials.json"
+        private const val truststoreFile = "key.p12.b64"
 
         private const val MAX_EXPIRY_SECONDS = 120
         private const val CLAIMS_SCOPE = "scope"
