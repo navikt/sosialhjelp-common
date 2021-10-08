@@ -38,7 +38,9 @@ class IdPortenClient(
     private var idPortenOidcConfiguration: IdPortenOidcConfiguration? = null
 
     suspend fun requestToken(attempts: Int = 10, headers: HttpHeaders = HttpHeaders()): AccessToken {
-        if (idPortenOidcConfiguration == null) setIdPortenOidcConfiguration()
+        if (idPortenOidcConfiguration == null) {
+            idPortenOidcConfiguration = hentIdPortenOidcConfiguration()
+        }
 
         return retry(attempts = attempts, retryableExceptions = serverErrors) {
             val jws = createJws()
@@ -59,16 +61,15 @@ class IdPortenClient(
         }
     }
 
-    private suspend fun setIdPortenOidcConfiguration() {
+    private suspend fun hentIdPortenOidcConfiguration(): IdPortenOidcConfiguration {
         log.debug("Forsøker å hente idporten-config fra ${idPortenProperties.configUrl}")
-        idPortenOidcConfiguration =
-            webClient.get()
-                .uri(idPortenProperties.configUrl)
-                .retrieve()
-                .awaitBody<IdPortenOidcConfiguration>()
-                .also {
-                    log.info("idporten-config: OIDC configuration initialized")
-                }
+        return webClient.get()
+            .uri(idPortenProperties.configUrl)
+            .retrieve()
+            .awaitBody<IdPortenOidcConfiguration>()
+            .also {
+                log.info("idporten-config: OIDC configuration initialized")
+            }
     }
 
     private fun createJws(
