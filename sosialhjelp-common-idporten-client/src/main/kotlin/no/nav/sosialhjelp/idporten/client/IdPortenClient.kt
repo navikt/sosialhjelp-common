@@ -7,7 +7,6 @@ import com.nimbusds.jose.crypto.RSASSASigner
 import com.nimbusds.jose.util.Base64
 import com.nimbusds.jwt.JWTClaimsSet
 import com.nimbusds.jwt.SignedJWT
-import kotlinx.coroutines.runBlocking
 import no.nav.sosialhjelp.client.utils.objectMapper
 import no.nav.sosialhjelp.kotlin.utils.logger
 import no.nav.sosialhjelp.kotlin.utils.retry
@@ -36,19 +35,14 @@ class IdPortenClient(
     private val idPortenProperties: IdPortenProperties
 ) {
 
-    private val idPortenOidcConfiguration: IdPortenOidcConfiguration = runBlocking {
-        log.debug("Forsøker å hente idporten-config fra ${idPortenProperties.configUrl}")
-        webClient.get()
-            .uri(idPortenProperties.configUrl)
-            .retrieve()
-            .awaitBody<IdPortenOidcConfiguration>()
-            .also {
-                log.info("idporten-config: OIDC configuration initialized")
-            }
-    }
+    private var idPortenOidcConfiguration: IdPortenOidcConfiguration? = null
 
-    suspend fun requestToken(attempts: Int = 10, headers: HttpHeaders = HttpHeaders()): AccessToken =
-        retry(attempts = attempts, retryableExceptions = serverErrors) {
+    suspend fun requestToken(attempts: Int = 10, headers: HttpHeaders = HttpHeaders()): AccessToken {
+        if (idPortenOidcConfiguration == null) {
+            idPortenOidcConfiguration = hentIdPortenOidcConfiguration()
+        }
+
+        return retry(attempts = attempts, retryableExceptions = serverErrors) {
             val jws = createJws()
             log.debug("Got jws, getting token (virksomhetssertifikat)")
 
@@ -65,6 +59,18 @@ class IdPortenClient(
 
             AccessToken(response.accessToken, response.expiresIn)
         }
+    }
+
+    private suspend fun hentIdPortenOidcConfiguration(): IdPortenOidcConfiguration {
+        log.debug("Forsøker å hente idporten-config fra ${idPortenProperties.configUrl}")
+        return webClient.get()
+            .uri(idPortenProperties.configUrl)
+            .retrieve()
+            .awaitBody<IdPortenOidcConfiguration>()
+            .also {
+                log.info("idporten-config: OIDC configuration initialized")
+            }
+    }
 
     private fun createJws(
         expirySeconds: Int = 100,
@@ -109,7 +115,7 @@ class IdPortenClient(
         return SignedJWT(
             JWSHeader.Builder(JWSAlgorithm.RS256).x509CertChain(mutableListOf(Base64.encode(pair.second))).build(),
             JWTClaimsSet.Builder()
-                .audience(idPortenOidcConfiguration.issuer)
+                .audience(idPortenOidcConfiguration?.issuer)
                 .issuer(issuer)
                 .issueTime(date)
                 .jwtID(UUID.randomUUID().toString())
