@@ -33,7 +33,7 @@ publishing {
 
             pom {
                 name.set("sosialhjelp-common-idporten-client")
-                description.set("Bibliotek for selftest i sosialhjelp-domene")
+                description.set("Felles klient for henting av virksomhetstoken fra IdPorten")
                 url.set("https://github.com/navikt/sosialhjelp-common")
                 licenses {
                     license {
