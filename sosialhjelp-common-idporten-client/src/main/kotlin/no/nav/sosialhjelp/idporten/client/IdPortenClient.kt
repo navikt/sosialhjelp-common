@@ -30,14 +30,18 @@ import java.util.Date
 import java.util.UUID
 import kotlin.reflect.KClass
 
-class IdPortenClient(
+interface IdPortenClient {
+    suspend fun requestToken(attempts: Int = 10, headers: HttpHeaders = HttpHeaders()): AccessToken
+}
+
+class IdPortenClientImpl(
     private val webClient: WebClient,
     private val idPortenProperties: IdPortenProperties
-) {
+) : IdPortenClient {
 
     private var idPortenOidcConfiguration: IdPortenOidcConfiguration? = null
 
-    suspend fun requestToken(attempts: Int = 10, headers: HttpHeaders = HttpHeaders()): AccessToken {
+    override suspend fun requestToken(attempts: Int, headers: HttpHeaders): AccessToken {
         if (idPortenOidcConfiguration == null) {
             idPortenOidcConfiguration = hentIdPortenOidcConfiguration()
         }
