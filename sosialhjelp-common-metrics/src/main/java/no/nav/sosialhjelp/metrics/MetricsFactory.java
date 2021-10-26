@@ -32,10 +32,6 @@ public final class MetricsFactory {
         return createTimerProxyInstance(name, object, type);
     }
 
-    public static <T> T createTimerProxyForWebService(String name, T object, Class<T> type) {
-        return createTimerProxyInstance("ws." + name, object, type);
-    }
-
     @SuppressWarnings("unchecked")
     private static <T> T createTimerProxyInstance(String name, T object, Class<T> type) {
         ClassLoader classLoader = TimerProxy.class.getClassLoader();
