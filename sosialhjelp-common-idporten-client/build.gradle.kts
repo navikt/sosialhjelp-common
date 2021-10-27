@@ -1,7 +1,7 @@
 object Versions {
-    const val jackson = "2.12.5"
-    const val spring = "5.3.10"
-    const val nimbusds = "9.14"
+    const val jackson = "2.13.0"
+    const val spring = "5.3.12"
+    const val nimbusds = "9.15.2"
 }
 
 plugins {
