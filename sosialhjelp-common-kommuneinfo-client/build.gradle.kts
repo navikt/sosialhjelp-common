@@ -1,6 +1,6 @@
 object Versions {
     const val jackson = "2.13.0"
-    const val spring = "5.3.12"
+    const val spring = "5.3.13"
 
     const val mockk = "1.12.0"
 }
