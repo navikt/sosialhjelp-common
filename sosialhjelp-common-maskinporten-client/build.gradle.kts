@@ -5,6 +5,7 @@ object Versions {
     const val tokenValidation = "1.3.9"
     const val jackson = "2.13.0"
     const val jjwtVersion = "0.10.7"
+    const val log4j = "2.15.0"
 }
 
 plugins {
@@ -39,6 +40,15 @@ dependencies {
     //    Sosialhjelp-common
     implementation(project(":sosialhjelp-common-kotlin-utils"))
     implementation(project(":sosialhjelp-common-client-utils"))
+
+    constraints {
+        implementation("org.apache.logging.log4j:log4j-api:${Versions.log4j}") {
+            because("0-day exploit i version 2.0.0-2.14.1")
+        }
+        implementation("org.apache.logging.log4j:log4j-to-slf4j:${Versions.log4j}") {
+            because("0-day exploit i version 2.0.0-2.14.1")
+        }
+    }
 }
 
 publishing {
