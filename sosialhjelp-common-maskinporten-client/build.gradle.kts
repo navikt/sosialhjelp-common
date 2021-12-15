@@ -5,7 +5,7 @@ object Versions {
     const val tokenValidation = "1.3.9"
     const val jackson = "2.13.0"
     const val jjwtVersion = "0.10.7"
-    const val log4j = "2.15.0"
+    const val log4j = "2.16.0"
 }
 
 plugins {
