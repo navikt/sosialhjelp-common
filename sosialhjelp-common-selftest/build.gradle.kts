@@ -1,5 +1,5 @@
 object Versions {
-    const val jackson = "2.13.0"
+    const val jackson = "2.13.1"
     const val micrometer = "1.7.5"
 }
 

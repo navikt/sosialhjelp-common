@@ -1,6 +1,6 @@
 object Versions {
-    const val spring = "5.3.13"
-    const val jackson = "2.13.0"
+    const val spring = "5.3.14"
+    const val jackson = "2.13.1"
 }
 
 plugins {
