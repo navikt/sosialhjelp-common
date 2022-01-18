@@ -55,7 +55,7 @@ public class MetricsConfig {
     }
 
     private static Optional<String> getOptionalProperty(String property) {
-        return Optional.of(System.getProperty(property));
+        return Optional.ofNullable(System.getProperty(property));
     }
 
     public String getSensuHost() {
