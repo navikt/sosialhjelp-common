@@ -1,8 +1,8 @@
 object Versions {
     const val jackson = "2.13.1"
-    const val spring = "5.3.14"
+    const val spring = "5.3.15"
 
-    const val mockk = "1.12.0"
+    const val mockk = "1.12.2"
 }
 
 plugins {
