@@ -21,6 +21,9 @@ Felles teknologi:
 * JDK 11
 * Gradle
 
+Krav:
+* JDK 11
+
 ### sosialhjelp-common-api
 Felles api-modeller for integrasjoner mot eksterne tjenester:
 - Fiks API
