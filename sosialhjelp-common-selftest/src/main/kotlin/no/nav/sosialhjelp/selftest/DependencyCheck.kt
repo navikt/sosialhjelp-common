@@ -20,7 +20,7 @@ interface DependencyCheck {
         try {
             doCheck()
         } catch (t: Throwable) {
-            log.warn("Call to dependency=$name with type=$type at url=$address timed out or circuitbreaker was tripped.", throwable)
+            log.error("Call to dependency=$name with type=$type at url=$address timed out or circuitbreaker was tripped. ${t.message}", t)
             throwable = t
         }
 
