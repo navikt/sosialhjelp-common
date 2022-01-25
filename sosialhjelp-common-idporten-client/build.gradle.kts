@@ -1,7 +1,7 @@
 object Versions {
-    const val jackson = "2.12.1"
-    const val spring = "5.3.3"
-    const val nimbusds = "8.19"
+    const val jackson = "2.13.1"
+    const val spring = "5.3.15"
+    const val nimbusds = "9.15.2"
 }
 
 plugins {
@@ -14,11 +14,9 @@ dependencies {
     implementation(project(":sosialhjelp-common-client-utils"))
 
     api("com.fasterxml.jackson.module:jackson-module-kotlin:${Versions.jackson}")
-    api("org.springframework:spring-web:${Versions.spring}")
+    api("org.springframework:spring-webflux:${Versions.spring}")
     api("com.nimbusds:nimbus-jose-jwt:${Versions.nimbusds}")
-
 }
-
 
 publishing {
     repositories {
@@ -35,7 +33,7 @@ publishing {
 
             pom {
                 name.set("sosialhjelp-common-idporten-client")
-                description.set("Bibliotek for selftest i sosialhjelp-domene")
+                description.set("Felles klient for henting av virksomhetstoken fra IdPorten")
                 url.set("https://github.com/navikt/sosialhjelp-common")
                 licenses {
                     license {

@@ -7,59 +7,79 @@ import com.nimbusds.jose.crypto.RSASSASigner
 import com.nimbusds.jose.util.Base64
 import com.nimbusds.jwt.JWTClaimsSet
 import com.nimbusds.jwt.SignedJWT
-import kotlinx.coroutines.runBlocking
 import no.nav.sosialhjelp.client.utils.objectMapper
 import no.nav.sosialhjelp.kotlin.utils.logger
 import no.nav.sosialhjelp.kotlin.utils.retry
-import org.springframework.http.HttpEntity
 import org.springframework.http.HttpHeaders
-import org.springframework.http.HttpMethod
 import org.springframework.util.LinkedMultiValueMap
-import org.springframework.web.client.HttpServerErrorException
-import org.springframework.web.client.RestTemplate
-import org.springframework.web.util.UriComponentsBuilder
+import org.springframework.web.reactive.function.BodyInserters
+import org.springframework.web.reactive.function.client.WebClient
+import org.springframework.web.reactive.function.client.WebClientResponseException.BadGateway
+import org.springframework.web.reactive.function.client.WebClientResponseException.GatewayTimeout
+import org.springframework.web.reactive.function.client.WebClientResponseException.InternalServerError
+import org.springframework.web.reactive.function.client.WebClientResponseException.NotImplemented
+import org.springframework.web.reactive.function.client.WebClientResponseException.ServiceUnavailable
+import org.springframework.web.reactive.function.client.awaitBody
 import java.io.File
 import java.security.KeyPair
 import java.security.KeyStore
 import java.security.PrivateKey
 import java.security.cert.X509Certificate
-import java.util.*
+import java.util.Calendar
+import java.util.Date
+import java.util.UUID
+import kotlin.reflect.KClass
 
-class IdPortenClient(
-        private val restTemplate: RestTemplate,
-        private val idPortenProperties: IdPortenProperties
-) {
+interface IdPortenClient {
+    suspend fun requestToken(attempts: Int = 10, headers: HttpHeaders = HttpHeaders()): AccessToken
+}
 
-    private val idPortenOidcConfiguration: IdPortenOidcConfiguration
+class IdPortenClientImpl(
+    private val webClient: WebClient,
+    private val idPortenProperties: IdPortenProperties
+) : IdPortenClient {
 
-    init {
-        idPortenOidcConfiguration = runBlocking {
-            val configUrl = idPortenProperties.configUrl
-            log.debug("Forsøker å hente idporten-config fra $configUrl")
-            val response = restTemplate.exchange(configUrl, HttpMethod.GET, HttpEntity<Nothing>(HttpHeaders()), IdPortenOidcConfiguration::class.java)
-            log.info("Hentet idporten-config fra $configUrl")
-            response.body!!
-        }.also {
-            log.info("idporten-config: OIDC configuration initialized")
+    private var idPortenOidcConfiguration: IdPortenOidcConfiguration? = null
+
+    override suspend fun requestToken(attempts: Int, headers: HttpHeaders): AccessToken {
+        if (idPortenOidcConfiguration == null) {
+            idPortenOidcConfiguration = hentIdPortenOidcConfiguration()
+        }
+
+        return retry(attempts = attempts, retryableExceptions = serverErrors) {
+            val jws = createJws()
+            log.debug("Got jws, getting token (virksomhetssertifikat)")
+
+            val body = LinkedMultiValueMap<String, String>()
+            body.add(GRANT_TYPE_PARAM, GRANT_TYPE)
+            body.add(ASSERTION_PARAM, jws.token)
+
+            val response = webClient.post()
+                .uri(idPortenProperties.tokenUrl)
+                .body(BodyInserters.fromFormData(body))
+                .headers { it.addAll(headers) }
+                .retrieve()
+                .awaitBody<IdPortenAccessTokenResponse>()
+
+            AccessToken(response.accessToken, response.expiresIn)
         }
     }
 
-    suspend fun requestToken(attempts: Int = 10, headers: HttpHeaders = HttpHeaders()): AccessToken =
-            retry(attempts = attempts, retryableExceptions = arrayOf(HttpServerErrorException::class)) {
-                val jws = createJws()
-                log.info("Got jws, getting token (virksomhetssertifikat)")
-                val uriComponents = UriComponentsBuilder.fromHttpUrl(idPortenProperties.tokenUrl).build()
-                val body = LinkedMultiValueMap<String, String>()
-                body.add(GRANT_TYPE_PARAM, GRANT_TYPE)
-                body.add(ASSERTION_PARAM, jws.token)
-                val response = restTemplate.exchange(uriComponents.toUriString(), HttpMethod.POST, HttpEntity(body, headers), IdPortenAccessTokenResponse::class.java)
-                AccessToken(response.body!!.accessToken, response.body!!.expiresIn)
+    private suspend fun hentIdPortenOidcConfiguration(): IdPortenOidcConfiguration {
+        log.debug("Forsøker å hente idporten-config fra ${idPortenProperties.configUrl}")
+        return webClient.get()
+            .uri(idPortenProperties.configUrl)
+            .retrieve()
+            .awaitBody<IdPortenOidcConfiguration>()
+            .also {
+                log.info("idporten-config: OIDC configuration initialized")
             }
+    }
 
-    fun createJws(
-            expirySeconds: Int = 100,
-            issuer: String = idPortenProperties.clientId,
-            scope: String = idPortenProperties.scope
+    private fun createJws(
+        expirySeconds: Int = 100,
+        issuer: String = idPortenProperties.clientId,
+        scope: String = idPortenProperties.scope
     ): Jws {
         require(expirySeconds <= MAX_EXPIRY_SECONDS) {
             "IdPorten: JWT expiry cannot be greater than $MAX_EXPIRY_SECONDS seconds (was $expirySeconds)"
@@ -71,47 +91,54 @@ class IdPortenClient(
             it.add(Calendar.SECOND, expirySeconds)
             it.time
         }
+
         val virksertCredentials = objectMapper.readValue<VirksertCredentials>(
-                File("${idPortenProperties.virksomhetSertifikatPath}/credentials.json").readText(Charsets.UTF_8)
+            File("${idPortenProperties.virksomhetSertifikatPath}/$credentialsJson").readText(Charsets.UTF_8)
         )
 
-        val pair = KeyStore.getInstance(idPortenProperties.truststoreType).let { keyStore ->
+        val pair = KeyStore.getInstance(virksertCredentials.type).let { keyStore ->
             keyStore.load(
-                    java.util.Base64.getDecoder().decode(File("${idPortenProperties.virksomhetSertifikatPath}/${idPortenProperties.truststoreFilepath}").readText(Charsets.UTF_8)).inputStream(),
-                    virksertCredentials.password.toCharArray()
+                java.util.Base64.getDecoder().decode(
+                    File("${idPortenProperties.virksomhetSertifikatPath}/$truststoreFile").readText(Charsets.UTF_8)
+                ).inputStream(),
+                virksertCredentials.password.toCharArray()
             )
             val cert = keyStore.getCertificate(virksertCredentials.alias) as X509Certificate
 
             KeyPair(
-                    cert.publicKey,
-                    keyStore.getKey(
-                            virksertCredentials.alias,
-                            virksertCredentials.password.toCharArray()
-                    ) as PrivateKey
+                cert.publicKey,
+                keyStore.getKey(
+                    virksertCredentials.alias,
+                    virksertCredentials.password.toCharArray()
+                ) as PrivateKey
             ) to cert.encoded
         }
 
-        log.info("Public certificate length ${pair.first.public.encoded.size} (virksomhetssertifikat)")
+        log.debug("Public certificate length ${pair.first.public.encoded.size} (virksomhetssertifikat)")
 
         return SignedJWT(
-                JWSHeader.Builder(JWSAlgorithm.RS256).x509CertChain(mutableListOf(Base64.encode(pair.second))).build(),
-                JWTClaimsSet.Builder()
-                        .audience(idPortenOidcConfiguration.issuer)
-                        .issuer(issuer)
-                        .issueTime(date)
-                        .jwtID(UUID.randomUUID().toString())
-                        .expirationTime(expDate)
-                        .claim(CLAIMS_SCOPE, scope)
-                        .build()
+            JWSHeader.Builder(JWSAlgorithm.RS256).x509CertChain(mutableListOf(Base64.encode(pair.second))).build(),
+            JWTClaimsSet.Builder()
+                .audience(idPortenOidcConfiguration?.issuer)
+                .issuer(issuer)
+                .issueTime(date)
+                .jwtID(UUID.randomUUID().toString())
+                .expirationTime(expDate)
+                .claim(CLAIMS_SCOPE, scope)
+                .build()
         ).run {
             sign(RSASSASigner(pair.first.private))
             val jws = Jws(serialize())
-            log.info("Serialized jws (virksomhetssertifikat)")
+            log.debug("Serialized jws (virksomhetssertifikat)")
             jws
         }
     }
 
     companion object {
+
+        private const val credentialsJson = "credentials.json"
+        private const val truststoreFile = "key.p12.b64"
+
         private const val MAX_EXPIRY_SECONDS = 120
         private const val CLAIMS_SCOPE = "scope"
         private const val GRANT_TYPE = "urn:ietf:params:oauth:grant-type:jwt-bearer"
@@ -120,12 +147,19 @@ class IdPortenClient(
         private const val ASSERTION_PARAM = "assertion"
 
         private val log by logger()
+
+        private val serverErrors: Array<KClass<out Throwable>> = arrayOf(
+            InternalServerError::class,
+            NotImplemented::class,
+            BadGateway::class,
+            ServiceUnavailable::class,
+            GatewayTimeout::class
+        )
     }
 
     private data class VirksertCredentials(
-            val alias: String,
-            val password: String,
-            val type: String
+        val alias: String,
+        val password: String,
+        val type: String
     )
-
 }

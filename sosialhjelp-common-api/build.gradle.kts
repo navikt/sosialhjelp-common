@@ -1,6 +1,4 @@
-object Versions {
-
-}
+object Versions
 
 plugins {
     id("java")
@@ -8,7 +6,6 @@ plugins {
 }
 
 dependencies {
-
 }
 
 publishing {

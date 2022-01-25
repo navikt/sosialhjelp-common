@@ -1,8 +1,8 @@
 object Versions {
-    const val jackson = "2.12.1"
-    const val spring = "5.3.3"
+    const val jackson = "2.13.1"
+    const val spring = "5.3.15"
 
-    const val mockk = "1.10.3"
+    const val mockk = "1.12.2"
 }
 
 plugins {
@@ -16,7 +16,7 @@ dependencies {
     implementation(project(":sosialhjelp-common-kotlin-utils"))
 
     api("com.fasterxml.jackson.module:jackson-module-kotlin:${Versions.jackson}")
-    api("org.springframework:spring-web:${Versions.spring}")
+    api("org.springframework:spring-webflux:${Versions.spring}")
 
     testImplementation("io.mockk:mockk:${Versions.mockk}")
 }

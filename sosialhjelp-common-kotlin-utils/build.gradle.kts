@@ -1,6 +1,6 @@
 object Versions {
-    const val coroutines = "1.4.2"
-    const val slf4j = "1.7.30"
+    const val coroutines = "1.6.0"
+    const val slf4j = "1.7.32"
 }
 
 plugins {
@@ -14,9 +14,7 @@ dependencies {
 
 //    Slf4j
     api("org.slf4j:slf4j-api:${Versions.slf4j}")
-
 }
-
 
 publishing {
     repositories {

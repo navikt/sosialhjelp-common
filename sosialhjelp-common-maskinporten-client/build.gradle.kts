@@ -1,10 +1,11 @@
 object Versions {
-    const val slf4j = "1.7.30"
-    const val coroutines = "1.4.2"
-    const val springBoot = "2.4.2"
-    const val tokenValidation = "1.3.2"
-    const val jackson = "2.12.1"
+    const val slf4j = "1.7.32"
+    const val coroutines = "1.6.0"
+    const val springBoot = "2.6.2"
+    const val tokenValidation = "1.3.10"
+    const val jackson = "2.13.1"
     const val jjwtVersion = "0.10.7"
+    const val log4j = "2.17.1"
 }
 
 plugins {
@@ -21,7 +22,6 @@ dependencies {
 
     //    Spring
     implementation("org.springframework.boot:spring-boot-starter-web:${Versions.springBoot}")
-    implementation("org.springframework.boot:spring-boot-starter-jetty:${Versions.springBoot}")
     implementation("org.springframework.boot:spring-boot-starter-actuator:${Versions.springBoot}")
     implementation("org.springframework.boot:spring-boot-starter-logging:${Versions.springBoot}")
     implementation("org.springframework.boot:spring-boot-starter-validation:${Versions.springBoot}")
@@ -40,6 +40,15 @@ dependencies {
     //    Sosialhjelp-common
     implementation(project(":sosialhjelp-common-kotlin-utils"))
     implementation(project(":sosialhjelp-common-client-utils"))
+
+    constraints {
+        implementation("org.apache.logging.log4j:log4j-api:${Versions.log4j}") {
+            because("0-day exploit i version 2.0.0-2.14.1")
+        }
+        implementation("org.apache.logging.log4j:log4j-to-slf4j:${Versions.log4j}") {
+            because("0-day exploit i version 2.0.0-2.14.1")
+        }
+    }
 }
 
 publishing {

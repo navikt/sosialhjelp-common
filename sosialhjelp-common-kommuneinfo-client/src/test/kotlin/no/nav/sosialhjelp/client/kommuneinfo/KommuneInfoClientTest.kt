@@ -12,19 +12,17 @@ import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
-import org.springframework.http.HttpMethod
 import org.springframework.http.HttpStatus
-import org.springframework.http.ResponseEntity
-import org.springframework.web.client.HttpClientErrorException
-import org.springframework.web.client.HttpServerErrorException
-import org.springframework.web.client.RestTemplate
+import org.springframework.web.reactive.function.client.WebClient
+import org.springframework.web.reactive.function.client.WebClientResponseException
+import org.springframework.web.reactive.function.client.bodyToMono
 
 internal class KommuneInfoClientTest {
 
-    private val restTemplate: RestTemplate = mockk()
+    private val webClient: WebClient = mockk()
     private val fiksProperties = FiksProperties("a", "b", "id", "pw")
 
-    private val kommuneInfoClient = KommuneInfoClientImpl(restTemplate, fiksProperties)
+    private val kommuneInfoClient = KommuneInfoClientImpl(webClient, fiksProperties)
 
     private val mockKommuneInfo: KommuneInfo = mockk()
 
@@ -38,14 +36,14 @@ internal class KommuneInfoClientTest {
     @Test
     fun `skal hente kommuneinfo`() {
         every {
-            restTemplate.exchange(
-                    any(),
-                    HttpMethod.GET,
-                    any(),
-                    KommuneInfo::class.java,
-                    any()
-            )
-        } returns ResponseEntity.ok(mockKommuneInfo)
+            webClient.get()
+                .uri(any(), any<String>())
+                .headers(any())
+                .retrieve()
+                .bodyToMono<KommuneInfo>()
+                .onErrorMap(WebClientResponseException::class.java, any())
+                .block()
+        } returns mockKommuneInfo
 
         val kommuneInfo = kommuneInfoClient.get("1234", token)
 
@@ -55,14 +53,14 @@ internal class KommuneInfoClientTest {
     @Test
     fun `404 not found - kaster feil`() {
         every {
-            restTemplate.exchange(
-                    any(),
-                    HttpMethod.GET,
-                    any(),
-                    KommuneInfo::class.java,
-                    any()
-            )
-        } throws HttpClientErrorException(HttpStatus.NOT_FOUND, "not found")
+            webClient.get()
+                .uri(any(), any<String>())
+                .headers(any())
+                .retrieve()
+                .bodyToMono<KommuneInfo>()
+                .onErrorMap(WebClientResponseException::class.java, any())
+                .block()
+        } throws FiksClientException(HttpStatus.NOT_FOUND.value(), "not found", null)
 
         assertThrows<FiksClientException> { kommuneInfoClient.get("1234", token) }
     }
@@ -70,14 +68,14 @@ internal class KommuneInfoClientTest {
     @Test
     fun `500 internal server error - kaster feil`() {
         every {
-            restTemplate.exchange(
-                    any(),
-                    HttpMethod.GET,
-                    any(),
-                    KommuneInfo::class.java,
-                    any()
-            )
-        } throws HttpServerErrorException(HttpStatus.INTERNAL_SERVER_ERROR, "error")
+            webClient.get()
+                .uri(any(), any<String>())
+                .headers(any())
+                .retrieve()
+                .bodyToMono<KommuneInfo>()
+                .onErrorMap(WebClientResponseException::class.java, any())
+                .block()
+        } throws FiksServerException(HttpStatus.INTERNAL_SERVER_ERROR.value(), "error", null)
 
         assertThrows<FiksServerException> { kommuneInfoClient.get("1234", token) }
     }
@@ -85,17 +83,17 @@ internal class KommuneInfoClientTest {
     @Test
     fun `skal hente alle kommuneinfoer`() {
         every {
-            restTemplate.exchange(
-                    any<String>(),
-                    HttpMethod.GET,
-                    any(),
-                    typeRef<List<KommuneInfo>>()
-            )
-        } returns ResponseEntity.ok(listOf(mockKommuneInfo))
+            webClient.get()
+                .uri(any<String>())
+                .headers(any())
+                .retrieve()
+                .bodyToMono(typeRef<List<KommuneInfo>>())
+                .onErrorMap(WebClientResponseException::class.java, any())
+                .block()
+        } returns listOf(mockKommuneInfo)
 
         val list = kommuneInfoClient.getAll(token)
 
         assertEquals(1, list.size)
     }
 }
-
