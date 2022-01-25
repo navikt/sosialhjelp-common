@@ -20,7 +20,12 @@ interface DependencyCheck {
         try {
             doCheck()
         } catch (t: Throwable) {
-            log.error("Call to dependency=$name with type=$type at url=$address timed out or circuitbreaker was tripped. ${t.message}", t)
+            val errorMessage = "Call to dependency=$name with type=$type at url=$address timed out or circuitbreaker was tripped. ${t.message}"
+            if (importance == Importance.CRITICAL) {
+                log.error(errorMessage, t)
+            } else {
+                log.warn(errorMessage, t)
+            }
             throwable = t
         }
 
