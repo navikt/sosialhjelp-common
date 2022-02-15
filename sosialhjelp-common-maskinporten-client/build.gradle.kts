@@ -1,10 +1,11 @@
 object Versions {
     const val slf4j = "1.7.32"
     const val coroutines = "1.6.0"
-    const val springBoot = "2.6.2"
+    const val springBoot = "2.6.3"
     const val tokenValidation = "1.3.10"
     const val jackson = "2.13.1"
-    const val jjwtVersion = "0.10.7"
+    const val jjwtVersion = "0.11.2"
+    const val nimbusJoseJwt = "9.19"
     const val log4j = "2.17.1"
 }
 
@@ -48,6 +49,8 @@ dependencies {
         implementation("org.apache.logging.log4j:log4j-to-slf4j:${Versions.log4j}") {
             because("0-day exploit i version 2.0.0-2.14.1")
         }
+
+        implementation("com.nimbusds:nimbus-jose-jwt:${Versions.nimbusJoseJwt}")
     }
 }
 

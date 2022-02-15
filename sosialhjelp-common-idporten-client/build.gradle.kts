@@ -1,7 +1,7 @@
 object Versions {
     const val jackson = "2.13.1"
     const val spring = "5.3.15"
-    const val nimbusds = "9.15.2"
+    const val nimbusJoseJwt = "9.19"
 }
 
 plugins {
@@ -15,7 +15,7 @@ dependencies {
 
     api("com.fasterxml.jackson.module:jackson-module-kotlin:${Versions.jackson}")
     api("org.springframework:spring-webflux:${Versions.spring}")
-    api("com.nimbusds:nimbus-jose-jwt:${Versions.nimbusds}")
+    api("com.nimbusds:nimbus-jose-jwt:${Versions.nimbusJoseJwt}")
 }
 
 publishing {
