@@ -5,15 +5,13 @@ import io.jsonwebtoken.JwsHeader
 import io.jsonwebtoken.Jwts
 import io.jsonwebtoken.SignatureAlgorithm
 import io.jsonwebtoken.jackson.io.JacksonSerializer
-import kotlinx.coroutines.runBlocking
 import no.nav.sosialhjelp.client.utils.objectMapper
 import no.nav.sosialhjelp.kotlin.utils.logger
-import org.springframework.http.HttpEntity
 import org.springframework.http.HttpHeaders
-import org.springframework.http.HttpMethod
 import org.springframework.util.LinkedMultiValueMap
-import org.springframework.web.client.RestTemplate
-import org.springframework.web.util.UriComponentsBuilder
+import org.springframework.web.reactive.function.BodyInserters
+import org.springframework.web.reactive.function.client.WebClient
+import org.springframework.web.reactive.function.client.awaitBody
 import java.security.KeyFactory
 import java.security.PrivateKey
 import java.security.spec.PKCS8EncodedKeySpec
@@ -23,44 +21,49 @@ import java.util.Date
 import java.util.UUID
 
 class MaskinportenClient(
-    private val restTemplate: RestTemplate,
+    private val webClient: WebClient,
     private val maskinportenProperties: MaskinportenProperties
-
 ) {
 
-    private var maskinportenOidcConfiguration: MaskinportenOidcConfiguration
-
-    init {
-        maskinportenOidcConfiguration = runBlocking {
-            val configUrl = maskinportenProperties.configuration
-            log.debug("Forsøker å hente idporten-config fra $configUrl")
-            val response = restTemplate.exchange(configUrl, HttpMethod.GET, HttpEntity<Nothing>(HttpHeaders()), MaskinportenOidcConfiguration::class.java)
-            log.info("Hentet idporten-config fra $configUrl")
-            response.body!!
-        }
-    }
-
-    fun getKeys(keys: String) = objectMapper.readValue<Keys>(keys)
+    private var maskinportenOidcConfiguration: MaskinportenOidcConfiguration? = null
 
     // Denne kalles for å anskaffe token
-    fun requestToken(): AccessToken {
+    suspend fun requestToken(): AccessToken {
+        if (maskinportenOidcConfiguration == null) {
+            maskinportenOidcConfiguration = hentMaskinportenOidcConfiguration()
+        }
         val jws = generatePrivateJWT()
-        val uriComponents = UriComponentsBuilder.fromHttpUrl(maskinportenProperties.tokenUrl).build()
         val body = LinkedMultiValueMap<String, String>()
         body.add(GRANT_TYPE_PARAM, GRANT_TYPE)
         body.add(ASSERTION_PARAM, jws.token)
-        val response = restTemplate.exchange(uriComponents.toUriString(), HttpMethod.POST, HttpEntity(body, HttpHeaders()), MaskinportenAccessTokenResponse::class.java)
-        return AccessToken(response.body!!.accessToken)
+        val response = webClient.post()
+            .uri(maskinportenProperties.tokenUrl)
+            .body(BodyInserters.fromFormData(body))
+            .headers { HttpHeaders() }
+            .retrieve()
+            .awaitBody<MaskinportenAccessTokenResponse>()
+        return AccessToken(response.accessToken)
     }
 
-    internal fun base64ToPrivateKey(privateBase64: String): PrivateKey? {
+    private suspend fun hentMaskinportenOidcConfiguration(): MaskinportenOidcConfiguration {
+        log.debug("Forsøker å hente idporten-config fra ${maskinportenProperties.configuration}")
+        return webClient.get()
+            .uri(maskinportenProperties.configuration)
+            .retrieve()
+            .awaitBody<MaskinportenOidcConfiguration>()
+            .also {
+                log.info("Hentet idporten-config fra ${maskinportenProperties.configuration}")
+            }
+    }
+
+    private fun base64ToPrivateKey(privateBase64: String): PrivateKey? {
         val keyBytes: ByteArray = Base64.getDecoder().decode(privateBase64)
         val keySpec = PKCS8EncodedKeySpec(keyBytes)
         val fact: KeyFactory = KeyFactory.getInstance("RSA")
         return fact.generatePrivate(keySpec)
     }
 
-    fun generatePrivateJWT(): Jws {
+    private fun generatePrivateJWT(): Jws {
         val keys = getKeys(maskinportenProperties.public_jwk).keys
         return Jws(
             Jwts.builder()
@@ -81,6 +84,8 @@ class MaskinportenClient(
                 .compact()
         )
     }
+
+    private fun getKeys(keys: String) = objectMapper.readValue<Keys>(keys)
 
     companion object {
         private val log by logger()
