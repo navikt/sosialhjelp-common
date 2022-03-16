@@ -73,9 +73,8 @@ Brukes p.t kun i `sosialhjelp-adminpanel-api`.
 
 Teknologi:
 * Coroutines
-* Spring-boot
+* Spring
 * Jackson
-* navikt/token-support
 * Jsonwebtoken
 
 ### sosialhjelp-common-metrics
