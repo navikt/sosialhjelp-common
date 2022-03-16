@@ -1,7 +1,6 @@
 object Versions {
     const val slf4j = "1.7.36"
     const val spring = "5.3.16"
-    const val coroutines = "1.6.0"
     const val jackson = "2.13.1"
     const val jjwtVersion = "0.11.2"
     const val log4j = "2.17.1"
@@ -16,7 +15,6 @@ dependencies {
     implementation(project(":sosialhjelp-common-kotlin-utils"))
     implementation(project(":sosialhjelp-common-client-utils"))
 
-    api("org.jetbrains.kotlinx:kotlinx-coroutines-core:${Versions.coroutines}")
     api("org.springframework:spring-webflux:${Versions.spring}")
     api("com.fasterxml.jackson.module:jackson-module-kotlin:${Versions.jackson}")
     api("org.slf4j:slf4j-api:${Versions.slf4j}")
