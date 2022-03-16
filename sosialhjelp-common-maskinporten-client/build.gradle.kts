@@ -21,12 +21,9 @@ dependencies {
     api("com.fasterxml.jackson.module:jackson-module-kotlin:${Versions.jackson}")
     api("org.slf4j:slf4j-api:${Versions.slf4j}")
 
-    //    Json webtokens
     implementation("io.jsonwebtoken:jjwt-api:${Versions.jjwtVersion}")
     implementation("io.jsonwebtoken:jjwt-jackson:${Versions.jjwtVersion}")
     implementation("io.jsonwebtoken:jjwt-impl:${Versions.jjwtVersion}")
-
-    //    Sosialhjelp-common
 
     constraints {
         implementation("org.apache.logging.log4j:log4j-api:${Versions.log4j}") {
