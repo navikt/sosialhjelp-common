@@ -36,13 +36,6 @@ Teknologi:
 * Jackson
 * Micrometer
 
-### sosialhjelp-common-kommuneinfo-client
-Klient for å kunne hente KommunenInfo fra Fiks.
-
-Teknologi:
-* Spring
-* Jackson
-
 ### sosialhjelp-common-client-utils
 Hjelpemetoder og felles funksjonalitet for klient-moduler i repoet.
 
@@ -50,21 +43,13 @@ Teknologi:
 * Spring
 * Jackson
 
-### sosialhjelp-common-idporten-client
-Klient for å hente virksomhetstoken fra IdPorten.
-
-Teknologi:
-* Spring
-* Jackson
-* nimbus-jose-jwt
-
 ### sosialhjelp-common-kotlin-utils
 Felles hjelpemetoder for logging og retry.
 
 Teknologi:
 * Coroutines
 
-### sosialhjelp-common-maskinporten-utils
+### sosialhjelp-common-maskinporten-client
 Klient for å hente access-token fra maskinporten til ønsket scope.  
 Krever registrering av applikasjon i [navikt/nav-maskinporten](https://github.com/navikt/nav-maskinporten) for å lage nødvendige secrets i vault.  
 Etter den er registert i nav-maskinporten må applikasjonen registreres med tilgang til managed secrets knyttet til

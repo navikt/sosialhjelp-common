@@ -46,13 +46,13 @@ class MaskinportenClient(
     }
 
     private suspend fun hentMaskinportenOidcConfiguration(): MaskinportenOidcConfiguration {
-        log.debug("Forsøker å hente idporten-config fra ${maskinportenProperties.configuration}")
+        log.debug("Forsøker å hente maskinporten-config fra ${maskinportenProperties.configuration}")
         return webClient.get()
             .uri(maskinportenProperties.configuration)
             .retrieve()
             .awaitBody<MaskinportenOidcConfiguration>()
             .also {
-                log.info("Hentet idporten-config fra ${maskinportenProperties.configuration}")
+                log.info("Hentet maskinporten-config fra ${maskinportenProperties.configuration}")
             }
     }
 
