@@ -1,7 +1,7 @@
 object Versions {
     const val slf4j = "1.7.36"
     const val spring = "5.3.16"
-    const val jackson = "2.13.1"
+    const val jackson = "2.13.2"
     const val jjwtVersion = "0.11.2"
     const val log4j = "2.17.1"
 }
