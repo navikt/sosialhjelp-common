@@ -18,11 +18,11 @@ Interne henvendelser kan sendes via Slack i kanalen #team_digisos.
 
 Felles teknologi:
 * Kotlin
-* JDK 11
+* JDK 17
 * Gradle
 
 Krav:
-* JDK 11
+* JDK 17
 
 ### sosialhjelp-common-api
 Felles api-modeller for integrasjoner mot eksterne tjenester:
