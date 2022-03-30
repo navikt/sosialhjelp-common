@@ -24,7 +24,6 @@ allprojects {
 
     repositories {
         mavenCentral()
-        jcenter()
     }
 }
 
@@ -53,7 +52,7 @@ subprojects {
     tasks {
         withType<KotlinCompile> {
             kotlinOptions {
-                jvmTarget = "11"
+                jvmTarget = "17"
             }
         }
 
