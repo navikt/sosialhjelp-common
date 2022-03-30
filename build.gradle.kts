@@ -15,7 +15,7 @@ plugins {
 }
 
 ktlint {
-    this.version.set("0.43.2")
+    this.version.set("0.45.1")
 }
 
 allprojects {
