@@ -49,19 +49,6 @@ Felles hjelpemetoder for logging og retry.
 Teknologi:
 * Coroutines
 
-### sosialhjelp-common-maskinporten-client
-Klient for å hente access-token fra maskinporten til ønsket scope.  
-Krever registrering av applikasjon i [navikt/nav-maskinporten](https://github.com/navikt/nav-maskinporten) for å lage nødvendige secrets i vault.  
-Etter den er registert i nav-maskinporten må applikasjonen registreres med tilgang til managed secrets knyttet til
-maskinporten i [navikt/vault-iac](https://github.com/navikt/vault-iac).
-Brukes p.t kun i `sosialhjelp-adminpanel-api`.
-
-Teknologi:
-* Coroutines
-* Spring
-* Jackson
-* Jsonwebtoken
-
 ### sosialhjelp-common-metrics
 Metrics hentet fra common-java-modules. Brukes i sosialhjelp-soknad-api.
 
