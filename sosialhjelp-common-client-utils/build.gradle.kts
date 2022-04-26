@@ -1,6 +1,7 @@
 object Versions {
     const val spring = "5.3.19"
     const val jackson = "2.13.2"
+    const val jacksonDatabind = "2.13.2.2"
 }
 
 plugins {
@@ -11,6 +12,7 @@ plugins {
 dependencies {
     api("org.springframework:spring-core:${Versions.spring}")
     api("com.fasterxml.jackson.module:jackson-module-kotlin:${Versions.jackson}")
+    api("com.fasterxml.jackson.core:jackson-databind:${Versions.jacksonDatabind}")
 }
 
 publishing {

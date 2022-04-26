@@ -27,10 +27,6 @@ allprojects {
     }
 }
 
-dependencies {
-    implementation(kotlin("stdlib"))
-}
-
 subprojects {
     apply(plugin = "org.jetbrains.kotlin.jvm")
     apply(plugin = "org.jlleitschuh.gradle.ktlint")
@@ -42,7 +38,6 @@ subprojects {
     }
 
     dependencies {
-        implementation(kotlin("stdlib"))
         implementation(kotlin("reflect"))
 
 //        Test
