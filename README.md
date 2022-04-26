@@ -55,7 +55,6 @@ Metrics hentet fra common-java-modules. Brukes i sosialhjelp-soknad-api.
 Teknologi:
 * Java
 * Spring
-* Jackson
 * Micrometer
 * AspectJ
 
