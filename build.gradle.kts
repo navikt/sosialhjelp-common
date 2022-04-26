@@ -10,12 +10,12 @@ repositories {
 }
 
 plugins {
-    kotlin("jvm") version "1.6.10"
+    kotlin("jvm") version "1.6.21"
     id("org.jlleitschuh.gradle.ktlint") version "10.2.1"
 }
 
 ktlint {
-    this.version.set("0.45.1")
+    this.version.set("0.45.2")
 }
 
 allprojects {
