@@ -1,7 +1,6 @@
 object Versions {
-    const val jackson = "2.13.2"
-    const val jacksonDatabind = "2.13.2.2"
-    const val micrometer = "1.8.5"
+    const val jackson = "2.13.3"
+    const val micrometer = "1.9.0"
 }
 
 plugins {
@@ -15,7 +14,7 @@ dependencies {
 
 //    Jackson
     api("com.fasterxml.jackson.module:jackson-module-kotlin:${Versions.jackson}")
-    api("com.fasterxml.jackson.core:jackson-databind:${Versions.jacksonDatabind}")
+    api("com.fasterxml.jackson.core:jackson-databind:${Versions.jackson}")
 //    Micrometer
     api("io.micrometer:micrometer-core:${Versions.micrometer}")
 }
