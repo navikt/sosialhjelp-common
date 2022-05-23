@@ -1,6 +1,6 @@
 object Versions {
     const val slf4j = "1.7.36"
-    const val micrometer = "1.8.5"
+    const val micrometer = "1.9.0"
     const val json = "20220320"
     const val spring = "5.3.20"
     const val commonsLang3 = "3.12.0"
