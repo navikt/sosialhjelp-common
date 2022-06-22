@@ -1,5 +1,7 @@
 package no.nav.sosialhjelp.selftest
 
+import io.micrometer.core.instrument.MeterRegistry
+import io.micrometer.core.instrument.simple.SimpleMeterRegistry
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 
@@ -7,10 +9,11 @@ internal class SelftestServiceTest {
 
     private val appName = "app"
     private val version = "1.0"
+    private val meterRegistry: MeterRegistry = SimpleMeterRegistry()
 
     @Test
     internal fun `result OK - ingen checks feiler`() {
-        val service = SelftestService(appName, version, listOf(A()))
+        val service = SelftestService(appName, version, listOf(A()), meterRegistry)
 
         val result = service.getSelftest()
 
@@ -19,7 +22,7 @@ internal class SelftestServiceTest {
 
     @Test
     internal fun `result WARNING - ikke critical check feiler`() {
-        val service = SelftestService(appName, version, listOf(A(), B()))
+        val service = SelftestService(appName, version, listOf(A(), B()), meterRegistry)
         val result = service.getSelftest()
 
         assertEquals(Result.WARNING, result.result)
@@ -27,7 +30,7 @@ internal class SelftestServiceTest {
 
     @Test
     internal fun `result ERROR - critical check feiler`() {
-        val service = SelftestService(appName, version, listOf(A(), B(), C()))
+        val service = SelftestService(appName, version, listOf(A(), B(), C()), meterRegistry)
         val result = service.getSelftest()
 
         assertEquals(Result.ERROR, result.result)
