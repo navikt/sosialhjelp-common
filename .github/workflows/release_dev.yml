@@ -15,14 +15,16 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
           cache: 'gradle'
+      - name: Set release tag
+        run: |
+          TAG_NAME="1.$(date "+%Y%m%d.%H%M")-$(echo $GITHUB_SHA | cut -c1-7)"
+          echo "RELEASE_TAG=$TAG_NAME" >> $GITHUB_ENV
       - name: Gradle wrapper validation
         uses: gradle/wrapper-validation-action@v1
       - name: Run lint
         run: ./gradlew ktlintCheck
-      - name: test and build
-        run: ./gradlew -Pversion="1.$(echo $GITHUB_SHA | cut -c1-7)-SNAPSHOT" build
-      - name: upload artifact
-        run: ./gradlew -Pversion="1.$(echo $GITHUB_SHA | cut -c1-7)-SNAPSHOT" publish
+      - name: run tests, build and publish
+        run: ./gradlew -Pversion="$(echo $RELEASE_TAG)-SNAPSHOT" build publish
         env:
           GITHUB_USERNAME: x-access-token
           GITHUB_PASSWORD: ${{ secrets.GITHUB_TOKEN }}
