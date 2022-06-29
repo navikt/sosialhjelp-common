@@ -17,7 +17,7 @@ jobs:
           cache: 'gradle'
       - name: Set release tag
         run: |
-          TAG_NAME="1.$(date "+%Y%m%d.%H%M")-$GITHUB_SHA"
+          TAG_NAME="1.$(date "+%Y%m%d.%H%M")-$(echo $GITHUB_SHA | cut -c1-7)"
           echo "RELEASE_TAG=$TAG_NAME" >> $GITHUB_ENV
       - name: Gradle wrapper validation
         uses: gradle/wrapper-validation-action@v1
