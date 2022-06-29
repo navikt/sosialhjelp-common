@@ -36,13 +36,6 @@ Teknologi:
 * Jackson
 * Micrometer
 
-### sosialhjelp-common-client-utils
-Hjelpemetoder og felles funksjonalitet for klient-moduler i repoet.
-
-Teknologi:
-* Spring
-* Jackson
-
 ### sosialhjelp-common-kotlin-utils
 Felles hjelpemetoder for logging og retry.
 
