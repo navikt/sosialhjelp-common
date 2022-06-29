@@ -22,7 +22,7 @@ jobs:
       - name: Run lint
         run: ./gradlew ktlintCheck
       - name: run tests, build and publish
-        run: ./gradlew -Pversion="$(echo $RELEASE_TAG)-SNAPSHOT" build publish
+        run: ./gradlew -Pversion="$(echo $RELEASE_TAG)" build publish
         env:
           GITHUB_USERNAME: x-access-token
           GITHUB_PASSWORD: ${{ secrets.GITHUB_TOKEN }}
