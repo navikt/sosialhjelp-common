@@ -42,15 +42,6 @@ Felles hjelpemetoder for logging og retry.
 Teknologi:
 * Coroutines
 
-### sosialhjelp-common-metrics
-Metrics hentet fra common-java-modules. Brukes i sosialhjelp-soknad-api.
-
-Teknologi:
-* Java
-* Spring
-* Micrometer
-* AspectJ
-
 ## Ktlint
 Hvordan kjøre Ktlint:
 * Fra IDEA: Kjør Gradle Task: sosialhjelp-common -> Tasks -> formatting -> ktlintFormat
