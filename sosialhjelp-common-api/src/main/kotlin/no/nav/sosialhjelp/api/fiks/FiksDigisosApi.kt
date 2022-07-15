@@ -41,7 +41,13 @@ data class Ettersendelse(
 data class DigisosSoker(
     val metadata: String,
     val dokumenter: List<DokumentInfo>,
-    val timestampSistOppdatert: Long
+    val timestampSistOppdatert: Long,
+    val avsender: Avsender?
+)
+
+data class Avsender(
+    val systemnavn: String?,
+    val systemversjon: String?
 )
 
 data class Tilleggsinformasjon(
