@@ -1,6 +1,6 @@
 object Versions {
     const val jackson = "2.13.3"
-    const val micrometer = "1.9.0"
+    const val micrometer = "1.9.2"
 }
 
 plugins {
