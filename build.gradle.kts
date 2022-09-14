@@ -2,7 +2,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 object Versions {
     // Test only
-    const val junitJupiter = "5.8.2"
+    const val junitJupiter = "5.9.0"
 }
 
 repositories {
@@ -30,6 +30,10 @@ allprojects {
 subprojects {
     apply(plugin = "org.jetbrains.kotlin.jvm")
     apply(plugin = "org.jlleitschuh.gradle.ktlint")
+
+    ktlint {
+        this.version.set("0.45.2")
+    }
 
     configurations {
         "testImplementation" {
