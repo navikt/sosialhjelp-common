@@ -1,6 +1,7 @@
 object Versions {
     const val jackson = "2.13.3"
     const val micrometer = "1.9.2"
+    const val slf4j = "1.7.36"
 }
 
 plugins {
@@ -9,14 +10,13 @@ plugins {
 }
 
 dependencies {
-//    kotlin-utils
-    implementation(project(":sosialhjelp-common-kotlin-utils"))
-
 //    Jackson
     api("com.fasterxml.jackson.module:jackson-module-kotlin:${Versions.jackson}")
     api("com.fasterxml.jackson.core:jackson-databind:${Versions.jackson}")
 //    Micrometer
     api("io.micrometer:micrometer-core:${Versions.micrometer}")
+//    Slf4j
+    api("org.slf4j:slf4j-api:${Versions.slf4j}")
 }
 
 publishing {

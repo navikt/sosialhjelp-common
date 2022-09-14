@@ -1,6 +1,6 @@
 package no.nav.sosialhjelp.selftest
 
-import no.nav.sosialhjelp.kotlin.utils.logger
+import org.slf4j.LoggerFactory
 import java.util.concurrent.TimeoutException
 
 interface DependencyCheck {
@@ -53,6 +53,6 @@ interface DependencyCheck {
     }
 
     companion object {
-        private val log by logger()
+        private val log = LoggerFactory.getLogger(this::class.java)
     }
 }
