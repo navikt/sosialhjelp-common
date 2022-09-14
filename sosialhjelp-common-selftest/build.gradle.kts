@@ -2,6 +2,7 @@ object Versions {
     const val jackson = "2.13.3"
     const val micrometer = "1.9.2"
     const val slf4j = "1.7.36"
+    const val coroutines = "1.6.4"
 }
 
 plugins {
@@ -17,6 +18,8 @@ dependencies {
     api("io.micrometer:micrometer-core:${Versions.micrometer}")
 //    Slf4j
     api("org.slf4j:slf4j-api:${Versions.slf4j}")
+//    Coroutines
+    api("org.jetbrains.kotlinx:kotlinx-coroutines-core:${Versions.coroutines}")
 }
 
 publishing {

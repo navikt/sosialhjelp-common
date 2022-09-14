@@ -31,7 +31,7 @@ publishing {
 
             pom {
                 name.set("sosialhjelp-common-kotlin-utils")
-                description.set("Bibliotek for selftest i sosialhjelp-domene")
+                description.set("Bibliotek med utils-funksjoner som kan brukes i sosialhjelp-appene")
                 url.set("https://github.com/navikt/sosialhjelp-common")
                 licenses {
                     license {
