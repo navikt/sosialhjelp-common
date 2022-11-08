@@ -1,6 +1,6 @@
 object Versions {
-    const val jackson = "2.13.4"
-    const val micrometer = "1.9.3"
+    const val jackson = "2.14.0"
+    const val micrometer = "1.9.5"
     const val slf4j = "1.7.36"
     const val coroutines = "1.6.4"
 }
