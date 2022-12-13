@@ -10,7 +10,6 @@ dependencies {
 
 publishing {
     repositories {
-        mavenLocal()
         maven {
             url = uri("https://maven.pkg.github.com/navikt/sosialhjelp-common")
             credentials {
@@ -21,6 +20,7 @@ publishing {
     }
     publications {
         create<MavenPublication>("mavenJava") {
+
             pom {
                 name.set("sosialhjelp-common-api")
                 description.set("Bibliotek med felles api-modeller i sosialhjelp-domene")

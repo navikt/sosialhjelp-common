@@ -18,7 +18,7 @@ data class OriginalSoknadNAV(
     val vedleggMetadata: String,
     val soknadDokument: DokumentInfo,
     val vedlegg: List<DokumentInfo>,
-    val timestampSendt: Long?
+    val timestampSendt: Long
 )
 
 data class DokumentInfo(
