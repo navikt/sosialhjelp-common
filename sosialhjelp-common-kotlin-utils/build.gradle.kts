@@ -14,6 +14,13 @@ dependencies {
 
 //    Slf4j
     api("org.slf4j:slf4j-api:${Versions.slf4j}")
+
+    // convert to pdf
+    implementation("org.apache.pdfbox:pdfbox:2.0.27")
+    implementation("org.apache.poi:poi:5.2.3")
+    implementation("org.apache.poi:poi-ooxml:5.2.3")
+
+    testImplementation("org.assertj:assertj-core:3.23.1")
 }
 
 publishing {
