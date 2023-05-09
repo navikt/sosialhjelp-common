@@ -1,7 +1,7 @@
 package no.nav.sosialhjelp.kotlin.utils.pdf.convert
 
 import no.nav.sosialhjelp.kotlin.utils.pdf.convert.excel.ExcelFileHandler
-import no.nav.sosialhjelp.kotlin.utils.pdf.convert.excel.ExcelTilPdfConverter
+import no.nav.sosialhjelp.kotlin.utils.pdf.convert.excel.ExcelToPdfConverter
 import no.nav.sosialhjelp.kotlin.utils.pdf.util.ExampleFileRepository.getKontoUtskrift
 import no.nav.sosialhjelp.kotlin.utils.pdf.util.ExampleFileRepository.getKontoUtskriftBred
 import no.nav.sosialhjelp.kotlin.utils.pdf.util.ExampleFileRepository.getKontoUtskriftLang
@@ -11,12 +11,12 @@ import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.junit.jupiter.api.Test
 import java.io.File
 
-class ExcelToPdfHandlerTest {
+class ExcelToPdfConverterTest {
     @Test
     fun `Test konverter excel`() {
         val destination = File("testExcel.pdf")
 
-        val document = ExcelTilPdfConverter.konverterTilPdf(getKontoUtskrift(), destination)
+        val document = ExcelToPdfConverter.konverterTilPdf(getKontoUtskrift(), destination)
         assertThat(document.pages.count).isEqualTo(1)
 
         destination.delete()
@@ -26,7 +26,7 @@ class ExcelToPdfHandlerTest {
     fun `Test langt excelark genererer flere sider`() {
         val destination = File("testExcel.pdf")
 
-        val document = ExcelTilPdfConverter.konverterTilPdf(getKontoUtskriftLang(), destination)
+        val document = ExcelToPdfConverter.konverterTilPdf(getKontoUtskriftLang(), destination)
         assertThat(document.pages.count).isEqualTo(2)
 
         destination.delete()
@@ -36,7 +36,7 @@ class ExcelToPdfHandlerTest {
     fun `Test for bredt excelark genererer flere sider`() {
         val destination = File("testExcel.pdf")
 
-        assertThatThrownBy { ExcelTilPdfConverter.konverterTilPdf(getKontoUtskriftBred(), destination) }
+        assertThatThrownBy { ExcelToPdfConverter.konverterTilPdf(getKontoUtskriftBred(), destination) }
             .isInstanceOf(IllegalArgumentException::class.java)
             .hasMessageContaining("for bredt")
 
@@ -53,7 +53,7 @@ class ExcelToPdfHandlerTest {
             .map { it.data }
 
         val resultFile = File("resultFile.pdf")
-        val document = ExcelTilPdfConverter.konverterTilPdf(getKontoUtskrift(), resultFile)
+        val document = ExcelToPdfConverter.konverterTilPdf(getKontoUtskrift(), resultFile)
 
         val textFromDocument = PDFTextStripper().getText(document)
 

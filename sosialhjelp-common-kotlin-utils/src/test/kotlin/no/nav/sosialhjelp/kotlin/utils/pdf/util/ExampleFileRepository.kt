@@ -8,11 +8,16 @@ object ExampleFileRepository {
     private const val EXCEL_KONTOUTSKRIFT = "sample_kontoutskrift.xlsx"
     private const val EXCEL_KONTOUTSKRIFT_LANG = "sample_kontoutskrift_lang.xlsx"
     private const val EXCEL_KONTOUTSKRIFT_BRED = "sample_kontoutskrift_bred.xlsx"
+    private const val CSV_FILE = "sample_csv.csv"
+    private const val CSV_FILE_WIDE = "sample_csv_wide.csv"
 
-    fun getKontoUtskrift(): File { return getFile(EXCEL_KONTOUTSKRIFT) }
-    fun getKontoUtskriftLang(): File { return getFile(EXCEL_KONTOUTSKRIFT_LANG) }
+    fun getWordExample() = getFile(WORD_FILE)
+    fun getKontoUtskrift() = getFile(EXCEL_KONTOUTSKRIFT)
+    fun getKontoUtskriftLang() = getFile(EXCEL_KONTOUTSKRIFT_LANG)
+    fun getKontoUtskriftBred() = getFile(EXCEL_KONTOUTSKRIFT_BRED)
+    fun getCsvExample() = getFile(CSV_FILE)
 
-    fun getKontoUtskriftBred(): File { return getFile(EXCEL_KONTOUTSKRIFT_BRED) }
+    fun getCsvExampleWide() = getFile(CSV_FILE_WIDE)
 
     private fun getFile(filename: String): File {
         val url = this.javaClass.classLoader.getResource("eksempelfiler/$filename")?.file
