@@ -1,4 +1,4 @@
-package no.nav.sosialhjelp.kotlin.utils.pdf.convert
+package no.nav.sosialhjelp.kotlin.utils.pdf.filkonvertering
 
 import java.io.File
 

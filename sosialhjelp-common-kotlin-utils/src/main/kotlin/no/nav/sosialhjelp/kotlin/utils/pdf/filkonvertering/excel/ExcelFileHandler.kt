@@ -1,9 +1,9 @@
-package no.nav.sosialhjelp.kotlin.utils.pdf.convert.excel
+package no.nav.sosialhjelp.kotlin.utils.pdf.filkonvertering.excel
 
-import no.nav.sosialhjelp.kotlin.utils.pdf.convert.CellWrapper
-import no.nav.sosialhjelp.kotlin.utils.pdf.convert.RowWrapper
-import no.nav.sosialhjelp.kotlin.utils.pdf.convert.SheetWrapper
-import no.nav.sosialhjelp.kotlin.utils.pdf.convert.WorkbookWrapper
+import no.nav.sosialhjelp.kotlin.utils.pdf.filkonvertering.CellWrapper
+import no.nav.sosialhjelp.kotlin.utils.pdf.filkonvertering.RowWrapper
+import no.nav.sosialhjelp.kotlin.utils.pdf.filkonvertering.SheetWrapper
+import no.nav.sosialhjelp.kotlin.utils.pdf.filkonvertering.WorkbookWrapper
 import org.apache.commons.collections4.IteratorUtils
 import org.apache.poi.ss.usermodel.*
 import org.apache.poi.xssf.usermodel.XSSFCell

@@ -1,7 +1,7 @@
-package no.nav.sosialhjelp.kotlin.utils.pdf.convert
+package no.nav.sosialhjelp.kotlin.utils.pdf.filkonvertering
 
-import no.nav.sosialhjelp.kotlin.utils.pdf.convert.excel.ExcelFileHandler
-import no.nav.sosialhjelp.kotlin.utils.pdf.convert.excel.ExcelToPdfConverter
+import no.nav.sosialhjelp.kotlin.utils.pdf.filkonvertering.excel.ExcelFileHandler
+import no.nav.sosialhjelp.kotlin.utils.pdf.filkonvertering.excel.ExcelToPdfConverter
 import no.nav.sosialhjelp.kotlin.utils.pdf.util.ExampleFileRepository.getKontoUtskrift
 import no.nav.sosialhjelp.kotlin.utils.pdf.util.ExampleFileRepository.getKontoUtskriftBred
 import no.nav.sosialhjelp.kotlin.utils.pdf.util.ExampleFileRepository.getKontoUtskriftLang

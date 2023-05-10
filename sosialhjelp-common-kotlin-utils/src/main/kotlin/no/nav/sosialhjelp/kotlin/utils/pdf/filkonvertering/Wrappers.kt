@@ -1,4 +1,4 @@
-package no.nav.sosialhjelp.kotlin.utils.pdf.convert
+package no.nav.sosialhjelp.kotlin.utils.pdf.filkonvertering
 
 import no.nav.sosialhjelp.kotlin.utils.pdf.util.PdfFontUtil
 import org.apache.pdfbox.pdmodel.PDPage

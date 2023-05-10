@@ -1,6 +1,6 @@
-package no.nav.sosialhjelp.kotlin.utils.pdf.convert.excel
+package no.nav.sosialhjelp.kotlin.utils.pdf.filkonvertering.excel
 
-import no.nav.sosialhjelp.kotlin.utils.pdf.convert.*
+import no.nav.sosialhjelp.kotlin.utils.pdf.filkonvertering.*
 import no.nav.sosialhjelp.kotlin.utils.pdf.util.PdfFontUtil.breddeIPunkter
 import org.apache.pdfbox.pdmodel.PDDocument
 import org.apache.pdfbox.pdmodel.PDPageContentStream

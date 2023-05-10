@@ -1,7 +1,7 @@
-package no.nav.sosialhjelp.kotlin.utils.pdf.convert.csv
+package no.nav.sosialhjelp.kotlin.utils.pdf.filkonvertering.csv
 
-import no.nav.sosialhjelp.kotlin.utils.pdf.convert.FilTilPdfConverter
-import no.nav.sosialhjelp.kotlin.utils.pdf.convert.PdfPageOptions
+import no.nav.sosialhjelp.kotlin.utils.pdf.filkonvertering.FilTilPdfConverter
+import no.nav.sosialhjelp.kotlin.utils.pdf.filkonvertering.PdfPageOptions
 import org.apache.commons.csv.CSVFormat
 import org.apache.pdfbox.pdmodel.PDDocument
 import java.io.File

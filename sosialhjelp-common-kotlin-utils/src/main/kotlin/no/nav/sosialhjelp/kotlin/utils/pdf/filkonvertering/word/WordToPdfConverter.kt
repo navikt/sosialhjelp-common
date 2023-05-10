@@ -1,6 +1,6 @@
-package no.nav.sosialhjelp.kotlin.utils.pdf.convert.word
+package no.nav.sosialhjelp.kotlin.utils.pdf.filkonvertering.word
 
-import no.nav.sosialhjelp.kotlin.utils.pdf.convert.FilTilPdfConverter
+import no.nav.sosialhjelp.kotlin.utils.pdf.filkonvertering.FilTilPdfConverter
 import org.docx4j.Docx4J
 import org.docx4j.openpackaging.packages.WordprocessingMLPackage
 import java.io.File

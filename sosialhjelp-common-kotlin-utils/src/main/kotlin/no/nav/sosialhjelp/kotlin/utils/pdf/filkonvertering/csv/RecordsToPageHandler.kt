@@ -1,9 +1,9 @@
-package no.nav.sosialhjelp.kotlin.utils.pdf.convert.csv
+package no.nav.sosialhjelp.kotlin.utils.pdf.filkonvertering.csv
 
-import no.nav.sosialhjelp.kotlin.utils.pdf.convert.ExceptionMsg
-import no.nav.sosialhjelp.kotlin.utils.pdf.convert.KolonneInfo
-import no.nav.sosialhjelp.kotlin.utils.pdf.convert.PageSpec
-import no.nav.sosialhjelp.kotlin.utils.pdf.convert.PdfPageOptions
+import no.nav.sosialhjelp.kotlin.utils.pdf.filkonvertering.ExceptionMsg
+import no.nav.sosialhjelp.kotlin.utils.pdf.filkonvertering.KolonneInfo
+import no.nav.sosialhjelp.kotlin.utils.pdf.filkonvertering.PageSpec
+import no.nav.sosialhjelp.kotlin.utils.pdf.filkonvertering.PdfPageOptions
 import no.nav.sosialhjelp.kotlin.utils.pdf.util.PdfFontUtil.breddeIPunkter
 import org.apache.pdfbox.pdmodel.PDDocument
 import org.apache.pdfbox.pdmodel.PDPageContentStream

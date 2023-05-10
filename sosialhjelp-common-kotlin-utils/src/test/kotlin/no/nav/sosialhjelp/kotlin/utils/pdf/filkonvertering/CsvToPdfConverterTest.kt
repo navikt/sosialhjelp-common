@@ -1,14 +1,15 @@
-package no.nav.sosialhjelp.kotlin.utils.pdf.convert
+package no.nav.sosialhjelp.kotlin.utils.pdf.filkonvertering
 
-import no.nav.sosialhjelp.kotlin.utils.pdf.convert.csv.CsvToPdfConverter.konverterTilPdf
-import no.nav.sosialhjelp.kotlin.utils.pdf.convert.csv.CsvToPdfConverter.konverterTilPdfWithOptions
+import no.nav.sosialhjelp.kotlin.utils.pdf.filkonvertering.csv.CsvToPdfConverter.konverterTilPdf
+import no.nav.sosialhjelp.kotlin.utils.pdf.filkonvertering.csv.CsvToPdfConverter.konverterTilPdfWithOptions
 import no.nav.sosialhjelp.kotlin.utils.pdf.util.ExampleFileRepository.getCsvExample
 import no.nav.sosialhjelp.kotlin.utils.pdf.util.ExampleFileRepository.getCsvExampleLong
 import no.nav.sosialhjelp.kotlin.utils.pdf.util.ExampleFileRepository.getCsvExampleWide
 import org.apache.commons.csv.CSVFormat
 import org.apache.pdfbox.pdmodel.PDDocument
 import org.apache.pdfbox.text.PDFTextStripper
-import org.assertj.core.api.Assertions.*
+import org.assertj.core.api.Assertions.assertThat
+import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.junit.jupiter.api.Test
 import java.io.File
 import java.io.FileReader

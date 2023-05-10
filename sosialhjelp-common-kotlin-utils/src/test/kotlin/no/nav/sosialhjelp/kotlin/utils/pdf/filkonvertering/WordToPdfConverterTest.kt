@@ -1,6 +1,6 @@
-package no.nav.sosialhjelp.kotlin.utils.pdf.convert
+package no.nav.sosialhjelp.kotlin.utils.pdf.filkonvertering
 
-import no.nav.sosialhjelp.kotlin.utils.pdf.convert.word.WordToPdfConverter
+import no.nav.sosialhjelp.kotlin.utils.pdf.filkonvertering.word.WordToPdfConverter
 import no.nav.sosialhjelp.kotlin.utils.pdf.util.ExampleFileRepository
 import org.apache.pdfbox.pdmodel.PDDocument
 import org.assertj.core.api.Assertions
