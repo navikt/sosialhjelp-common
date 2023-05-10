@@ -6,17 +6,20 @@ import org.apache.pdfbox.pdmodel.PDDocument
 import java.io.File
 
 object ExcelToPdfConverter: FilTilPdfConverter {
-    override fun konverterTilPdf(source: File, destination: File): PDDocument = konverterTilPdfWithOptions(source, destination, PdfPageOptions())
+    override fun konverterTilPdf(source: File, destination: File) {
+        konverterTilPdfWithOptions(source, destination, PdfPageOptions())
+    }
 
-    fun konverterTilPdfWithOptions(source: File, destination: File, options: PdfPageOptions) = PDDocument().apply {
+    fun konverterTilPdfWithOptions(source: File, destination: File, options: PdfPageOptions) {
+        PDDocument().run {
+            val workbookWrapper = ExcelFileHandler.hentDataFraSource(source)
 
-        val workbookWrapper = ExcelFileHandler.hentDataFraSource(source)
+            workbookWrapper.sheets.forEach { sheetWrapper ->
+                SheetToPageHandler(sheetWrapper, this, options).skrivSheetTilDokument()
+            }
 
-        workbookWrapper.sheets.forEach { sheetWrapper ->
-            SheetToPageHandler(sheetWrapper, this, options).skrivSheetTilDokument()
+            save(destination)
+            close()
         }
-
-        save(destination)
-        close()
     }
 }

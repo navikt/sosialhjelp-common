@@ -8,15 +8,18 @@ import java.io.File
 import java.io.FileReader
 
 object CsvToPdfConverter: FilTilPdfConverter {
-    override fun konverterTilPdf(source: File, destination: File): PDDocument =
+    override fun konverterTilPdf(source: File, destination: File) {
         konverterTilPdfWithOptions(source, destination, PdfPageOptions())
+    }
 
-    fun konverterTilPdfWithOptions(source: File, destination: File, options: PdfPageOptions) = PDDocument().apply {
-        RecordsToPageHandler(streamRecordsToList(source), this, options)
-            .skrivRecordsTilDokument()
+    fun konverterTilPdfWithOptions(source: File, destination: File, options: PdfPageOptions) {
+        PDDocument().run {
+            RecordsToPageHandler(streamRecordsToList(source), this, options)
+                .skrivRecordsTilDokument()
 
-        save(destination)
-        close()
+            save(destination)
+            close()
+        }
     }
 
     private fun streamRecordsToList(csvFile: File): List<List<String>> = FileReader(csvFile).let { fileReader ->

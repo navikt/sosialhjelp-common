@@ -2,6 +2,8 @@ package no.nav.sosialhjelp.kotlin.utils.pdf.convert
 
 import no.nav.sosialhjelp.kotlin.utils.pdf.convert.word.WordToPdfConverter
 import no.nav.sosialhjelp.kotlin.utils.pdf.util.ExampleFileRepository
+import org.apache.pdfbox.pdmodel.PDDocument
+import org.assertj.core.api.Assertions
 import org.junit.jupiter.api.Test
 import java.io.File
 
@@ -13,11 +15,12 @@ class WordToPdfConverterTest {
         val source = ExampleFileRepository.getWordExample()
         val dest = File("testWord.pdf")
 
-        val dokument = WordToPdfConverter.konverterTilPdf(source, dest)
+        WordToPdfConverter.konverterTilPdf(source, dest)
 
-
-
-
+        PDDocument.load(dest).also {
+            Assertions.assertThat(it.pages.count).isEqualTo(3)
+            it.close()
+        }
 
         dest.delete()
     }

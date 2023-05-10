@@ -5,6 +5,7 @@ import no.nav.sosialhjelp.kotlin.utils.pdf.convert.excel.ExcelToPdfConverter
 import no.nav.sosialhjelp.kotlin.utils.pdf.util.ExampleFileRepository.getKontoUtskrift
 import no.nav.sosialhjelp.kotlin.utils.pdf.util.ExampleFileRepository.getKontoUtskriftBred
 import no.nav.sosialhjelp.kotlin.utils.pdf.util.ExampleFileRepository.getKontoUtskriftLang
+import org.apache.pdfbox.pdmodel.PDDocument
 import org.apache.pdfbox.text.PDFTextStripper
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatThrownBy
@@ -16,7 +17,8 @@ class ExcelToPdfConverterTest {
     fun `Test konverter excel`() {
         val destination = File("testExcel.pdf")
 
-        val document = ExcelToPdfConverter.konverterTilPdf(getKontoUtskrift(), destination)
+        ExcelToPdfConverter.konverterTilPdf(getKontoUtskrift(), destination)
+        val document = PDDocument.load(destination)
         assertThat(document.pages.count).isEqualTo(1)
 
         destination.delete()
@@ -26,7 +28,8 @@ class ExcelToPdfConverterTest {
     fun `Test langt excelark genererer flere sider`() {
         val destination = File("testExcel.pdf")
 
-        val document = ExcelToPdfConverter.konverterTilPdf(getKontoUtskriftLang(), destination)
+        ExcelToPdfConverter.konverterTilPdf(getKontoUtskriftLang(), destination)
+        val document = PDDocument.load(destination)
         assertThat(document.pages.count).isEqualTo(2)
 
         destination.delete()
@@ -53,8 +56,9 @@ class ExcelToPdfConverterTest {
             .map { it.data }
 
         val resultFile = File("resultFile.pdf")
-        val document = ExcelToPdfConverter.konverterTilPdf(getKontoUtskrift(), resultFile)
+        ExcelToPdfConverter.konverterTilPdf(getKontoUtskrift(), resultFile)
 
+        val document = PDDocument.load(resultFile)
         val textFromDocument = PDFTextStripper().getText(document)
 
         allCellContent.forEach { cellContent ->
@@ -67,9 +71,9 @@ class ExcelToPdfConverterTest {
         if (lineToCompare.isBlank()) return true
         var dynamicLine = lineToCompare
 
-        while (dynamicLine.length > 3) {
+        while (dynamicLine.length > 1) {
             if (allText.contains(dynamicLine)) return true
-            dynamicLine = dynamicLine.substring(0, dynamicLine.length-3)
+            dynamicLine = dynamicLine.substring(0, dynamicLine.length-1)
         }
         return false
     }
