@@ -5,6 +5,7 @@ import no.nav.sosialhjelp.kotlin.utils.pdf.filkonvertering.excel.ExcelToPdfConve
 import no.nav.sosialhjelp.kotlin.utils.pdf.util.ExampleFileRepository.getKontoUtskrift
 import no.nav.sosialhjelp.kotlin.utils.pdf.util.ExampleFileRepository.getKontoUtskriftBred
 import no.nav.sosialhjelp.kotlin.utils.pdf.util.ExampleFileRepository.getKontoUtskriftLang
+import org.apache.commons.io.FileUtils
 import org.apache.pdfbox.pdmodel.PDDocument
 import org.apache.pdfbox.text.PDFTextStripper
 import org.assertj.core.api.Assertions.assertThat
@@ -17,7 +18,9 @@ class ExcelToPdfConverterTest {
     fun `Test konverter excel`() {
         val destination = File("testExcel.pdf")
 
-        ExcelToPdfConverter.konverterTilPdf(getKontoUtskrift(), destination)
+        ExcelToPdfConverter.konverterTilPdf(getKontoUtskrift().readBytes()).run {
+            FileUtils.writeByteArrayToFile(destination, this)
+        }
         val document = PDDocument.load(destination)
         assertThat(document.pages.count).isEqualTo(1)
 
@@ -28,7 +31,9 @@ class ExcelToPdfConverterTest {
     fun `Test langt excelark genererer flere sider`() {
         val destination = File("testExcel.pdf")
 
-        ExcelToPdfConverter.konverterTilPdf(getKontoUtskriftLang(), destination)
+        ExcelToPdfConverter.konverterTilPdf(getKontoUtskriftLang().readBytes()).run {
+            FileUtils.writeByteArrayToFile(destination, this)
+        }
         val document = PDDocument.load(destination)
         assertThat(document.pages.count).isEqualTo(2)
 
@@ -39,7 +44,7 @@ class ExcelToPdfConverterTest {
     fun `Test for bredt excelark genererer flere sider`() {
         val destination = File("testExcel.pdf")
 
-        assertThatThrownBy { ExcelToPdfConverter.konverterTilPdf(getKontoUtskriftBred(), destination) }
+        assertThatThrownBy { ExcelToPdfConverter.konverterTilPdf(getKontoUtskriftBred().readBytes()) }
             .isInstanceOf(IllegalArgumentException::class.java)
             .hasMessageContaining("for bredt")
 
@@ -49,14 +54,16 @@ class ExcelToPdfConverterTest {
     @Test
     fun `Finner alt innhold fra cellene i excel-arket i pdf-dokumentet`() {
 
-        val workbookWrapper = ExcelFileHandler.hentDataFraSource(getKontoUtskrift())
+        val workbookWrapper = ExcelFileHandler.hentDataFraSource(getKontoUtskrift().readBytes())
         val allCellContent = workbookWrapper.sheets
             .flatMap { it.rows }
             .flatMap { it.cells }
             .map { it.data }
 
         val resultFile = File("resultFile.pdf")
-        ExcelToPdfConverter.konverterTilPdf(getKontoUtskrift(), resultFile)
+        ExcelToPdfConverter.konverterTilPdf(getKontoUtskrift().readBytes()).run {
+            FileUtils.writeByteArrayToFile(resultFile, this)
+        }
 
         val document = PDDocument.load(resultFile)
         val textFromDocument = PDFTextStripper().getText(document)

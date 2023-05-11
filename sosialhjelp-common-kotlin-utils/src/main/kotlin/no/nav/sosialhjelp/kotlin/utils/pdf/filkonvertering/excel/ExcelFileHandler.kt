@@ -10,16 +10,15 @@ import org.apache.poi.xssf.usermodel.XSSFCell
 import org.apache.poi.xssf.usermodel.XSSFRow
 import org.apache.poi.xssf.usermodel.XSSFSheet
 import org.apache.poi.xssf.usermodel.XSSFWorkbook
-import java.io.File
-import java.io.FileInputStream
+import java.io.ByteArrayInputStream
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
 
 object ExcelFileHandler {
-    fun hentDataFraSource(file: File): WorkbookWrapper {
+    fun hentDataFraSource(source: ByteArray): WorkbookWrapper {
 
-        val fileInputStream = FileInputStream(file)
-        val workbook = XSSFWorkbook(fileInputStream)
+        val byteArrayInputStream = ByteArrayInputStream(source)
+        val workbook = XSSFWorkbook(byteArrayInputStream)
 
         val sheets = behandleSheets(workbook.sheetIterator())
         return WorkbookWrapper(sheets, workbook)

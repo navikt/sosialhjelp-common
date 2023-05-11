@@ -1,12 +1,10 @@
 package no.nav.sosialhjelp.kotlin.utils.pdf.filkonvertering
 
-import java.io.File
-
 interface FilTilPdfConverter {
 
     /**
      * Returnerer et åpent PDDocument som er lagret til destination.
      * Dokumentet bør lukkes.
      */
-    fun konverterTilPdf(source: File, destination: File)
+    fun konverterTilPdf(source: ByteArray): ByteArray
 }
