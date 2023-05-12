@@ -5,7 +5,7 @@ import no.nav.sosialhjelp.kotlin.utils.pdf.filkonvertering.PdfPageOptions
 import org.apache.pdfbox.pdmodel.PDDocument
 import java.io.ByteArrayOutputStream
 
-object ExcelToPdfConverter: FilTilPdfConverter {
+object ExcelToPdfConverter : FilTilPdfConverter {
     override fun konverterTilPdf(source: ByteArray) = konverterTilPdfWithOptions(source, PdfPageOptions())
 
     fun konverterTilPdfWithOptions(source: ByteArray, options: PdfPageOptions): ByteArray {

@@ -16,48 +16,40 @@ import java.io.File
 import java.io.FileReader
 
 class CsvToPdfConverterTest {
+
+    // For å kunne se på output ved utvikling/testing
+    private val SKRIV_TIL_FIL = false
     @Test
     fun `Test konvertere csv til pdf og finne igjen all tekst`() {
+        val pdfBytes = konverterTilPdf(getCsvExample().readBytes())
 
-        val resultFile = File("resultFile.pdf")
+        PDDocument.load(pdfBytes).use {
 
-        konverterTilPdf(getCsvExample().readBytes()).run {
-            FileUtils.writeByteArrayToFile(resultFile, this)
-        }
+            val radTekstListePdf = PDFTextStripper().getText(it).split("\r\n")
+            val radTekstListeCsv = parseCsvFile(getCsvExample())
 
-        val document = PDDocument.load(resultFile)
-        val radTekstListePdf = PDFTextStripper().getText(document).split("\r\n")
-        val radTekstListeCsv = parseCsvFile(getCsvExample())
-
-        radTekstListePdf.forEachIndexed { index, tekstForRadPdf ->
-            if (tekstForRadPdf.isNotBlank()) {
-                radTekstListeCsv[index].forEach { tekstForRadCsv ->
-                    assertThat(tekstForRadPdf).contains(tekstForRadCsv)
+            radTekstListePdf.forEachIndexed { index, tekstForRadPdf ->
+                if (tekstForRadPdf.isNotBlank()) {
+                    radTekstListeCsv[index].forEach { tekstForRadCsv ->
+                        assertThat(tekstForRadPdf).contains(tekstForRadCsv)
+                    }
                 }
             }
-        }
-        document.also {
             assertThat(it.pages.count).isEqualTo(1)
-            it.close()
         }
-        resultFile.delete()
+        lagPdfFilHvis(pdfBytes)
     }
 
     @Test
     fun `Test konvertere csv til pdf med kolonnetilpasning`() {
         // strippe tekst fra dette dokumentet gjenspeiler ikke "kolonnetilpasningen"
-        // er derfor vanskelig å asserte at dette var vellykket
-        val resultFile = File("resultFile.pdf")
+        // er derfor vanskelig å asserte at dette var vellykket visuelt
+        val pdfBytes = konverterTilPdfWithOptions(getCsvExample().readBytes(), PdfPageOptions(tilpassKolonner = true))
 
-        konverterTilPdfWithOptions(getCsvExample().readBytes(), PdfPageOptions(tilpassKolonner = true)).run {
-            FileUtils.writeByteArrayToFile(resultFile, this)
-        }
-
-        PDDocument.load(resultFile).also {
+        PDDocument.load(pdfBytes).use {
             assertThat(it.pages.count).isEqualTo(1)
-            it.close()
         }
-        resultFile.delete()
+        lagPdfFilHvis(pdfBytes)
     }
 
     @Test
@@ -81,15 +73,19 @@ class CsvToPdfConverterTest {
 
     @Test
     fun `Test konvertere lang csv blir 2 sider`() {
-        val resultFile = File("resultFile.pdf")
-        konverterTilPdf(getCsvExampleLong().readBytes()).run {
-            FileUtils.writeByteArrayToFile(resultFile, this)
-        }
-        PDDocument.load(resultFile).also {
+        val pdfBytes = konverterTilPdf(getCsvExampleLong().readBytes())
+
+        PDDocument.load(pdfBytes).use {
             assertThat(it.pages.count).isEqualTo(2)
-            it.close()
         }
-        resultFile.delete()
+        lagPdfFilHvis(pdfBytes)
+    }
+
+    fun lagPdfFilHvis(byteArray: ByteArray) {
+        if (SKRIV_TIL_FIL) {
+            val resultFile = File("konvertert_csv.pdf")
+            FileUtils.writeByteArrayToFile(resultFile, byteArray)
+        }
     }
 
     private fun parseCsvFile(file: File): List<List<String>> {

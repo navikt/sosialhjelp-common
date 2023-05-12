@@ -1,14 +1,21 @@
 package no.nav.sosialhjelp.kotlin.utils.pdf.filkonvertering.excel
 
-import no.nav.sosialhjelp.kotlin.utils.pdf.filkonvertering.*
+import no.nav.sosialhjelp.kotlin.utils.pdf.filkonvertering.CellWrapper
+import no.nav.sosialhjelp.kotlin.utils.pdf.filkonvertering.ExceptionMsg
+import no.nav.sosialhjelp.kotlin.utils.pdf.filkonvertering.KolonneInfo
+import no.nav.sosialhjelp.kotlin.utils.pdf.filkonvertering.PageSpec
+import no.nav.sosialhjelp.kotlin.utils.pdf.filkonvertering.PdfPageOptions
+import no.nav.sosialhjelp.kotlin.utils.pdf.filkonvertering.RowWrapper
+import no.nav.sosialhjelp.kotlin.utils.pdf.filkonvertering.SheetWrapper
 import no.nav.sosialhjelp.kotlin.utils.pdf.util.PdfFontUtil.breddeIPunkter
 import org.apache.pdfbox.pdmodel.PDDocument
 import org.apache.pdfbox.pdmodel.PDPageContentStream
 import org.apache.pdfbox.pdmodel.font.PDType0Font
 import org.apache.poi.ss.usermodel.CellType
 import org.apache.poi.util.Units
+import java.io.ByteArrayInputStream
 
-internal class SheetToPageHandler (
+internal class SheetToPageHandler(
     private val sheetWrapper: SheetWrapper,
     private val dokument: PDDocument,
     private val options: PdfPageOptions
@@ -16,7 +23,7 @@ internal class SheetToPageHandler (
     private var currentPageSpec = PageSpec(initX = options.start_x)
     private var currentContentStream = PDPageContentStream(dokument, currentPageSpec.page)
 
-    private val pdFont = PDType0Font.load(dokument, options.fontFile)
+    private val pdFont = PDType0Font.load(dokument, ByteArrayInputStream(options.fontByteArray))
     private val kolonneInfo: KolonneInfo = kalkulerKolonneInfoFraSheet(sheetWrapper)
 
     fun skrivSheetTilDokument() {
@@ -40,7 +47,7 @@ internal class SheetToPageHandler (
     }
 
     private fun behandleRad(rowWrapper: RowWrapper) {
-        with (currentPageSpec) {
+        with(currentPageSpec) {
             initY -= rowWrapper.row.heightInPoints
             rowWrapper.cells.forEach { behandleCelle(it) }
             initX = options.start_x
@@ -53,7 +60,7 @@ internal class SheetToPageHandler (
 
         val data = evaluerTekstLengde(cellWrapper)
 
-        with (currentContentStream) {
+        with(currentContentStream) {
             beginText()
             newLineAtOffset(currentPageSpec.initX + startLinjeX, currentPageSpec.initY)
             setFont(pdFont, options.fontSize.toFloat())
@@ -73,7 +80,7 @@ internal class SheetToPageHandler (
         val stringWidth = pdFont.breddeIPunkter(cellWrapper.data, options.fontSize)
         val columnWidth = kolonneInfo.kolonneBredde(cellWrapper.cell.columnIndex) - options.margin_x
 
-        return if (columnWidth < stringWidth) tilpassBredde(cellWrapper.data, columnWidth/stringWidth)
+        return if (columnWidth < stringWidth) tilpassBredde(cellWrapper.data, columnWidth / stringWidth)
         else cellWrapper.data
     }
 

@@ -10,20 +10,24 @@ import java.io.File
 
 class WordToPdfConverterTest {
 
+    // For å kunne se på output ved utvikling/testing
+    private val SKRIV_TIL_FIL = false
+
     @Test
     fun `Test konverter word til pdf`() {
-
         val source = ExampleFileRepository.getWordExample()
-        val dest = File("testWord.pdf")
-
         val pdfBytes = WordToPdfConverter.konverterTilPdf(source.readBytes())
-        FileUtils.writeByteArrayToFile(dest, pdfBytes)
 
-        PDDocument.load(dest).also {
+        PDDocument.load(pdfBytes).use {
             Assertions.assertThat(it.pages.count).isEqualTo(3)
-            it.close()
         }
+        lagPdfFilHvis(pdfBytes)
+    }
 
-        dest.delete()
+    fun lagPdfFilHvis(byteArray: ByteArray) {
+        if (SKRIV_TIL_FIL) {
+            val resultFile = File("konvertert_word.pdf")
+            FileUtils.writeByteArrayToFile(resultFile, byteArray)
+        }
     }
 }

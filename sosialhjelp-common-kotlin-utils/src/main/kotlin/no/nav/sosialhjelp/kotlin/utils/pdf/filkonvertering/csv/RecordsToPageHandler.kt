@@ -8,17 +8,18 @@ import no.nav.sosialhjelp.kotlin.utils.pdf.util.PdfFontUtil.breddeIPunkter
 import org.apache.pdfbox.pdmodel.PDDocument
 import org.apache.pdfbox.pdmodel.PDPageContentStream
 import org.apache.pdfbox.pdmodel.font.PDType0Font
+import java.io.ByteArrayInputStream
 
 class RecordsToPageHandler(
     private val rader: List<List<String>>,
     private val dokument: PDDocument,
-    private var options: PdfPageOptions
+    private val options: PdfPageOptions
 ) {
     private var currentPageSpec = PageSpec(initX = options.start_x)
     private var currentContentStream = PDPageContentStream(dokument, currentPageSpec.page)
 
-    private val pdFont = PDType0Font.load(dokument, options.fontFile)
-    private val kolonneInfo = createKolonneInfoFraRader()
+    private val pdFont = PDType0Font.load(dokument, ByteArrayInputStream(options.fontByteArray))
+    private val kolonneInfo = opprettKolonneInfoFraRader()
 
     fun skrivRecordsTilDokument() {
         validerBredde()
@@ -57,8 +58,7 @@ class RecordsToPageHandler(
     }
 
     private fun behandleRad(rad: List<String>) {
-        if (!options.tilpassKolonner) { skrivTekstTilSide(rad.joinToString(separator = ";")) }
-        else  {
+        if (!options.tilpassKolonner) { skrivTekstTilSide(rad.joinToString(separator = ";")) } else {
             rad.forEachIndexed { index, tekst ->
                 skrivTekstTilSide(tekst)
                 currentPageSpec.initX += kolonneInfo.kolonneBredde(index) + options.margin_x
@@ -77,7 +77,7 @@ class RecordsToPageHandler(
         }
     }
 
-    private fun createKolonneInfoFraRader(): KolonneInfo {
+    private fun opprettKolonneInfoFraRader(): KolonneInfo {
         val tempMap: MutableMap<Int, Float> = HashMap()
 
         rader.forEach { rad ->

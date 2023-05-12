@@ -5,7 +5,11 @@ import no.nav.sosialhjelp.kotlin.utils.pdf.filkonvertering.RowWrapper
 import no.nav.sosialhjelp.kotlin.utils.pdf.filkonvertering.SheetWrapper
 import no.nav.sosialhjelp.kotlin.utils.pdf.filkonvertering.WorkbookWrapper
 import org.apache.commons.collections4.IteratorUtils
-import org.apache.poi.ss.usermodel.*
+import org.apache.poi.ss.usermodel.Cell
+import org.apache.poi.ss.usermodel.CellType
+import org.apache.poi.ss.usermodel.DateUtil
+import org.apache.poi.ss.usermodel.Row
+import org.apache.poi.ss.usermodel.Sheet
 import org.apache.poi.xssf.usermodel.XSSFCell
 import org.apache.poi.xssf.usermodel.XSSFRow
 import org.apache.poi.xssf.usermodel.XSSFSheet
@@ -61,16 +65,16 @@ object ExcelFileHandler {
         }
     }
 
-    private fun sjekkNumeriskErDato(cell: Cell): String =
-        DateUtil.isADateFormat(cell.cellStyle.dataFormat.toInt(), cell.cellStyle.dataFormatString).let {
-            return if (!it) { leggTilDesimal(cell.numericCellValue.toString()) }
-            else {
-                val toLocalDate = cell.localDateTimeCellValue.toLocalDate()
-                toLocalDate.format(DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT))
-            }
+    private fun sjekkNumeriskErDato(cell: Cell): String {
+        val aDateFormat = DateUtil.isADateFormat(cell.cellStyle.dataFormat.toInt(), cell.cellStyle.dataFormatString)
+
+        return if (!aDateFormat) { leggTilDesimal(cell.numericCellValue.toString()) } else {
+            val toLocalDate = cell.localDateTimeCellValue.toLocalDate()
+            toLocalDate.format(DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT))
         }
+    }
 
     private fun leggTilDesimal(number: String): String = number.let {
-        return if (it.substring(it.indexOf(".")).length == 2) it+"0" else it
+        return if (it.substring(it.indexOf(".")).length == 2) it + "0" else it
     }
 }

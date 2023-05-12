@@ -1,16 +1,15 @@
 package no.nav.sosialhjelp.kotlin.utils.pdf.filkonvertering
 
-import no.nav.sosialhjelp.kotlin.utils.pdf.util.PdfFontUtil
+import no.nav.sosialhjelp.kotlin.utils.pdf.util.PdfFontUtil.getDefaultFontBytes
 import org.apache.pdfbox.pdmodel.PDPage
 import org.apache.pdfbox.pdmodel.common.PDRectangle
 import org.apache.poi.xssf.usermodel.XSSFCell
 import org.apache.poi.xssf.usermodel.XSSFRow
 import org.apache.poi.xssf.usermodel.XSSFSheet
 import org.apache.poi.xssf.usermodel.XSSFWorkbook
-import java.io.File
 
-data class PdfPageOptions (
-    var fontFile: File = PdfFontUtil.getDefaultFontFile(),
+class PdfPageOptions(
+    var fontByteArray: ByteArray = getDefaultFontBytes(),
     var fontSize: Short = 11,
     val start_x: Float = 1f,
     val margin_x: Float = 3f,
@@ -28,16 +27,16 @@ data class SheetWrapper(
     val sheet: XSSFSheet
 )
 
-data class RowWrapper (
+data class RowWrapper(
     val cells: List<CellWrapper>,
     val row: XSSFRow
 )
-data class CellWrapper (
+data class CellWrapper(
     val data: String,
     val cell: XSSFCell
 )
 
-data class PageSpec (
+data class PageSpec(
     val page: PDPage = PDPage(PDRectangle.A4),
     val width: Float = page.trimBox.width,
     var initX: Float,

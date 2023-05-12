@@ -14,65 +14,59 @@ import org.junit.jupiter.api.Test
 import java.io.File
 
 class ExcelToPdfConverterTest {
+    // For å kunne se på output ved utvikling/testing
+    private val SKRIV_TIL_FIL = false
+
     @Test
     fun `Test konverter excel`() {
-        val destination = File("testExcel.pdf")
-
-        ExcelToPdfConverter.konverterTilPdf(getKontoUtskrift().readBytes()).run {
-            FileUtils.writeByteArrayToFile(destination, this)
+        val pdfBytes = ExcelToPdfConverter.konverterTilPdf(getKontoUtskrift().readBytes())
+        PDDocument.load(pdfBytes).use {
+            assertThat(it.pages.count).isEqualTo(1)
         }
-        val document = PDDocument.load(destination)
-        assertThat(document.pages.count).isEqualTo(1)
-
-        destination.delete()
+        lagPdfFilHvis(pdfBytes)
     }
 
     @Test
     fun `Test langt excelark genererer flere sider`() {
-        val destination = File("testExcel.pdf")
-
-        ExcelToPdfConverter.konverterTilPdf(getKontoUtskriftLang().readBytes()).run {
-            FileUtils.writeByteArrayToFile(destination, this)
+        val pdfBytes = ExcelToPdfConverter.konverterTilPdf(getKontoUtskriftLang().readBytes())
+        PDDocument.load(pdfBytes).use {
+            assertThat(it.pages.count).isEqualTo(2)
         }
-        val document = PDDocument.load(destination)
-        assertThat(document.pages.count).isEqualTo(2)
-
-        destination.delete()
+        lagPdfFilHvis(pdfBytes)
     }
 
     @Test
-    fun `Test for bredt excelark genererer flere sider`() {
-        val destination = File("testExcel.pdf")
-
+    fun `Test for bredt excelark kaster exception`() {
         assertThatThrownBy { ExcelToPdfConverter.konverterTilPdf(getKontoUtskriftBred().readBytes()) }
             .isInstanceOf(IllegalArgumentException::class.java)
             .hasMessageContaining("for bredt")
-
-        destination.delete()
     }
 
     @Test
     fun `Finner alt innhold fra cellene i excel-arket i pdf-dokumentet`() {
-
         val workbookWrapper = ExcelFileHandler.hentDataFraSource(getKontoUtskrift().readBytes())
         val allCellContent = workbookWrapper.sheets
             .flatMap { it.rows }
             .flatMap { it.cells }
             .map { it.data }
 
-        val resultFile = File("resultFile.pdf")
-        ExcelToPdfConverter.konverterTilPdf(getKontoUtskrift().readBytes()).run {
-            FileUtils.writeByteArrayToFile(resultFile, this)
-        }
+        val pdfBytes = ExcelToPdfConverter.konverterTilPdf(getKontoUtskrift().readBytes())
 
-        val document = PDDocument.load(resultFile)
-        val textFromDocument = PDFTextStripper().getText(document)
-
-        allCellContent.forEach { cellContent ->
-            assertThat(cutTextToCompare(textFromDocument, cellContent)).isTrue()
+        PDDocument.load(pdfBytes).use {
+            val textFromDocument = PDFTextStripper().getText(it)
+            allCellContent.forEach { cellContent ->
+                assertThat(cutTextToCompare(textFromDocument, cellContent)).isTrue()
+            }
         }
+        lagPdfFilHvis(pdfBytes)
     }
 
+    fun lagPdfFilHvis(byteArray: ByteArray) {
+        if (SKRIV_TIL_FIL) {
+            val resultFile = File("konvertert_excel.pdf")
+            FileUtils.writeByteArrayToFile(resultFile, byteArray)
+        }
+    }
     // tekst kan være croppet i pdf pga celle-bredde.
     private fun cutTextToCompare(allText: String, lineToCompare: String): Boolean {
         if (lineToCompare.isBlank()) return true
@@ -80,7 +74,7 @@ class ExcelToPdfConverterTest {
 
         while (dynamicLine.length > 1) {
             if (allText.contains(dynamicLine)) return true
-            dynamicLine = dynamicLine.substring(0, dynamicLine.length-1)
+            dynamicLine = dynamicLine.substring(0, dynamicLine.length - 1)
         }
         return false
     }

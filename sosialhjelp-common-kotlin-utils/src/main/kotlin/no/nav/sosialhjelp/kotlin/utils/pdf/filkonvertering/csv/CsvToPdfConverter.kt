@@ -8,19 +8,18 @@ import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
 import java.io.InputStreamReader
 
-object CsvToPdfConverter: FilTilPdfConverter {
+object CsvToPdfConverter : FilTilPdfConverter {
     override fun konverterTilPdf(source: ByteArray) = konverterTilPdfWithOptions(source, PdfPageOptions())
 
     fun konverterTilPdfWithOptions(source: ByteArray, options: PdfPageOptions): ByteArray {
-        PDDocument().run {
-            RecordsToPageHandler(streamRecordsToList(source), this, options)
-                .skrivRecordsTilDokument()
+        val doc = PDDocument()
+        RecordsToPageHandler(streamRecordsToList(source), doc, options)
+            .skrivRecordsTilDokument()
 
-            val byteArrayOutputStream = ByteArrayOutputStream()
-            save(byteArrayOutputStream)
-            close()
-
-            return byteArrayOutputStream.toByteArray()
+        return ByteArrayOutputStream().use {
+            doc.save(it)
+            doc.close()
+            it.toByteArray()
         }
     }
 

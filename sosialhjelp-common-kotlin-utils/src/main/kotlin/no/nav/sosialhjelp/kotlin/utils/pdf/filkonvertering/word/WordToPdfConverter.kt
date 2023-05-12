@@ -6,7 +6,7 @@ import org.docx4j.openpackaging.packages.WordprocessingMLPackage
 import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
 
-object WordToPdfConverter: FilTilPdfConverter {
+object WordToPdfConverter : FilTilPdfConverter {
     override fun konverterTilPdf(source: ByteArray): ByteArray {
         val wordFile = ByteArrayInputStream(source).use {
             WordprocessingMLPackage.load(it)

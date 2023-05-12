@@ -1,8 +1,7 @@
 package no.nav.sosialhjelp.kotlin.utils.pdf.util
 
+import org.apache.commons.io.IOUtils
 import org.apache.pdfbox.pdmodel.font.PDFont
-import java.io.File
-import java.net.URL
 
 object PdfFontUtil {
 
@@ -10,19 +9,18 @@ object PdfFontUtil {
     private const val DEFAULT_FAMILY = "calibri"
     private const val DEFAULT_FONT = "calibri.ttf"
 
-    fun getDefaultFontFile(): File {
-        return getResource("$DEFAULT_FAMILY/$DEFAULT_FONT")?.let {
-            File(it.toURI())
-        } ?: throw IllegalStateException("Default font calibri finnes ikke")
+    fun getDefaultFontBytes(): ByteArray {
+        return getResource("$DEFAULT_FAMILY/$DEFAULT_FONT")
+            ?: throw IllegalStateException("Default font calibri finnes ikke")
     }
 
-    fun getFontFile(fontname: String): File {
-        return getResource("/$fontname/$fontname.ttf")?.let {
-            File(it.toURI())
-        } ?: getDefaultFontFile()
-    }
+    fun getFontBytes(fontname: String): ByteArray = getResource("/$fontname/$fontname.ttf")
+        ?: getDefaultFontBytes()
 
-    private fun getResource(path: String): URL? = javaClass.classLoader.getResource("$FONTS_PATH/$path")
+    private fun getResource(path: String): ByteArray? {
+        return javaClass.classLoader.getResourceAsStream("$FONTS_PATH/$path")
+            ?.let { IOUtils.toByteArray(it) }
+    }
 
     fun PDFont.breddeIPunkter(data: String, fontsize: Short): Float = getStringWidth(data) / 1000 * fontsize
 }
