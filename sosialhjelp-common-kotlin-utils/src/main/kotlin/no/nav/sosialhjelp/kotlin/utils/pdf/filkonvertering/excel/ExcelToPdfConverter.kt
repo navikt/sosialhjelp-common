@@ -1,14 +1,14 @@
 package no.nav.sosialhjelp.kotlin.utils.pdf.filkonvertering.excel
 
 import no.nav.sosialhjelp.kotlin.utils.pdf.filkonvertering.FilTilPdfConverter
-import no.nav.sosialhjelp.kotlin.utils.pdf.filkonvertering.PdfPageOptions
+import no.nav.sosialhjelp.kotlin.utils.pdf.filkonvertering.WritePdfPageOptions
 import org.apache.pdfbox.pdmodel.PDDocument
 import java.io.ByteArrayOutputStream
 
 object ExcelToPdfConverter : FilTilPdfConverter {
-    override fun konverterTilPdf(source: ByteArray) = konverterTilPdfWithOptions(source, PdfPageOptions())
+    override fun konverterTilPdf(source: ByteArray) = konverterTilPdfWithOptions(source, WritePdfPageOptions())
 
-    fun konverterTilPdfWithOptions(source: ByteArray, options: PdfPageOptions): ByteArray {
+    fun konverterTilPdfWithOptions(source: ByteArray, options: WritePdfPageOptions): ByteArray {
         val doc = PDDocument()
         val workbookWrapper = ExcelFileHandler.hentDataFraSource(source)
 

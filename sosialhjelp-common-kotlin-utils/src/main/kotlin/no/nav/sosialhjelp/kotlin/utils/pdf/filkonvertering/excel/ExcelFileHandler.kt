@@ -1,9 +1,5 @@
 package no.nav.sosialhjelp.kotlin.utils.pdf.filkonvertering.excel
 
-import no.nav.sosialhjelp.kotlin.utils.pdf.filkonvertering.CellWrapper
-import no.nav.sosialhjelp.kotlin.utils.pdf.filkonvertering.RowWrapper
-import no.nav.sosialhjelp.kotlin.utils.pdf.filkonvertering.SheetWrapper
-import no.nav.sosialhjelp.kotlin.utils.pdf.filkonvertering.WorkbookWrapper
 import org.apache.commons.collections4.IteratorUtils
 import org.apache.poi.ss.usermodel.Cell
 import org.apache.poi.ss.usermodel.CellType
@@ -78,3 +74,22 @@ object ExcelFileHandler {
         return if (it.substring(it.indexOf(".")).length == 2) it + "0" else it
     }
 }
+
+data class WorkbookWrapper(
+    val sheets: List<SheetWrapper>,
+    val workbook: XSSFWorkbook
+)
+
+data class SheetWrapper(
+    val rows: List<RowWrapper>,
+    val sheet: XSSFSheet
+)
+
+data class RowWrapper(
+    val cells: List<CellWrapper>,
+    val row: XSSFRow
+)
+data class CellWrapper(
+    val data: String,
+    val cell: XSSFCell
+)

@@ -1,7 +1,7 @@
 package no.nav.sosialhjelp.kotlin.utils.pdf.filkonvertering.csv
 
 import no.nav.sosialhjelp.kotlin.utils.pdf.filkonvertering.FilTilPdfConverter
-import no.nav.sosialhjelp.kotlin.utils.pdf.filkonvertering.PdfPageOptions
+import no.nav.sosialhjelp.kotlin.utils.pdf.filkonvertering.WritePdfPageOptions
 import org.apache.commons.csv.CSVFormat
 import org.apache.pdfbox.pdmodel.PDDocument
 import java.io.ByteArrayInputStream
@@ -9,9 +9,9 @@ import java.io.ByteArrayOutputStream
 import java.io.InputStreamReader
 
 object CsvToPdfConverter : FilTilPdfConverter {
-    override fun konverterTilPdf(source: ByteArray) = konverterTilPdfWithOptions(source, PdfPageOptions())
+    override fun konverterTilPdf(source: ByteArray) = konverterTilPdfWithOptions(source, WritePdfPageOptions())
 
-    fun konverterTilPdfWithOptions(source: ByteArray, options: PdfPageOptions): ByteArray {
+    fun konverterTilPdfWithOptions(source: ByteArray, options: WritePdfPageOptions): ByteArray {
         val doc = PDDocument()
         RecordsToPageHandler(streamRecordsToList(source), doc, options)
             .skrivRecordsTilDokument()

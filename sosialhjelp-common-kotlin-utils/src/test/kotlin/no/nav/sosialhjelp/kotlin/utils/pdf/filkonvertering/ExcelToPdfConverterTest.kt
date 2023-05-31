@@ -15,7 +15,7 @@ import java.io.File
 
 class ExcelToPdfConverterTest {
     // For å kunne se på output ved utvikling/testing
-    private val SKRIV_TIL_FIL = false
+    private val lagPdfFilHvisTrue = false
 
     @Test
     fun `Test konverter excel`() {
@@ -62,7 +62,7 @@ class ExcelToPdfConverterTest {
     }
 
     fun lagPdfFilHvis(byteArray: ByteArray) {
-        if (SKRIV_TIL_FIL) {
+        if (lagPdfFilHvisTrue) {
             val resultFile = File("konvertert_excel.pdf")
             FileUtils.writeByteArrayToFile(resultFile, byteArray)
         }

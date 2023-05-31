@@ -11,7 +11,7 @@ import java.io.File
 class WordToPdfConverterTest {
 
     // For å kunne se på output ved utvikling/testing
-    private val SKRIV_TIL_FIL = false
+    private val lagPdfFilHvisTrue = false
 
     @Test
     fun `Test konverter word til pdf`() {
@@ -25,7 +25,7 @@ class WordToPdfConverterTest {
     }
 
     fun lagPdfFilHvis(byteArray: ByteArray) {
-        if (SKRIV_TIL_FIL) {
+        if (lagPdfFilHvisTrue) {
             val resultFile = File("konvertert_word.pdf")
             FileUtils.writeByteArrayToFile(resultFile, byteArray)
         }

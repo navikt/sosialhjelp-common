@@ -18,8 +18,8 @@ Eksisterende filkonverterere implementerer ```interface FilTilPdfConverter```.
 ### Excel -> PDF
 ```kotlin
 object ExcelToPdfConverter: FilTilPdfConverter {
-    override fun konverterTilPdf(source: File, destination: File)
-    fun konverterTilPdfWithOptions(source: File, destination: File, options: PdfPageOptions)
+    override fun konverterTilPdf(source: ByteArray) = konverterTilPdfWithOptions(source, PdfPageOptions())
+    fun konverterTilPdfWithOptions(source: ByteArray, options: PdfPageOptions): ByteArray
 }
 ```
 Konverterer data fra excel-fil (source) til pdf-fil (destination). 2-stegs prosess hvor man henter ut data fra source,
@@ -32,8 +32,8 @@ Er innholdet for bredt, vil det kastes exception.
 ### CSV -> PDF
 ```kotlin
 object CsvToPdfConverter: FilTilPdfConverter {
-    override fun konverterTilPdf(source: File, destination: File)
-    fun konverterTilPdfWithOptions(source: File, destination: File, options: PdfPageOptions)
+    override fun konverterTilPdf(source: ByteArray) = konverterTilPdfWithOptions(source, PdfPageOptions())
+    fun konverterTilPdfWithOptions(source: ByteArray, options: PdfPageOptions): ByteArray
 }
 ```
 Konverterer data fra csv-fil (source) til pdf-fil (destination). 2-stegs prosess hvor man henter ut data fra source, 
@@ -46,7 +46,7 @@ Er innholdet for bredt, vil det kastes exception.
 ### Word -> CSV
 ```kotlin
 object WordToPdfConverter: FilTilPdfConverter {
-    override fun konverterTilPdf(source: File, destination: File)
+    override fun konverterTilPdf(source: ByteArray): ByteArray
 }
 ```
 Konverterer word-fil (source) til pdf-fil (destination). Her gjør et bibliotek mesteparten av jobben, og det er pr. nå
@@ -54,24 +54,24 @@ ikke mulig å sette valgfri parametre. Bør fungere tilstrekkelig for de fleste 
 Er allikevel verdt å verifisere eksempelfiler.
 
 ```kotlin
-data class PdfPageOptions (
-    var fontFile: File = PdfFontUtil.getDefaultFontFile(),
+class WritePdfPageOptions(
+    var fontByteArray: ByteArray = getDefaultFontBytes(),
     var fontSize: Short = 11,
-    val start_x: Float = 1f, 
-    val margin_x: Float = 3f,
-    val margin_y: Float = 3f,
+    val lineStartFromEdge: Float = 1f,
+    val columnMargin: Float = 3f,
+    val rowMargin: Float = 3f,
     val tilpassKolonner: Boolean = false,
 )
 ```
 Påvirker utseendet på den genererte PDF-filen. Kun for excel- og csv-konvertering. 
-### fontFile og fontSize
+### fontByteArray og fontSize
 Default = ```calibri```. Støtte for valgfrie fonter er ikke testet ordentlig.
-### start_x
+### lineStartFromEdge
 Utgangspunkt for starten av en linje. Oppgis som offset i punkter hvor A4-ark defineres som 595.27563 punkter av 
 biblioteket.
-### margin_x
-Hvor mange punkter som skiller 2 celler/kolonner. 
-### margin_x
+### columnMargin
+Hvor mange punkter som skiller 2 celler/kolonner (hvis teksten er stor nok eller høyrejustert). 
+### rowMargin
 Hvor mange punkter som skiller rader.
 ### tilpassKolonner
 Kun for CSV. Hvis ```true```, prøver den å tilpasse innhold i kolonner.

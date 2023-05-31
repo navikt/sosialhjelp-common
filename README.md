@@ -40,6 +40,7 @@ Teknologi:
 Felles hjelpemetoder for logging og retry. 
 
 Konvertering av utvalgte filtyper til PDF. Se egen README i pakken.
+// TODO: Legg inn link
 
 Teknologi:
 * Coroutines

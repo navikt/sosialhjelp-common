@@ -18,7 +18,7 @@ import java.io.FileReader
 class CsvToPdfConverterTest {
 
     // For å kunne se på output ved utvikling/testing
-    private val SKRIV_TIL_FIL = false
+    private val lagPdfFilHvisTrue = false
     @Test
     fun `Test konvertere csv til pdf og finne igjen all tekst`() {
         val pdfBytes = konverterTilPdf(getCsvExample().readBytes())
@@ -44,7 +44,7 @@ class CsvToPdfConverterTest {
     fun `Test konvertere csv til pdf med kolonnetilpasning`() {
         // strippe tekst fra dette dokumentet gjenspeiler ikke "kolonnetilpasningen"
         // er derfor vanskelig å asserte at dette var vellykket visuelt
-        val pdfBytes = konverterTilPdfWithOptions(getCsvExample().readBytes(), PdfPageOptions(tilpassKolonner = true))
+        val pdfBytes = konverterTilPdfWithOptions(getCsvExample().readBytes(), WritePdfPageOptions(tilpassKolonner = true))
 
         PDDocument.load(pdfBytes).use {
             assertThat(it.pages.count).isEqualTo(1)
@@ -64,7 +64,7 @@ class CsvToPdfConverterTest {
         assertThatThrownBy {
             konverterTilPdfWithOptions(
                 getCsvExampleWide().readBytes(),
-                PdfPageOptions(tilpassKolonner = true)
+                WritePdfPageOptions(tilpassKolonner = true)
             )
         }
             .isInstanceOf(IllegalArgumentException::class.java)
@@ -82,7 +82,7 @@ class CsvToPdfConverterTest {
     }
 
     fun lagPdfFilHvis(byteArray: ByteArray) {
-        if (SKRIV_TIL_FIL) {
+        if (lagPdfFilHvisTrue) {
             val resultFile = File("konvertert_csv.pdf")
             FileUtils.writeByteArrayToFile(resultFile, byteArray)
         }
