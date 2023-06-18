@@ -40,7 +40,8 @@ Teknologi:
 Felles hjelpemetoder for logging og retry. 
 
 Konvertering av utvalgte filtyper til PDF. Se egen README i pakken.
-// TODO: Legg inn link
+
+[PDF-konvertering](sosialhjelp-common-kotlin-utils/src/main/kotlin/no/nav/sosialhjelp/kotlin/utils/pdf/README.md)
 
 Teknologi:
 * Coroutines
