@@ -2,6 +2,7 @@ package no.nav.sosialhjelp.kotlin.utils.pdf.filkonvertering.csv
 
 import no.nav.sosialhjelp.kotlin.utils.pdf.filkonvertering.FilTilPdfConverter
 import no.nav.sosialhjelp.kotlin.utils.pdf.filkonvertering.WritePdfPageOptions
+import no.nav.sosialhjelp.kotlin.utils.pdf.filkonvertering.exception.CsvKonverteringException
 import org.apache.commons.csv.CSVFormat
 import org.apache.pdfbox.pdmodel.PDDocument
 import java.io.ByteArrayInputStream
@@ -12,14 +13,18 @@ object CsvToPdfConverter : FilTilPdfConverter {
     override fun konverterTilPdf(source: ByteArray) = konverterTilPdfWithOptions(source, WritePdfPageOptions())
 
     fun konverterTilPdfWithOptions(source: ByteArray, options: WritePdfPageOptions): ByteArray {
-        val doc = PDDocument()
-        RecordsToPageHandler(streamRecordsToList(source), doc, options)
-            .skrivRecordsTilDokument()
+        try {
+            val doc = PDDocument()
+            RecordsToPageHandler(streamRecordsToList(source), doc, options)
+                .skrivRecordsTilDokument()
 
-        return ByteArrayOutputStream().use {
-            doc.save(it)
-            doc.close()
-            it.toByteArray()
+            return ByteArrayOutputStream().use {
+                doc.save(it)
+                doc.close()
+                it.toByteArray()
+            }
+        } catch (e: Exception) {
+            throw CsvKonverteringException("Konvertering av CSV-fil feilet", e)
         }
     }
 

@@ -2,9 +2,10 @@ package no.nav.sosialhjelp.kotlin.utils.pdf.filkonvertering
 
 import no.nav.sosialhjelp.kotlin.utils.pdf.filkonvertering.csv.CsvToPdfConverter.konverterTilPdf
 import no.nav.sosialhjelp.kotlin.utils.pdf.filkonvertering.csv.CsvToPdfConverter.konverterTilPdfWithOptions
-import no.nav.sosialhjelp.kotlin.utils.pdf.util.ExampleFileRepository.getCsvExample
-import no.nav.sosialhjelp.kotlin.utils.pdf.util.ExampleFileRepository.getCsvExampleLong
-import no.nav.sosialhjelp.kotlin.utils.pdf.util.ExampleFileRepository.getCsvExampleWide
+import no.nav.sosialhjelp.kotlin.utils.pdf.filkonvertering.exception.CsvKonverteringException
+import no.nav.sosialhjelp.kotlin.utils.pdf.util.ExampleFileRepository.CSV_FILE
+import no.nav.sosialhjelp.kotlin.utils.pdf.util.ExampleFileRepository.CSV_FILE_LONG
+import no.nav.sosialhjelp.kotlin.utils.pdf.util.ExampleFileRepository.CSV_FILE_WIDE
 import org.apache.commons.csv.CSVFormat
 import org.apache.commons.io.FileUtils
 import org.apache.pdfbox.pdmodel.PDDocument
@@ -21,12 +22,12 @@ class CsvToPdfConverterTest {
     private val lagPdfFilHvisTrue = false
     @Test
     fun `Test konvertere csv til pdf og finne igjen all tekst`() {
-        val pdfBytes = konverterTilPdf(getCsvExample().readBytes())
+        val pdfBytes = konverterTilPdf(CSV_FILE.readBytes())
 
         PDDocument.load(pdfBytes).use {
 
             val radTekstListePdf = PDFTextStripper().getText(it).split("\r\n")
-            val radTekstListeCsv = parseCsvFile(getCsvExample())
+            val radTekstListeCsv = parseCsvFile(CSV_FILE)
 
             radTekstListePdf.forEachIndexed { index, tekstForRadPdf ->
                 if (tekstForRadPdf.isNotBlank()) {
@@ -44,7 +45,7 @@ class CsvToPdfConverterTest {
     fun `Test konvertere csv til pdf med kolonnetilpasning`() {
         // strippe tekst fra dette dokumentet gjenspeiler ikke "kolonnetilpasningen"
         // er derfor vanskelig å asserte at dette var vellykket visuelt
-        val pdfBytes = konverterTilPdfWithOptions(getCsvExample().readBytes(), WritePdfPageOptions(tilpassKolonner = true))
+        val pdfBytes = konverterTilPdfWithOptions(CSV_FILE.readBytes(), WritePdfPageOptions(tilpassKolonner = true))
 
         PDDocument.load(pdfBytes).use {
             assertThat(it.pages.count).isEqualTo(1)
@@ -54,26 +55,26 @@ class CsvToPdfConverterTest {
 
     @Test
     fun `Test konvertere csv med for bred tekst`() {
-        assertThatThrownBy { konverterTilPdf(getCsvExampleWide().readBytes()) }
-            .isInstanceOf(IllegalArgumentException::class.java)
-            .hasMessageContaining(ExceptionMsg.csvRowTextTooWide)
+        assertThatThrownBy { konverterTilPdf(CSV_FILE_WIDE.readBytes()) }
+            .isInstanceOf(CsvKonverteringException::class.java)
+            .hasCauseInstanceOf(IllegalArgumentException::class.java)
     }
 
     @Test
     fun `Test konvertere csv med kolonnetilpasning som blir for bred`() {
         assertThatThrownBy {
             konverterTilPdfWithOptions(
-                getCsvExampleWide().readBytes(),
+                CSV_FILE_WIDE.readBytes(),
                 WritePdfPageOptions(tilpassKolonner = true)
             )
         }
-            .isInstanceOf(IllegalArgumentException::class.java)
-            .hasMessageContaining(ExceptionMsg.csvColumnTooWide)
+            .isInstanceOf(CsvKonverteringException::class.java)
+            .hasCauseInstanceOf(IllegalArgumentException::class.java)
     }
 
     @Test
     fun `Test konvertere lang csv blir 2 sider`() {
-        val pdfBytes = konverterTilPdf(getCsvExampleLong().readBytes())
+        val pdfBytes = konverterTilPdf(CSV_FILE_LONG.readBytes())
 
         PDDocument.load(pdfBytes).use {
             assertThat(it.pages.count).isEqualTo(2)
