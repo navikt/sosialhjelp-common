@@ -4,23 +4,18 @@ import java.io.File
 
 object ExampleFileRepository {
 
-    private const val WORD_FILE = "sample_word.docx"
-    private const val EXCEL_KONTOUTSKRIFT = "sample_kontoutskrift.xlsx"
-    private const val EXCEL_KONTOUTSKRIFT_LANG = "sample_kontoutskrift_lang.xlsx"
-    private const val EXCEL_KONTOUTSKRIFT_BRED = "sample_kontoutskrift_bred.xlsx"
-    private const val CSV_FILE = "sample_csv.csv"
-    private const val CSV_FILE_WIDE = "sample_csv_wide.csv"
-    private const val CSV_FILE_LONG = "sample_csv_long.csv"
+    val WORD_FILE = getFile("sample_word.docx")
+    val EXCEL_KONTOUTSKRIFT = getFile("sample_kontoutskrift.xlsx")
+    val EXCEL_KONTOUTSKRIFT_LANG = getFile("sample_kontoutskrift_lang.xlsx")
+    val EXCEL_KONTOUTSKRIFT_BRED = getFile("sample_kontoutskrift_bred.xlsx")
+    val CSV_FILE = getFile("sample_csv.csv")
+    val CSV_FILE_WIDE = getFile("sample_csv_wide.csv")
+    val CSV_FILE_LONG = getFile("sample_csv_long.csv")
 
-    fun getWordExample() = getFile(WORD_FILE)
-    fun getKontoUtskrift() = getFile(EXCEL_KONTOUTSKRIFT)
-    fun getKontoUtskriftLang() = getFile(EXCEL_KONTOUTSKRIFT_LANG)
-    fun getKontoUtskriftBred() = getFile(EXCEL_KONTOUTSKRIFT_BRED)
-    fun getCsvExample() = getFile(CSV_FILE)
-    fun getCsvExampleWide() = getFile(CSV_FILE_WIDE)
-    fun getCsvExampleLong() = getFile(CSV_FILE_LONG)
+    val PROBLEM_WORD = getFile("problem_word.docx")
+    val PROBLEM_EXCEL = getFile("problem_excel.xlsx")
 
-    private fun getFile(filename: String): File {
+    fun getFile(filename: String): File {
         val url = this.javaClass.classLoader.getResource("eksempelfiler/$filename")?.file
         return File(url!!)
     }

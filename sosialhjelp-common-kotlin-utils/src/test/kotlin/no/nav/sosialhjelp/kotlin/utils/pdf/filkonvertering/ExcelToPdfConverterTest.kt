@@ -2,9 +2,11 @@ package no.nav.sosialhjelp.kotlin.utils.pdf.filkonvertering
 
 import no.nav.sosialhjelp.kotlin.utils.pdf.filkonvertering.excel.ExcelFileHandler
 import no.nav.sosialhjelp.kotlin.utils.pdf.filkonvertering.excel.ExcelToPdfConverter
-import no.nav.sosialhjelp.kotlin.utils.pdf.util.ExampleFileRepository.getKontoUtskrift
-import no.nav.sosialhjelp.kotlin.utils.pdf.util.ExampleFileRepository.getKontoUtskriftBred
-import no.nav.sosialhjelp.kotlin.utils.pdf.util.ExampleFileRepository.getKontoUtskriftLang
+import no.nav.sosialhjelp.kotlin.utils.pdf.filkonvertering.exception.ExcelKonverteringException
+import no.nav.sosialhjelp.kotlin.utils.pdf.util.ExampleFileRepository.EXCEL_KONTOUTSKRIFT
+import no.nav.sosialhjelp.kotlin.utils.pdf.util.ExampleFileRepository.EXCEL_KONTOUTSKRIFT_BRED
+import no.nav.sosialhjelp.kotlin.utils.pdf.util.ExampleFileRepository.EXCEL_KONTOUTSKRIFT_LANG
+import no.nav.sosialhjelp.kotlin.utils.pdf.util.ExampleFileRepository.PROBLEM_EXCEL
 import org.apache.commons.io.FileUtils
 import org.apache.pdfbox.pdmodel.PDDocument
 import org.apache.pdfbox.text.PDFTextStripper
@@ -19,7 +21,7 @@ class ExcelToPdfConverterTest {
 
     @Test
     fun `Test konverter excel`() {
-        val pdfBytes = ExcelToPdfConverter.konverterTilPdf(getKontoUtskrift().readBytes())
+        val pdfBytes = ExcelToPdfConverter.konverterTilPdf(EXCEL_KONTOUTSKRIFT.readBytes())
         PDDocument.load(pdfBytes).use {
             assertThat(it.pages.count).isEqualTo(1)
         }
@@ -28,7 +30,7 @@ class ExcelToPdfConverterTest {
 
     @Test
     fun `Test langt excelark genererer flere sider`() {
-        val pdfBytes = ExcelToPdfConverter.konverterTilPdf(getKontoUtskriftLang().readBytes())
+        val pdfBytes = ExcelToPdfConverter.konverterTilPdf(EXCEL_KONTOUTSKRIFT_LANG.readBytes())
         PDDocument.load(pdfBytes).use {
             assertThat(it.pages.count).isEqualTo(2)
         }
@@ -37,20 +39,20 @@ class ExcelToPdfConverterTest {
 
     @Test
     fun `Test for bredt excelark kaster exception`() {
-        assertThatThrownBy { ExcelToPdfConverter.konverterTilPdf(getKontoUtskriftBred().readBytes()) }
-            .isInstanceOf(IllegalArgumentException::class.java)
-            .hasMessageContaining("for bredt")
+        assertThatThrownBy { ExcelToPdfConverter.konverterTilPdf(EXCEL_KONTOUTSKRIFT_BRED.readBytes()) }
+            .isInstanceOf(ExcelKonverteringException::class.java)
+            .hasCauseInstanceOf(IllegalArgumentException::class.java)
     }
 
     @Test
     fun `Finner alt innhold fra cellene i excel-arket i pdf-dokumentet`() {
-        val workbookWrapper = ExcelFileHandler.hentDataFraSource(getKontoUtskrift().readBytes())
+        val workbookWrapper = ExcelFileHandler.hentDataFraSource(EXCEL_KONTOUTSKRIFT.readBytes())
         val allCellContent = workbookWrapper.sheets
             .flatMap { it.rows }
             .flatMap { it.cells }
             .map { it.data }
 
-        val pdfBytes = ExcelToPdfConverter.konverterTilPdf(getKontoUtskrift().readBytes())
+        val pdfBytes = ExcelToPdfConverter.konverterTilPdf(EXCEL_KONTOUTSKRIFT.readBytes())
 
         PDDocument.load(pdfBytes).use {
             val textFromDocument = PDFTextStripper().getText(it)
@@ -59,6 +61,11 @@ class ExcelToPdfConverterTest {
             }
         }
         lagPdfFilHvis(pdfBytes)
+    }
+
+    @Test
+    fun `Konvertere excel-fil med sheet uten rader håndteres`() {
+        ExcelToPdfConverter.konverterTilPdf(PROBLEM_EXCEL.readBytes())
     }
 
     fun lagPdfFilHvis(byteArray: ByteArray) {
