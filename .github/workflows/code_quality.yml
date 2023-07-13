@@ -9,6 +9,10 @@ on:
 jobs:
   analyze_code:
     name: Analyze Code
+    permissions:
+      actions: read
+      contents: read
+      security-events: write
     uses: navikt/sosialhjelp-ci/.github/workflows/codeql_java.yml@master
 
   dependency_submission:
