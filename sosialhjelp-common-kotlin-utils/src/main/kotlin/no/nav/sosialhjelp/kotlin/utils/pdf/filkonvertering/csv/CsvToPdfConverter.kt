@@ -4,6 +4,7 @@ import no.nav.sosialhjelp.kotlin.utils.pdf.filkonvertering.FilTilPdfConverter
 import no.nav.sosialhjelp.kotlin.utils.pdf.filkonvertering.WritePdfPageOptions
 import no.nav.sosialhjelp.kotlin.utils.pdf.filkonvertering.exception.CsvKonverteringException
 import org.apache.commons.csv.CSVFormat
+import org.apache.pdfbox.pdfwriter.compress.CompressParameters
 import org.apache.pdfbox.pdmodel.PDDocument
 import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
@@ -19,7 +20,7 @@ object CsvToPdfConverter : FilTilPdfConverter {
                 .skrivRecordsTilDokument()
 
             return ByteArrayOutputStream().use {
-                doc.save(it)
+                doc.save(it, CompressParameters.NO_COMPRESSION)
                 doc.close()
                 it.toByteArray()
             }
