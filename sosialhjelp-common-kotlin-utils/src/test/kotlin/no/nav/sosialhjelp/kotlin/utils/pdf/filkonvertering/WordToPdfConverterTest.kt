@@ -5,7 +5,7 @@ import no.nav.sosialhjelp.kotlin.utils.pdf.filkonvertering.word.WordToPdfConvert
 import no.nav.sosialhjelp.kotlin.utils.pdf.util.ExampleFileRepository.PROBLEM_WORD
 import no.nav.sosialhjelp.kotlin.utils.pdf.util.ExampleFileRepository.WORD_FILE
 import org.apache.commons.io.FileUtils
-import org.apache.pdfbox.pdmodel.PDDocument
+import org.apache.pdfbox.Loader
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.junit.jupiter.api.Test
@@ -20,7 +20,7 @@ class WordToPdfConverterTest {
     fun `Test konverter word til pdf`() {
         val pdfBytes = WordToPdfConverter.konverterTilPdf(WORD_FILE.readBytes())
 
-        PDDocument.load(pdfBytes).use {
+        Loader.loadPDF(pdfBytes).use {
             assertThat(it.pages.count).isEqualTo(3)
         }
         lagPdfFilHvis(pdfBytes)

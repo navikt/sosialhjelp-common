@@ -8,7 +8,7 @@ import no.nav.sosialhjelp.kotlin.utils.pdf.util.ExampleFileRepository.EXCEL_KONT
 import no.nav.sosialhjelp.kotlin.utils.pdf.util.ExampleFileRepository.EXCEL_KONTOUTSKRIFT_LANG
 import no.nav.sosialhjelp.kotlin.utils.pdf.util.ExampleFileRepository.PROBLEM_EXCEL
 import org.apache.commons.io.FileUtils
-import org.apache.pdfbox.pdmodel.PDDocument
+import org.apache.pdfbox.Loader
 import org.apache.pdfbox.text.PDFTextStripper
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatThrownBy
@@ -22,7 +22,7 @@ class ExcelToPdfConverterTest {
     @Test
     fun `Test konverter excel`() {
         val pdfBytes = ExcelToPdfConverter.konverterTilPdf(EXCEL_KONTOUTSKRIFT.readBytes())
-        PDDocument.load(pdfBytes).use {
+        Loader.loadPDF(pdfBytes).use {
             assertThat(it.pages.count).isEqualTo(1)
         }
         lagPdfFilHvis(pdfBytes)
@@ -31,7 +31,7 @@ class ExcelToPdfConverterTest {
     @Test
     fun `Test langt excelark genererer flere sider`() {
         val pdfBytes = ExcelToPdfConverter.konverterTilPdf(EXCEL_KONTOUTSKRIFT_LANG.readBytes())
-        PDDocument.load(pdfBytes).use {
+        Loader.loadPDF(pdfBytes).use {
             assertThat(it.pages.count).isEqualTo(2)
         }
         lagPdfFilHvis(pdfBytes)
@@ -54,7 +54,7 @@ class ExcelToPdfConverterTest {
 
         val pdfBytes = ExcelToPdfConverter.konverterTilPdf(EXCEL_KONTOUTSKRIFT.readBytes())
 
-        PDDocument.load(pdfBytes).use {
+        Loader.loadPDF(pdfBytes).use {
             val textFromDocument = PDFTextStripper().getText(it)
             allCellContent.forEach { cellContent ->
                 assertThat(cutTextToCompare(textFromDocument, cellContent)).isTrue()

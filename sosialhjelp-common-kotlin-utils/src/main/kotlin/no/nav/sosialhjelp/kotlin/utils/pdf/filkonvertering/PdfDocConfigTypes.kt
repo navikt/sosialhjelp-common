@@ -15,9 +15,9 @@ class WritePdfPageOptions(
 
 data class PdfPageSpec(
     val page: PDPage = PDPage(PDRectangle.A4),
-    val width: Float = page.trimBox.width,
+    val width: Float = page.cropBox.width,
     var currentXLocation: Float,
-    var currentYLocation: Float = page.trimBox.height
+    var currentYLocation: Float = page.cropBox.height
 )
 
 object ExceptionMsg {
