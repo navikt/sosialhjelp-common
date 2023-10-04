@@ -3,6 +3,7 @@ package no.nav.sosialhjelp.kotlin.utils.pdf.filkonvertering.excel
 import no.nav.sosialhjelp.kotlin.utils.pdf.filkonvertering.FilTilPdfConverter
 import no.nav.sosialhjelp.kotlin.utils.pdf.filkonvertering.WritePdfPageOptions
 import no.nav.sosialhjelp.kotlin.utils.pdf.filkonvertering.exception.ExcelKonverteringException
+import org.apache.pdfbox.pdfwriter.compress.CompressParameters
 import org.apache.pdfbox.pdmodel.PDDocument
 import java.io.ByteArrayOutputStream
 
@@ -21,7 +22,7 @@ object ExcelToPdfConverter : FilTilPdfConverter {
             }
 
             return ByteArrayOutputStream().run {
-                doc.save(this)
+                doc.save(this, CompressParameters.NO_COMPRESSION)
                 doc.close()
                 toByteArray()
             }

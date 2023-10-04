@@ -8,7 +8,7 @@ import no.nav.sosialhjelp.kotlin.utils.pdf.util.ExampleFileRepository.CSV_FILE_L
 import no.nav.sosialhjelp.kotlin.utils.pdf.util.ExampleFileRepository.CSV_FILE_WIDE
 import org.apache.commons.csv.CSVFormat
 import org.apache.commons.io.FileUtils
-import org.apache.pdfbox.pdmodel.PDDocument
+import org.apache.pdfbox.Loader
 import org.apache.pdfbox.text.PDFTextStripper
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatThrownBy
@@ -24,7 +24,7 @@ class CsvToPdfConverterTest {
     fun `Test konvertere csv til pdf og finne igjen all tekst`() {
         val pdfBytes = konverterTilPdf(CSV_FILE.readBytes())
 
-        PDDocument.load(pdfBytes).use {
+        Loader.loadPDF(pdfBytes).use {
 
             val radTekstListePdf = PDFTextStripper().getText(it).split("\r\n")
             val radTekstListeCsv = parseCsvFile(CSV_FILE)
@@ -47,7 +47,7 @@ class CsvToPdfConverterTest {
         // er derfor vanskelig å asserte at dette var vellykket visuelt
         val pdfBytes = konverterTilPdfWithOptions(CSV_FILE.readBytes(), WritePdfPageOptions(tilpassKolonner = true))
 
-        PDDocument.load(pdfBytes).use {
+        Loader.loadPDF(pdfBytes).use {
             assertThat(it.pages.count).isEqualTo(1)
         }
         lagPdfFilHvis(pdfBytes)
@@ -76,7 +76,7 @@ class CsvToPdfConverterTest {
     fun `Test konvertere lang csv blir 2 sider`() {
         val pdfBytes = konverterTilPdf(CSV_FILE_LONG.readBytes())
 
-        PDDocument.load(pdfBytes).use {
+        Loader.loadPDF(pdfBytes).use {
             assertThat(it.pages.count).isEqualTo(2)
         }
         lagPdfFilHvis(pdfBytes)
