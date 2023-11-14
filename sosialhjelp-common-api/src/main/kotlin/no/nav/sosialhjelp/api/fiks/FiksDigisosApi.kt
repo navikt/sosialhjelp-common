@@ -1,5 +1,7 @@
 package no.nav.sosialhjelp.api.fiks
 
+import java.io.Serializable
+
 data class DigisosSak(
     val fiksDigisosId: String,
     val sokerFnr: String,
@@ -57,12 +59,12 @@ data class KommuneInfo(
     val kontaktpersoner: Kontaktpersoner?,
     val harNksTilgang: Boolean,
     val behandlingsansvarlig: String?
-)
+) : Serializable
 
 data class Kontaktpersoner(
     val fagansvarligEpost: List<String>,
     val tekniskAnsvarligEpost: List<String>
-)
+) : Serializable
 
 data class ErrorMessage(
     val error: String?,
