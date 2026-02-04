@@ -3,6 +3,11 @@ object Versions
 plugins {
     id("java")
     id("maven-publish")
+    id("org.jetbrains.kotlin.jvm") version "2.3.0"
+}
+
+kotlin {
+    jvmToolchain(21)
 }
 
 dependencies {
