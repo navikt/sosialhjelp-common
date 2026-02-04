@@ -1,8 +1,9 @@
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 object Versions {
     // Test only
-    const val junitJupiter = "5.9.2"
+    const val JUNIT_JUPITER = "5.9.2"
 }
 
 repositories {
@@ -10,12 +11,17 @@ repositories {
 }
 
 plugins {
-    kotlin("jvm") version "1.8.0"
-    id("org.jlleitschuh.gradle.ktlint") version "11.0.0"
+    id("org.jetbrains.kotlin.jvm") version "2.3.0"
+    id("org.jlleitschuh.gradle.ktlint") version "14.0.1"
+}
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_21
+    targetCompatibility = JavaVersion.VERSION_21
 }
 
 ktlint {
-    this.version.set("0.45.2")
+    this.version.set("1.2.1")
 }
 
 allprojects {
@@ -32,34 +38,15 @@ subprojects {
     apply(plugin = "org.jlleitschuh.gradle.ktlint")
 
     ktlint {
-        this.version.set("0.45.2")
-    }
-
-    configurations {
-        "testImplementation" {
-            exclude(group = "junit", module = "junit")
-        }
+        this.version.set("1.2.1")
     }
 
     dependencies {
-        implementation(kotlin("reflect"))
-
 //        Test
-        testImplementation("org.junit.jupiter:junit-jupiter:${Versions.junitJupiter}")
+        testImplementation("org.junit.jupiter:junit-jupiter:${Versions.JUNIT_JUPITER}")
     }
 
-    tasks {
-        withType<KotlinCompile> {
-            kotlinOptions {
-                jvmTarget = "17"
-            }
-        }
-
-        withType<Test> {
-            useJUnitPlatform()
-            testLogging {
-                events("passed", "skipped", "failed")
-            }
-        }
+    tasks.withType<KotlinCompile> {
+        compilerOptions.jvmTarget.set(JvmTarget.JVM_21)
     }
 }

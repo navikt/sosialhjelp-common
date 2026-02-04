@@ -11,7 +11,7 @@ data class DigisosSak(
     val originalSoknadNAV: OriginalSoknadNAV?,
     val ettersendtInfoNAV: EttersendtInfoNAV?,
     val digisosSoker: DigisosSoker?,
-    val tilleggsinformasjon: Tilleggsinformasjon?
+    val tilleggsinformasjon: Tilleggsinformasjon?,
 ) : Serializable
 
 data class OriginalSoknadNAV(
@@ -20,34 +20,34 @@ data class OriginalSoknadNAV(
     val vedleggMetadata: String,
     val soknadDokument: DokumentInfo,
     val vedlegg: List<DokumentInfo>,
-    val timestampSendt: Long
+    val timestampSendt: Long,
 ) : Serializable
 
 data class DokumentInfo(
     val filnavn: String,
     val dokumentlagerDokumentId: String,
-    val storrelse: Long
+    val storrelse: Long,
 ) : Serializable
 
 data class EttersendtInfoNAV(
-    val ettersendelser: List<Ettersendelse>
+    val ettersendelser: List<Ettersendelse>,
 ) : Serializable
 
 data class Ettersendelse(
     val navEksternRefId: String,
     val vedleggMetadata: String,
     val vedlegg: List<DokumentInfo>,
-    val timestampSendt: Long
+    val timestampSendt: Long,
 ) : Serializable
 
 data class DigisosSoker(
     val metadata: String,
     val dokumenter: List<DokumentInfo>,
-    val timestampSistOppdatert: Long
+    val timestampSistOppdatert: Long,
 ) : Serializable
 
 data class Tilleggsinformasjon(
-    val enhetsnummer: String?
+    val enhetsnummer: String?,
 ) : Serializable
 
 data class KommuneInfo(
@@ -58,12 +58,12 @@ data class KommuneInfo(
     val harMidlertidigDeaktivertOppdateringer: Boolean,
     val kontaktpersoner: Kontaktpersoner?,
     val harNksTilgang: Boolean,
-    val behandlingsansvarlig: String?
+    val behandlingsansvarlig: String?,
 ) : Serializable
 
 data class Kontaktpersoner(
     val fagansvarligEpost: List<String>,
-    val tekniskAnsvarligEpost: List<String>
+    val tekniskAnsvarligEpost: List<String>,
 ) : Serializable
 
 data class ErrorMessage(
@@ -75,5 +75,5 @@ data class ErrorMessage(
     val originalPath: String?,
     val path: String?,
     val status: Int?,
-    val timestamp: Long?
+    val timestamp: Long?,
 ) : Serializable

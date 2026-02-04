@@ -11,20 +11,6 @@ updates:
       interval: daily
     commit-message:
       prefix: "gradle"
-
-  - package-ecosystem: "gradle"
-    directory: "sosialhjelp-common-kotlin-utils/"
-    schedule:
-      interval: daily
-    commit-message:
-      prefix: "gradle"
-      
-  - package-ecosystem: "gradle"
-    directory: "sosialhjelp-common-selftest/"
-    schedule:
-      interval: daily
-    commit-message:
-      prefix: "gradle"
    
   - package-ecosystem: "github-actions"
     directory: "/"
