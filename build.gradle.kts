@@ -21,7 +21,7 @@ java {
 }
 
 ktlint {
-    this.version.set("1.3.15")
+    this.version.set("1.8.0")
 }
 
 allprojects {
@@ -38,7 +38,7 @@ subprojects {
     apply(plugin = "org.jlleitschuh.gradle.ktlint")
 
     ktlint {
-        this.version.set("1.3.15")
+        this.version.set("1.8.0")
     }
 
     dependencies {
