@@ -11,7 +11,7 @@ repositories {
 }
 
 plugins {
-    id("org.jetbrains.kotlin.jvm") version "2.3.0"
+    id("org.jetbrains.kotlin.jvm") version "2.3.21"
     id("org.jlleitschuh.gradle.ktlint") version "14.0.1"
 }
 
