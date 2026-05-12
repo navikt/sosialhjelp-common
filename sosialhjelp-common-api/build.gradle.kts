@@ -3,7 +3,8 @@ object Versions
 plugins {
     id("java")
     id("maven-publish")
-    id("org.jetbrains.kotlin.jvm") version "2.3.21"
+    id("org.jetbrains.kotlin.jvm")
+    id("org.jlleitschuh.gradle.ktlint")
 }
 
 kotlin {
