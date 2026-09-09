@@ -6,7 +6,7 @@
 version: 2
 updates:
   - package-ecosystem: "gradle"
-    directory: "sosialhjelp-common-api/"
+    directory: "/"
     schedule:
       interval: daily
     commit-message:
@@ -18,10 +18,3 @@ updates:
       interval: daily
     commit-message:
       prefix: "github-actions"
-
-  - package-ecosystem: "docker"
-    directory: "/"
-    schedule:
-      interval: daily
-    commit-message:
-      prefix: "[docker]"
