@@ -27,7 +27,6 @@ internal fun FoldAccumulator.apply(hendelse: FilformatDokumentasjonEtterspurt) {
             when (ref) {
                 is DokumentlagerFilreferanse -> DokumentRef.Dokumentlager(ref.id)
                 is SvarUtFilreferanse -> DokumentRef.SvarUt(ref.id, ref.nr)
-                else -> null
             }
         }
 

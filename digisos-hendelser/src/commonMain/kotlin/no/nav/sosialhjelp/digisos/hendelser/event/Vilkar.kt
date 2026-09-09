@@ -15,7 +15,7 @@ internal fun FoldAccumulator.apply(hendelse: FilformatVilkar) {
             FilformatVilkar.Status.ANNULLERT -> Oppgavestatus.ANNULLERT
             FilformatVilkar.Status.OPPFYLT -> Oppgavestatus.OPPFYLT
             FilformatVilkar.Status.IKKE_OPPFYLT -> Oppgavestatus.IKKE_OPPFYLT
-            FilformatVilkar.Status.UKJENT, null -> Oppgavestatus.RELEVANT
+            null -> Oppgavestatus.RELEVANT
         }
     val existing = vilkar.map { it.vilkar }.firstOrNull { it.referanse == referanse }
     val tidspunkt = hendelse.hendelsestidspunkt.toInstant()

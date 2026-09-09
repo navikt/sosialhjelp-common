@@ -6,7 +6,7 @@ import no.nav.sosialhjelp.digisos.hendelser.domain.hendelse.VedtakFattet
 import no.nav.sosialhjelp.filformat.digisos.soker.DokumentlagerFilreferanse
 import no.nav.sosialhjelp.filformat.digisos.soker.SvarUtFilreferanse
 import no.nav.sosialhjelp.filformat.digisos.soker.VedtakFattet.Utfall
-import no.nav.sosialhjelp.filformat.digisos.soker.VedtakFattet.Vedtaksfil
+import no.nav.sosialhjelp.filformat.digisos.soker.hendelse.Vedtaksfil
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue

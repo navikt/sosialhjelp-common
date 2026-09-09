@@ -23,7 +23,6 @@ import no.nav.sosialhjelp.filformat.digisos.soker.Rammevedtak
 import no.nav.sosialhjelp.filformat.digisos.soker.SaksStatus
 import no.nav.sosialhjelp.filformat.digisos.soker.SoknadsStatus
 import no.nav.sosialhjelp.filformat.digisos.soker.TildeltNavKontor
-import no.nav.sosialhjelp.filformat.digisos.soker.UkjentHendelse
 import no.nav.sosialhjelp.filformat.digisos.soker.Utbetaling
 import no.nav.sosialhjelp.filformat.digisos.soker.VedtakFattet
 import no.nav.sosialhjelp.filformat.digisos.soker.Vilkar
@@ -201,8 +200,6 @@ fun fold(
                 is Rammevedtak -> {
                     acc.apply(hendelse)
                 }
-
-                is UkjentHendelse -> { /* forward-compat: new hendelse types are silently ignored */ }
             }
         }
 

@@ -13,7 +13,6 @@ internal fun FoldAccumulator.apply(hendelse: no.nav.sosialhjelp.filformat.digiso
             FilformatSoknadsStatus.Status.UNDER_BEHANDLING -> no.nav.sosialhjelp.digisos.hendelser.domain.SoknadsStatus.UNDER_BEHANDLING
             FilformatSoknadsStatus.Status.FERDIGBEHANDLET -> no.nav.sosialhjelp.digisos.hendelser.domain.SoknadsStatus.FERDIGBEHANDLET
             FilformatSoknadsStatus.Status.BEHANDLES_IKKE -> no.nav.sosialhjelp.digisos.hendelser.domain.SoknadsStatus.BEHANDLES_IKKE
-            FilformatSoknadsStatus.Status.UKJENT -> status // ignore unknown status changes
         }
 
     val mottakerNavn: String? =

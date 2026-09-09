@@ -13,7 +13,7 @@ internal fun FoldAccumulator.apply(hendelse: FilformatSaksStatus) {
             FilformatSaksStatus.Status.IKKE_INNSYN -> SaksStatus.IKKE_INNSYN
             FilformatSaksStatus.Status.BEHANDLES_IKKE -> SaksStatus.BEHANDLES_IKKE
             FilformatSaksStatus.Status.FEILREGISTRERT -> SaksStatus.FEILREGISTRERT
-            FilformatSaksStatus.Status.UKJENT, null -> SaksStatus.UNDER_BEHANDLING
+            null -> SaksStatus.UNDER_BEHANDLING
         }
     val tittel = hendelse.tittel
     val existing = getSak(referanse)

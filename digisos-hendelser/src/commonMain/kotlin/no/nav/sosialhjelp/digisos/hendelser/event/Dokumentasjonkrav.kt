@@ -18,7 +18,7 @@ internal fun FoldAccumulator.apply(hendelse: FilformatDokumentasjonkrav) {
             FilformatDokumentasjonkrav.Status.ANNULLERT -> Oppgavestatus.ANNULLERT
             FilformatDokumentasjonkrav.Status.OPPFYLT -> Oppgavestatus.OPPFYLT
             FilformatDokumentasjonkrav.Status.IKKE_OPPFYLT -> Oppgavestatus.IKKE_OPPFYLT
-            FilformatDokumentasjonkrav.Status.UKJENT, null -> Oppgavestatus.RELEVANT
+            null -> Oppgavestatus.RELEVANT
         }
     val frist = hendelse.frist?.toLocalDate()
     val tidspunkt = hendelse.hendelsestidspunkt.toInstant()
