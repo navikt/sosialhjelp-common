@@ -1,27 +1,12 @@
-import org.jetbrains.kotlin.gradle.dsl.JvmTarget
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-
-object Versions {
-    // Test only
-    const val JUNIT_JUPITER = "5.9.2"
-}
-
-repositories {
-    mavenCentral()
-}
+import org.gradle.api.tasks.testing.logging.TestExceptionFormat
+import org.gradle.api.tasks.testing.logging.TestLogEvent
+import org.jlleitschuh.gradle.ktlint.KtlintExtension
 
 plugins {
-    id("org.jetbrains.kotlin.jvm") version "2.3.21"
-    id("org.jlleitschuh.gradle.ktlint") version "14.0.1"
-}
-
-java {
-    sourceCompatibility = JavaVersion.VERSION_21
-    targetCompatibility = JavaVersion.VERSION_21
-}
-
-ktlint {
-    this.version.set("1.8.0")
+    alias(libs.plugins.kotlin.jvm) apply false
+    alias(libs.plugins.kotlin.multiplatform) apply false
+    alias(libs.plugins.kotlin.serialization) apply false
+    alias(libs.plugins.ktlint) apply false
 }
 
 allprojects {
@@ -30,23 +15,31 @@ allprojects {
 
     repositories {
         mavenCentral()
+        maven {
+            url = uri("https://maven.pkg.github.com/navikt/*")
+            credentials {
+                username = providers.gradleProperty("githubUser").orNull
+                password = providers.gradleProperty("githubPassword").orNull
+            }
+        }
     }
 }
 
 subprojects {
-    apply(plugin = "org.jetbrains.kotlin.jvm")
     apply(plugin = "org.jlleitschuh.gradle.ktlint")
 
-    ktlint {
-        this.version.set("1.8.0")
+    extensions.configure<KtlintExtension> {
+        version.set("1.8.0")
     }
 
-    dependencies {
-//        Test
-        testImplementation("org.junit.jupiter:junit-jupiter:${Versions.JUNIT_JUPITER}")
-    }
-
-    tasks.withType<KotlinCompile> {
-        compilerOptions.jvmTarget.set(JvmTarget.JVM_21)
+    tasks.withType<Test> {
+        useJUnitPlatform()
+        testLogging {
+            events = setOf(TestLogEvent.SKIPPED, TestLogEvent.FAILED)
+            exceptionFormat = TestExceptionFormat.FULL
+            showCauses = true
+            showExceptions = true
+            showStackTraces = true
+        }
     }
 }

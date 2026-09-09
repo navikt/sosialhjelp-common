@@ -18,15 +18,23 @@ Interne henvendelser kan sendes via Slack i kanalen #team_digisos.
 
 Felles teknologi:
 * Kotlin
-* JDK 17
+* JDK 21
 * Gradle
 
 Krav:
-* JDK 17
+* JDK 21
 
 ### sosialhjelp-common-api
 Felles api-modeller for integrasjoner mot eksterne tjenester:
 - Fiks API
+
+### digisos-hendelser
+Kotlin Multiplatform-bibliotek (JVM og JS) som folder Digisos-hendelser til en lesemodell.
+Brukes av sosialhjelp-innsyn-api, sosialhjelp-modia-api og sosialhjelp-adminpanel.
+
+## Releases
+Maven- og npm-pakker publiseres når en GitHub Release publiseres. Release-taggen, uten
+eventuell `v`-prefiks, brukes som versjon.
 
 ### sosialhjelp-common-selftest
 Selftest-bibliotek. SelftestService gir en rapport over avhengigheter som implementerer `DependencyCheck`.

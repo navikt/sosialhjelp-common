@@ -1,10 +1,6 @@
-object Versions
-
 plugins {
-    id("java")
     id("maven-publish")
-    id("org.jetbrains.kotlin.jvm")
-    id("org.jlleitschuh.gradle.ktlint")
+    alias(libs.plugins.kotlin.jvm)
 }
 
 kotlin {
@@ -12,15 +8,19 @@ kotlin {
 }
 
 dependencies {
+    testImplementation(libs.junit.jupiter)
 }
+
+val githubUser: String? by project
+val githubPassword: String? by project
 
 publishing {
     repositories {
         maven {
             url = uri("https://maven.pkg.github.com/navikt/sosialhjelp-common")
             credentials {
-                username = System.getenv("GITHUB_USERNAME")
-                password = System.getenv("GITHUB_PASSWORD")
+                username = githubUser
+                password = githubPassword
             }
         }
     }
