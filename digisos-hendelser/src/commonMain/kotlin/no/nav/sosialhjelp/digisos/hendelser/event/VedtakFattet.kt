@@ -15,7 +15,6 @@ internal fun FoldAccumulator.apply(hendelse: FilformatVedtakFattet) {
         when (val ref = hendelse.vedtaksfil.referanse) {
             is DokumentlagerFilreferanse -> DokumentRef.Dokumentlager(ref.id)
             is SvarUtFilreferanse -> DokumentRef.SvarUt(ref.id, ref.nr)
-            else -> error("Ikke støttet filreferanse-type: ${ref.type}")
         }
 
     val utfall =
@@ -24,7 +23,7 @@ internal fun FoldAccumulator.apply(hendelse: FilformatVedtakFattet) {
             FilformatVedtakFattet.Utfall.DELVIS_INNVILGET -> UtfallVedtak.DELVIS_INNVILGET
             FilformatVedtakFattet.Utfall.AVSLATT -> UtfallVedtak.AVSLATT
             FilformatVedtakFattet.Utfall.AVVIST -> UtfallVedtak.AVVIST
-            FilformatVedtakFattet.Utfall.UKJENT, null -> null
+            null -> null
         }
 
     val saksReferanse = hendelse.saksreferanse.takeIf { it.isNotBlank() }

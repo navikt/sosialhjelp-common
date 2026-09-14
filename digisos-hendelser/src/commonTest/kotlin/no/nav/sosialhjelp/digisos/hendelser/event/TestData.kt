@@ -17,6 +17,8 @@ import no.nav.sosialhjelp.filformat.digisos.soker.TildeltNavKontor
 import no.nav.sosialhjelp.filformat.digisos.soker.Utbetaling
 import no.nav.sosialhjelp.filformat.digisos.soker.VedtakFattet
 import no.nav.sosialhjelp.filformat.digisos.soker.Vilkar
+import no.nav.sosialhjelp.filformat.digisos.soker.hendelse.Dokumenter
+import no.nav.sosialhjelp.filformat.digisos.soker.hendelse.Vedtaksfil
 import kotlin.time.Duration.Companion.days
 import kotlin.time.Duration.Companion.hours
 
@@ -94,7 +96,7 @@ fun vedtakFattet(
     VedtakFattet(
         hendelsestidspunkt = tidspunkt,
         saksreferanse = saksreferanse,
-        vedtaksfil = VedtakFattet.Vedtaksfil(referanse = DOKUMENTLAGER_1),
+        vedtaksfil = Vedtaksfil(referanse = DOKUMENTLAGER_1),
         utfall = utfall,
     )
 
@@ -106,7 +108,7 @@ fun dokumentasjonEtterspurt(
 ): DokumentasjonEtterspurt =
     DokumentasjonEtterspurt(
         hendelsestidspunkt = tidspunkt,
-        dokumenter = listOf(DokumentasjonEtterspurt.Dokument(dokumenttype = dokumenttype, innsendelsesfrist = innsendelsesfrist)),
+        dokumenter = listOf(Dokumenter(dokumenttype = dokumenttype, innsendelsesfrist = innsendelsesfrist)),
         forvaltningsbrev = forvaltningsbrevId?.let { Forvaltningsbrev(DokumentlagerFilreferanse(it)) },
     )
 

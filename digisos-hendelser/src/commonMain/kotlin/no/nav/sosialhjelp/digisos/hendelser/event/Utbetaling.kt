@@ -18,7 +18,7 @@ internal fun FoldAccumulator.apply(hendelse: FilformatUtbetaling) {
             FilformatUtbetaling.Status.UTBETALT -> UtbetalingsStatus.UTBETALT
             FilformatUtbetaling.Status.STOPPET -> UtbetalingsStatus.STOPPET
             FilformatUtbetaling.Status.ANNULLERT -> UtbetalingsStatus.ANNULLERT
-            FilformatUtbetaling.Status.UKJENT, null -> UtbetalingsStatus.PLANLAGT_UTBETALING
+            null -> UtbetalingsStatus.PLANLAGT_UTBETALING
         }
 
     val tidspunkt = hendelse.hendelsestidspunkt.toInstant()

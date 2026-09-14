@@ -2,12 +2,15 @@ package no.nav.sosialhjelp.digisos.hendelser.event
 
 import kotlinx.coroutines.test.runTest
 import kotlinx.datetime.Instant
+import kotlinx.serialization.SerializationException
 import no.nav.sosialhjelp.digisos.hendelser.domain.SoknadsStatus
 import no.nav.sosialhjelp.digisos.hendelser.fold.FoldResult
 import no.nav.sosialhjelp.digisos.hendelser.fold.SoknadMetadata
 import no.nav.sosialhjelp.digisos.hendelser.fold.fold
+import no.nav.sosialhjelp.digisos.hendelser.fold.foldJson
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertFailsWith
 import kotlin.test.assertNotNull
 import no.nav.sosialhjelp.filformat.digisos.soker.SoknadsStatus as FilformatSoknadsStatus
 
@@ -95,21 +98,15 @@ class FoldTest {
         }
 
     @Test
-    fun `unknown hendelse type is silently ignored`() =
+    fun `unknown hendelse type fails parsing`() =
         runTest {
-            val digisosSoker =
-                digisosSoker(
-                    no.nav.sosialhjelp.filformat.digisos.soker.UkjentHendelse(
-                        type = "fremtidigHendelsestype",
-                        hendelsestidspunkt = tidspunkt_1,
-                        raw = kotlinx.serialization.json.JsonObject(emptyMap()),
-                    ),
-                    soknadsStatus(FilformatSoknadsStatus.Status.MOTTATT, tidspunkt_2),
+            assertFailsWith<SerializationException> {
+                foldJson(
+                    digisosSokerJson =
+                        """{"version":"1.0.0","avsender":{"systemnavn":"test","systemversjon":"1.0"},"hendelser":[{"type":"fremtidigHendelsestype","hendelsestidspunkt":"$tidspunkt_1"}]}""",
+                    metadata = baseMetadata,
+                    paakrevdeVedleggJson = null,
                 )
-
-            val result = fold(digisosSoker, baseMetadata, emptyList())
-
-            // Should still process the known hendelse
-            assertEquals(SoknadsStatus.MOTTATT, result.soknad.status)
+            }
         }
 }
