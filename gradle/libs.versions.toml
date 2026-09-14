@@ -8,7 +8,7 @@ sosialhjelp-filformat-kmp = "1.20260909.60"
 mockk = "1.14.9"
 assertj = "3.27.7"
 js-joda-timezone = "2.23.0"
-junit-jupiter = "5.9.2"
+junit-jupiter = "6.1.3"
 
 [libraries]
 kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinx-serialization" }
