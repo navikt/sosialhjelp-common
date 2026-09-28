@@ -50,62 +50,62 @@ class FoldResult(
  */
 @JsExport
 class SoknadMetadata
-@JsExport.Ignore
-constructor(
-    val fiksDigisosId: String,
-    val kommunenummer: String,
-    val erPapirsoknad: Boolean,
-    @property:JsExport.Ignore val sistEndret: Instant,
-    /** When the søknad was sent, from OriginalSoknadNAV.timestampSendt; null for paper søknader. */
-    @property:JsExport.Ignore val timestampSendt: Instant?,
-    val navEksternRefId: String?,
-    /** Dokumentlager id of the original søknad document; null if unavailable. */
-    val originalSoknadDokumentlagerId: String?,
-    /** Dokumentlager id of the vedlegg metadata document */
-    val vedleggMetadataDokumentlagerId: String?,
-    val fagsystemNavn: String?,
-    val fagsystemVersjon: String?,
-    /** The initial mottaker enhetsnummer from søknad.mottaker. */
-    val mottakerEnhetsnummer: String?,
-    /** The initial mottaker enhetsnavn (consumer resolves via NORG if desired). */
-    val mottakerEnhetsnavn: String?,
-) {
-    val sistEndretEpochMillis: Double get() = sistEndret.toEpochMilliseconds().toDouble()
-    val timestampSendtEpochMillis: Double? get() = timestampSendt?.toEpochMilliseconds()?.toDouble()
-
-    /**
-     * JS/TypeScript factory, exported as `SoknadMetadata.create(...)`.
-     * Timestamps are epoch milliseconds, as `Instant` cannot cross the JS export boundary.
-     */
-    @JsName("create")
+    @JsExport.Ignore
     constructor(
-        fiksDigisosId: String,
-        kommunenummer: String,
-        erPapirsoknad: Boolean,
-        sistEndretEpochMillis: Double,
-        timestampSendtEpochMillis: Double?,
-        navEksternRefId: String?,
-        originalSoknadDokumentlagerId: String?,
-        vedleggMetadataDokumentlagerId: String?,
-        fagsystemNavn: String?,
-        fagsystemVersjon: String?,
-        mottakerEnhetsnummer: String?,
-        mottakerEnhetsnavn: String?,
-    ) : this(
-        fiksDigisosId = fiksDigisosId,
-        kommunenummer = kommunenummer,
-        erPapirsoknad = erPapirsoknad,
-        sistEndret = Instant.fromEpochMilliseconds(sistEndretEpochMillis.toLong()),
-        timestampSendt = timestampSendtEpochMillis?.let { Instant.fromEpochMilliseconds(it.toLong()) },
-        navEksternRefId = navEksternRefId,
-        originalSoknadDokumentlagerId = originalSoknadDokumentlagerId,
-        vedleggMetadataDokumentlagerId = vedleggMetadataDokumentlagerId,
-        fagsystemNavn = fagsystemNavn,
-        fagsystemVersjon = fagsystemVersjon,
-        mottakerEnhetsnummer = mottakerEnhetsnummer,
-        mottakerEnhetsnavn = mottakerEnhetsnavn,
-    )
-}
+        val fiksDigisosId: String,
+        val kommunenummer: String,
+        val erPapirsoknad: Boolean,
+        @property:JsExport.Ignore val sistEndret: Instant,
+        /** When the søknad was sent, from OriginalSoknadNAV.timestampSendt; null for paper søknader. */
+        @property:JsExport.Ignore val timestampSendt: Instant?,
+        val navEksternRefId: String?,
+        /** Dokumentlager id of the original søknad document; null if unavailable. */
+        val originalSoknadDokumentlagerId: String?,
+        /** Dokumentlager id of the vedlegg metadata document */
+        val vedleggMetadataDokumentlagerId: String?,
+        val fagsystemNavn: String?,
+        val fagsystemVersjon: String?,
+        /** The initial mottaker enhetsnummer from søknad.mottaker. */
+        val mottakerEnhetsnummer: String?,
+        /** The initial mottaker enhetsnavn (consumer resolves via NORG if desired). */
+        val mottakerEnhetsnavn: String?,
+    ) {
+        val sistEndretEpochMillis: Double get() = sistEndret.toEpochMilliseconds().toDouble()
+        val timestampSendtEpochMillis: Double? get() = timestampSendt?.toEpochMilliseconds()?.toDouble()
+
+        /**
+         * JS/TypeScript factory, exported as `SoknadMetadata.create(...)`.
+         * Timestamps are epoch milliseconds, as `Instant` cannot cross the JS export boundary.
+         */
+        @JsName("create")
+        constructor(
+            fiksDigisosId: String,
+            kommunenummer: String,
+            erPapirsoknad: Boolean,
+            sistEndretEpochMillis: Double,
+            timestampSendtEpochMillis: Double?,
+            navEksternRefId: String?,
+            originalSoknadDokumentlagerId: String?,
+            vedleggMetadataDokumentlagerId: String?,
+            fagsystemNavn: String?,
+            fagsystemVersjon: String?,
+            mottakerEnhetsnummer: String?,
+            mottakerEnhetsnavn: String?,
+        ) : this(
+            fiksDigisosId = fiksDigisosId,
+            kommunenummer = kommunenummer,
+            erPapirsoknad = erPapirsoknad,
+            sistEndret = Instant.fromEpochMilliseconds(sistEndretEpochMillis.toLong()),
+            timestampSendt = timestampSendtEpochMillis?.let { Instant.fromEpochMilliseconds(it.toLong()) },
+            navEksternRefId = navEksternRefId,
+            originalSoknadDokumentlagerId = originalSoknadDokumentlagerId,
+            vedleggMetadataDokumentlagerId = vedleggMetadataDokumentlagerId,
+            fagsystemNavn = fagsystemNavn,
+            fagsystemVersjon = fagsystemVersjon,
+            mottakerEnhetsnummer = mottakerEnhetsnummer,
+            mottakerEnhetsnavn = mottakerEnhetsnavn,
+        )
+    }
 
 /**
  * Fold a [DigisosSoker] hendelse stream into a [FoldResult].
