@@ -39,7 +39,7 @@ class FoldTest {
                     soknadsStatus(FilformatSoknadsStatus.Status.MOTTATT, tidspunkt_1),
                 )
 
-            val result: FoldResult = fold(digisosSoker, baseMetadata, emptyList())
+            val result: FoldResult = fold(digisosSoker, baseMetadata) { emptyList() }
 
             assertEquals(SoknadsStatus.MOTTATT, result.soknad.status)
             // SoknadSendt + SoknadsStatusEndret
@@ -56,7 +56,7 @@ class FoldTest {
                     soknadsStatus(FilformatSoknadsStatus.Status.UNDER_BEHANDLING, tidspunkt_2),
                 )
 
-            val result = fold(digisosSoker, baseMetadata, emptyList())
+            val result = fold(digisosSoker, baseMetadata) { emptyList() }
 
             // Result hendelser (excluding SoknadSendt) should be MOTTATT, UNDER_BEHANDLING, FERDIGBEHANDLET
             val statusHendelser =
@@ -81,7 +81,7 @@ class FoldTest {
                     ),
                 )
 
-            val result = fold(digisosSoker, baseMetadata, emptyList())
+            val result = fold(digisosSoker, baseMetadata) { emptyList() }
 
             assertEquals(SoknadsStatus.FERDIGBEHANDLET, result.soknad.status)
             assertEquals(SoknadsStatus.UNDER_BEHANDLING, result.soknad.avledetStatus)
@@ -90,7 +90,7 @@ class FoldTest {
     @Test
     fun `null digisosSoker produces empty aggregate`() =
         runTest {
-            val result = fold(null, baseMetadata, emptyList())
+            val result = fold(null, baseMetadata) { emptyList() }
 
             assertNotNull(result.soknad)
             // Only SoknadSendt from metadata seeding
