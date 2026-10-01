@@ -48,6 +48,7 @@ internal data class FoldAccumulator(
     val dokumentasjonkrav: MutableList<FlatDokumentasjonkrav> = mutableListOf(),
     val vilkar: MutableList<FlatVilkar> = mutableListOf(),
     val dokumentasjonEtterspurt: MutableList<DokumentasjonEtterspurt> = mutableListOf(),
+    var harMottattDokumentasjonEtterspurt: Boolean = false,
     val forvaltningsbrev: MutableList<DatertDokument> = mutableListOf(),
     var forelopigSvar: DatertDokument? = null,
     var originalSoknad: DokumentRef? = null,
@@ -150,9 +151,6 @@ internal data class FoldAccumulator(
         this.vilkar.removeAll { it.vilkar.referanse == vilkar.vilkar.referanse }
         this.vilkar.add(vilkar)
     }
-
-    fun harDokumentasjonEtterspurt(): Boolean =
-        dokumentasjonEtterspurt.any { it.kilde == DokumentasjonEtterspurt.Kilde.DOKUMENTASJON_ETTERSPURT }
 
     fun clearDokumentasjonEtterspurt() {
         dokumentasjonEtterspurt.clear()

@@ -1,5 +1,17 @@
 # Changelog
 
+## 2.1.0
+
+### Added
+
+- `fold` takes an optional `clock: Clock` parameter (default `Clock.System`) so the 30-day window for søknad vedlegg krav can be tested.
+
+### Fixed
+
+- Søknad `VedleggKreves` krav are no longer applied once a `DokumentasjonEtterspurt` hendelse has been received. Previously, a `DokumentasjonEtterspurt` with empty `dokumenter` brought back the søknad's krav within the 30-day window.
+- `paakrevdeVedleggProvider` is no longer called when a `DokumentasjonEtterspurt` hendelse exists.
+- The 30-day window for søknad krav is now counted in calendar days in Europe/Oslo, not exact milliseconds, matching legacy behaviour.
+
 ## 2.0.0
 
 ### Breaking changes

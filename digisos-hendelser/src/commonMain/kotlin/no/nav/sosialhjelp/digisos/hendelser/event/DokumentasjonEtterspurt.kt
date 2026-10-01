@@ -16,6 +16,7 @@ import no.nav.sosialhjelp.digisos.hendelser.domain.hendelse.DokumentasjonEttersp
 import no.nav.sosialhjelp.filformat.digisos.soker.DokumentasjonEtterspurt as FilformatDokumentasjonEtterspurt
 
 internal fun FoldAccumulator.apply(hendelse: FilformatDokumentasjonEtterspurt) {
+    harMottattDokumentasjonEtterspurt = true
     val prevCount =
         dokumentasjonEtterspurt.count {
             it.kilde == DokumentasjonEtterspurt.Kilde.DOKUMENTASJON_ETTERSPURT

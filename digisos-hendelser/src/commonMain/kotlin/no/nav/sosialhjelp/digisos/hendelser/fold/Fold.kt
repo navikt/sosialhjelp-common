@@ -3,6 +3,12 @@
 package no.nav.sosialhjelp.digisos.hendelser.fold
 
 import kotlinx.datetime.Instant
+import kotlinx.datetime.Clock
+import kotlinx.datetime.DateTimeUnit
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.minus
+import kotlinx.datetime.todayIn
+import kotlinx.datetime.toLocalDateTime
 import kotlinx.serialization.builtins.ListSerializer
 import kotlinx.serialization.json.Json
 import no.nav.sosialhjelp.digisos.hendelser.domain.DokumentRef
@@ -115,6 +121,7 @@ class SoknadMetadata
 fun fold(
     digisosSoker: DigisosSoker?,
     metadata: SoknadMetadata,
+    clock: Clock = Clock.System,
     paakrevdeVedleggProvider: () -> List<Vedlegg>,
 ): FoldResult {
     val acc =
@@ -204,8 +211,8 @@ fun fold(
         }
 
     if (timestampSendt != null &&
-        !acc.harDokumentasjonEtterspurt() &&
-        soknadSendtForMindreEnn30DagerSiden(timestampSendt)
+        !acc.harMottattDokumentasjonEtterspurt &&
+        soknadSendtForMindreEnn30DagerSiden(timestampSendt, clock)
     ) {
         val paakrevdeVedlegg = paakrevdeVedleggProvider()
         acc.applySoknadKrav(paakrevdeVedlegg, timestampSendt)
@@ -242,13 +249,14 @@ private fun mottattBeforeUnderBehandling(
         else -> 0
     }
 
-private fun soknadSendtForMindreEnn30DagerSiden(timestampSendt: Instant): Boolean {
-    val now =
-        kotlinx.datetime.Clock.System
-            .now()
-    val thirtyDays = 30L * 24 * 60 * 60 * 1000
-    return (now.toEpochMilliseconds() - timestampSendt.toEpochMilliseconds()) < thirtyDays
-}
+private val osloTimeZone = TimeZone.of("Europe/Oslo")
+
+private fun soknadSendtForMindreEnn30DagerSiden(
+    timestampSendt: Instant,
+    clock: Clock,
+): Boolean =
+    timestampSendt.toLocalDateTime(osloTimeZone).date >
+        clock.todayIn(osloTimeZone).minus(30, DateTimeUnit.DAY)
 
 // ---------------------------------------------------------------------------
 // JSON entrypoint
