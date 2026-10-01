@@ -6,11 +6,11 @@ import kotlinx.serialization.json.Json
 import no.nav.sosialhjelp.digisos.hendelser.domain.DokumentasjonEtterspurt
 import no.nav.sosialhjelp.digisos.hendelser.fold.SoknadMetadata
 import no.nav.sosialhjelp.digisos.hendelser.fold.fold
-import no.nav.sosialhjelp.filformat.digisos.soker.DokumentasjonEtterspurt as FilformatDokumentasjonEtterspurt
 import no.nav.sosialhjelp.filformat.vedlegg.Vedlegg
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
+import no.nav.sosialhjelp.filformat.digisos.soker.DokumentasjonEtterspurt as FilformatDokumentasjonEtterspurt
 
 class FoldSoknadKravTest {
     private val clock = FixedClock(Instant.parse("2026-10-01T12:00:00Z"))
@@ -18,25 +18,27 @@ class FoldSoknadKravTest {
 
     @Test
     fun `empty DokumentasjonEtterspurt after one with documents does not restore soknad krav`() {
-        val result = fold(
-            digisosSoker(
-                dokumentasjonEtterspurt(tidspunkt = "2026-09-30T10:00:00Z"),
-                emptyDokumentasjonEtterspurt("2026-09-30T11:00:00Z"),
-            ),
-            metadata(sentAt = "2026-09-30T12:00:00Z"),
-            clock,
-        ) { listOf(paakrevdVedlegg) }
+        val result =
+            fold(
+                digisosSoker(
+                    dokumentasjonEtterspurt(tidspunkt = "2026-09-30T10:00:00Z"),
+                    emptyDokumentasjonEtterspurt("2026-09-30T11:00:00Z"),
+                ),
+                metadata(sentAt = "2026-09-30T12:00:00Z"),
+                clock,
+            ) { listOf(paakrevdVedlegg) }
 
         assertTrue(result.soknad.dokumentasjonEtterspurt.isEmpty())
     }
 
     @Test
     fun `single empty DokumentasjonEtterspurt does not add soknad krav`() {
-        val result = fold(
-            digisosSoker(emptyDokumentasjonEtterspurt("2026-09-30T10:00:00Z")),
-            metadata(sentAt = "2026-09-30T12:00:00Z"),
-            clock,
-        ) { listOf(paakrevdVedlegg) }
+        val result =
+            fold(
+                digisosSoker(emptyDokumentasjonEtterspurt("2026-09-30T10:00:00Z")),
+                metadata(sentAt = "2026-09-30T12:00:00Z"),
+                clock,
+            ) { listOf(paakrevdVedlegg) }
 
         assertTrue(result.soknad.dokumentasjonEtterspurt.isEmpty())
     }
@@ -101,7 +103,9 @@ class FoldSoknadKravTest {
             mottakerEnhetsnavn = null,
         )
 
-    private class FixedClock(private val instant: Instant) : Clock {
+    private class FixedClock(
+        private val instant: Instant,
+    ) : Clock {
         override fun now(): Instant = instant
     }
 }

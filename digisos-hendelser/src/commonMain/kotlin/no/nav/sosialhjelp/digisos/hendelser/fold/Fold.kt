@@ -2,13 +2,13 @@
 
 package no.nav.sosialhjelp.digisos.hendelser.fold
 
-import kotlinx.datetime.Instant
 import kotlinx.datetime.Clock
 import kotlinx.datetime.DateTimeUnit
+import kotlinx.datetime.Instant
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.minus
-import kotlinx.datetime.todayIn
 import kotlinx.datetime.toLocalDateTime
+import kotlinx.datetime.todayIn
 import kotlinx.serialization.builtins.ListSerializer
 import kotlinx.serialization.json.Json
 import no.nav.sosialhjelp.digisos.hendelser.domain.DokumentRef
