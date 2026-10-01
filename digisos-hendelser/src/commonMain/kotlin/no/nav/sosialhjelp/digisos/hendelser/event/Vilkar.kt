@@ -25,6 +25,7 @@ internal fun FoldAccumulator.apply(hendelse: FilformatVilkar) {
             vilkar =
                 Vilkar(
                     referanse = referanse,
+                    saksReferanse = hendelse.saksreferanse,
                     tittel = hendelse.tittel,
                     beskrivelse = hendelse.beskrivelse,
                     status = status,

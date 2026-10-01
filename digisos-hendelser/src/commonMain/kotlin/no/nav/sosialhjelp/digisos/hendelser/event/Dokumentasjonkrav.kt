@@ -29,6 +29,7 @@ internal fun FoldAccumulator.apply(hendelse: FilformatDokumentasjonkrav) {
             krav =
                 Dokumentasjonkrav(
                     referanse = referanse,
+                    saksReferanse = hendelse.saksreferanse,
                     tittel = hendelse.tittel,
                     beskrivelse = hendelse.beskrivelse,
                     status = status,

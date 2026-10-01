@@ -61,20 +61,9 @@ internal data class FoldAccumulator(
         val vilkarBySak = vilkar.groupBy { it.saksReferanse }
 
         val kjenteReferanser = saker.mapTo(mutableSetOf()) { it.referanse }
-        // Dokumentasjonkrav/vilkår on a sak we've never heard of get a synthesized placeholder,
-        // matching what VedtakFattet.kt already does for vedtak with a real saksreferanse.
-        val syntetiskeReferanser =
-            (dokkravBySak.keys + vilkarBySak.keys)
-                .filterNotNull()
-                .filter { it !in kjenteReferanser }
-                .distinct()
-
-        val alleSaker =
-            saker.map { it.referanse } +
-                syntetiskeReferanser
 
         val nestedSaker =
-            alleSaker.distinct().map { referanse ->
+            kjenteReferanser.map { referanse ->
                 val eksisterende = saker.firstOrNull { it.referanse == referanse }
                 Sak(
                     referanse = referanse,
@@ -104,8 +93,16 @@ internal data class FoldAccumulator(
                     vedtakUtenSak = vedtakBySak[null].orEmpty().map { it.vedtak },
                     utbetalingerUtenSak =
                         utbetalinger
-                            .filter { it.saksReferanse == null || it.saksReferanse !in kjenteReferanser + syntetiskeReferanser }
+                            .filter { it.saksReferanse == null || it.saksReferanse !in kjenteReferanser }
                             .map { it.utbetaling },
+                    vilkarUtenSak =
+                        vilkar
+                            .filter { it.saksReferanse == null || it.saksReferanse !in kjenteReferanser }
+                            .map { it.vilkar },
+                    dokumentasjonkravUtenSak =
+                        dokumentasjonkrav
+                            .filter { it.saksReferanse == null || it.saksReferanse !in kjenteReferanser }
+                            .map { it.krav },
                     dokumentasjonEtterspurt = dokumentasjonEtterspurt.toList(),
                     forvaltningsbrev = forvaltningsbrev.toList(),
                     forelopigSvar = forelopigSvar,

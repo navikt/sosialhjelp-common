@@ -46,6 +46,10 @@ class Soknad
         val vedtakUtenSak: List<Vedtak>,
         /** Utbetalinger whose saksreferanse is blank or matches no known sak. */
         val utbetalingerUtenSak: List<Utbetaling>,
+        /** Vilkår whose saksreferanse is blank or matches no known sak. */
+        val vilkarUtenSak: List<Vilkar>,
+        /** Dokumentasjonskrav whose saksreferanse is blank or matches no known sak. */
+        val dokumentasjonkravUtenSak: List<Dokumentasjonkrav>,
         /**
          * Dokumentasjon etterspurt på søknadsnivå. From JsonDokumentasjonEtterspurt or the original
          * søknad's VedleggKreves fallback.
@@ -106,9 +110,9 @@ class NavKontorTildeling
 @JsExport
 class Sak(
     val referanse: String,
-    /** null when the sak was synthesized from a hendelse referencing an unknown sak */
+    /** null when the sak was synthesized by a VedtakFattet hendelse */
     val saksStatus: SaksStatus?,
-    /** null for a synthesized sak */
+    /** null for a sak synthesized by a VedtakFattet hendelse */
     val tittel: String?,
     val vedtak: List<Vedtak>,
     val utbetalinger: List<Utbetaling>,
@@ -188,18 +192,20 @@ class DokumentasjonEtterspurt
         enum class Kilde { DOKUMENTASJON_ETTERSPURT, SOKNAD_VEDLEGG_KREVES }
     }
 
-/** From a JsonDokumentasjonkrav hendelse. Always belongs to a [Sak]. */
+/** From a JsonDokumentasjonkrav hendelse. Nested under [Sak] when [saksReferanse] matches a known sak. */
 @JsExport
 class Dokumentasjonkrav
     @JsExport.Ignore
     constructor(
         val referanse: String,
+        /** The source event's saksreferanse; null when the requirement is not associated with a sak. */
+        val saksReferanse: String?,
         val tittel: String?,
         val beskrivelse: String?,
         val status: Oppgavestatus,
         @property:JsExport.Ignore val frist: LocalDate?,
         val gruppeId: String,
-        /** References into the parent [Sak.utbetalinger]. Many-to-many */
+        /** References to [Utbetaling] entries on the associated sak or the søknad. Many-to-many. */
         val utbetalingsReferanser: List<String>,
         @property:JsExport.Ignore val datoLagtTil: Instant,
     ) {
@@ -207,16 +213,18 @@ class Dokumentasjonkrav
         val datoLagtTilEpochMillis: Double get() = datoLagtTil.toEpochMilliseconds().toDouble()
     }
 
-/** From a JsonVilkar hendelse. Always belongs to a [Sak]. */
+/** From a JsonVilkar hendelse. Nested under [Sak] when [saksReferanse] matches a known sak. */
 @JsExport
 class Vilkar
     @JsExport.Ignore
     constructor(
         val referanse: String,
+        /** The source event's saksreferanse; null when the requirement is not associated with a sak. */
+        val saksReferanse: String?,
         val tittel: String?,
         val beskrivelse: String?,
         val status: Oppgavestatus,
-        /** References into the parent [Sak.utbetalinger]. Many-to-many */
+        /** References to [Utbetaling] entries on the associated sak or the søknad. Many-to-many. */
         val utbetalingsReferanser: List<String>,
         @property:JsExport.Ignore val datoLagtTil: Instant,
         @property:JsExport.Ignore val datoSistEndret: Instant,
