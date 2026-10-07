@@ -45,7 +45,7 @@ class SoknadSendt
     @JsExport.Ignore
     constructor(
         @property:JsExport.Ignore override val tidspunkt: Instant,
-        val mottaker: NavEnhet?,
+        val mottaker: NavEnhet,
         val soknadDokumentRef: DokumentRef?,
     ) : SoknadHendelse {
         override val tidspunktEpochMillis: Double get() = tidspunkt.toEpochMilliseconds().toDouble()
@@ -120,8 +120,7 @@ class DokumentasjonEtterspurt
     @JsExport.Ignore
     constructor(
         @property:JsExport.Ignore override val tidspunkt: Instant,
-        val harDokumenter: Boolean,
-        val forvaltningsbrevRef: DokumentRef?,
+        val forvaltningsbrevRef: DokumentRef,
     ) : SoknadHendelse {
         override val tidspunktEpochMillis: Double get() = tidspunkt.toEpochMilliseconds().toDouble()
     }

@@ -126,10 +126,10 @@ class Vedtak
     constructor(
         val dokument: DokumentRef,
         val utfall: UtfallVedtak?,
-        @property:JsExport.Ignore val dato: LocalDate?,
+        @property:JsExport.Ignore val dato: LocalDate,
     ) {
         /** ISO-8601 date, e.g. "2024-03-01". */
-        val datoIso: String? get() = dato?.toString()
+        val datoIso: String get() = dato.toString()
     }
 
 @JsExport

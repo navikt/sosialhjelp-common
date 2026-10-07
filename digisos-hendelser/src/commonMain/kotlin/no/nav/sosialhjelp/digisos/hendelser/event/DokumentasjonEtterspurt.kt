@@ -58,7 +58,6 @@ internal fun FoldAccumulator.apply(hendelse: FilformatDokumentasjonEtterspurt) {
         hendelser.add(
             DokumentasjonEtterspurtHendelse(
                 tidspunkt = tidspunkt,
-                harDokumenter = true,
                 forvaltningsbrevRef = forvaltningsbrevRef,
             ),
         )
