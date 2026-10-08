@@ -36,6 +36,7 @@ import no.nav.sosialhjelp.filformat.vedlegg.Vedlegg
 import kotlin.js.ExperimentalJsExport
 import kotlin.js.JsExport
 import kotlin.js.JsName
+import kotlin.uuid.Uuid
 import no.nav.sosialhjelp.digisos.hendelser.domain.SoknadsStatus as DomainSoknadsStatus
 
 /**
@@ -66,7 +67,7 @@ class SoknadMetadata
         @property:JsExport.Ignore val timestampSendt: Instant?,
         val navEksternRefId: String?,
         /** Dokumentlager id of the original søknad document; null if unavailable. */
-        val originalSoknadDokumentlagerId: String?,
+        val originalSoknadDokumentlagerId: Uuid?,
         /** Dokumentlager id of the vedlegg metadata document */
         val vedleggMetadataDokumentlagerId: String?,
         val fagsystemNavn: String?,
@@ -91,7 +92,7 @@ class SoknadMetadata
             sistEndretEpochMillis: Double,
             timestampSendtEpochMillis: Double?,
             navEksternRefId: String?,
-            originalSoknadDokumentlagerId: String?,
+            originalSoknadDokumentlagerId: Uuid?,
             vedleggMetadataDokumentlagerId: String?,
             fagsystemNavn: String?,
             fagsystemVersjon: String?,

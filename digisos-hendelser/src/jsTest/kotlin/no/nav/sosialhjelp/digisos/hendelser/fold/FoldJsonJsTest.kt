@@ -10,6 +10,7 @@ import kotlin.test.assertEquals
 import kotlin.test.assertIs
 import kotlin.test.assertNotNull
 import kotlin.test.assertTrue
+import kotlin.uuid.Uuid
 
 /**
  * Covers [foldJson] on Node — the entrypoint the npm package exposes.
@@ -27,7 +28,7 @@ class FoldJsonJsTest {
             sistEndretEpochMillis = 1_704_067_200_000.0,
             timestampSendtEpochMillis = 1_700_000_000_000.0,
             navEksternRefId = "ref-1",
-            originalSoknadDokumentlagerId = "dok-1",
+            originalSoknadDokumentlagerId = Uuid.random(),
             vedleggMetadataDokumentlagerId = null,
             fagsystemNavn = null,
             fagsystemVersjon = null,
@@ -42,7 +43,7 @@ class FoldJsonJsTest {
         assertEquals(SoknadsStatus.SENDT, result.soknad.status)
         assertEquals(1, result.hendelser.size)
         val sendt = assertIs<SoknadSendt>(result.hendelser[0])
-        assertEquals("1337", sendt.mottaker?.enhetsnummer)
+        assertEquals("1337", sendt.mottaker.enhetsnummer)
     }
 
     @Test
@@ -84,7 +85,7 @@ class FoldJsonJsTest {
                   "hendelsestidspunkt": "2024-01-02T10:00:00.000Z",
                   "saksreferanse": "sak1",
                   "utfall": "INNVILGET",
-                  "vedtaksfil": { "referanse": { "type": "dokumentlager", "id": "dok-2" } }
+                  "vedtaksfil": { "referanse": { "type": "dokumentlager", "id": "1f6bdf69-cafa-4ea5-8b3f-7012ee82893a" } }
                 }
               ]
             }
@@ -94,7 +95,7 @@ class FoldJsonJsTest {
 
         val vedtak = result.hendelser.filterIsInstance<VedtakFattet>().single()
         val ref = assertIs<DokumentRef.Dokumentlager>(vedtak.vedtakRef)
-        assertEquals("dok-2", ref.id)
+        assertEquals(Uuid.parse("1f6bdf69-cafa-4ea5-8b3f-7012ee82893a"), ref.id)
     }
 
     @Test

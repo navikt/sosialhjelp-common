@@ -10,6 +10,7 @@ import no.nav.sosialhjelp.filformat.digisos.soker.hendelse.Vedtaksfil
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
+import kotlin.uuid.Uuid
 import no.nav.sosialhjelp.filformat.digisos.soker.VedtakFattet as FilformatVedtakFattet
 
 class VedtakFattetTest {
@@ -39,7 +40,7 @@ class VedtakFattetTest {
 
         val ref = acc.vedtak[0].vedtak.dokument
         assertTrue(ref is DokumentRef.SvarUt)
-        assertEquals(SVARUTID, ref.id)
+        assertEquals(Uuid.parse(SVARUTID), ref.id)
         assertEquals(SVARUT_NR, ref.nr)
     }
 
@@ -69,7 +70,7 @@ class VedtakFattetTest {
             FilformatVedtakFattet(
                 hendelsestidspunkt = tidspunkt_1,
                 saksreferanse = "",
-                vedtaksfil = Vedtaksfil(referanse = DokumentlagerFilreferanse(id = DOKUMENTLAGERID_1)),
+                vedtaksfil = Vedtaksfil(referanse = DokumentlagerFilreferanse(id = DOKUMENTLAGERID_1.toString())),
             ),
         )
 

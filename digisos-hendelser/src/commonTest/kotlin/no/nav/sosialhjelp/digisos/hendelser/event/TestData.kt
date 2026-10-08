@@ -21,14 +21,15 @@ import no.nav.sosialhjelp.filformat.digisos.soker.hendelse.Dokumenter
 import no.nav.sosialhjelp.filformat.digisos.soker.hendelse.Vedtaksfil
 import kotlin.time.Duration.Companion.days
 import kotlin.time.Duration.Companion.hours
+import kotlin.uuid.Uuid
 
 // ---------------------------------------------------------------------------
 // Shared test constants
 // ---------------------------------------------------------------------------
 
-const val DOKUMENTLAGERID_1 = "dok-1"
-const val DOKUMENTLAGERID_2 = "dok-2"
-const val SVARUTID = "svut-42"
+val DOKUMENTLAGERID_1 = Uuid.random()
+val DOKUMENTLAGERID_2 = Uuid.random()
+const val SVARUTID = "9bff1510-6f3f-48b6-80f0-e788ffad53df"
 const val SVARUT_NR = 42
 
 const val NAVKONTOR = "1337"
@@ -57,8 +58,8 @@ val innsendelsesfrist: String = (now + 7.days).toString()
 
 val avsender = Avsender(systemnavn = "testSystem", systemversjon = "1.0")
 
-val DOKUMENTLAGER_1 = DokumentlagerFilreferanse(id = DOKUMENTLAGERID_1)
-val DOKUMENTLAGER_2 = DokumentlagerFilreferanse(id = DOKUMENTLAGERID_2)
+val DOKUMENTLAGER_1 = DokumentlagerFilreferanse(id = DOKUMENTLAGERID_1.toString())
+val DOKUMENTLAGER_2 = DokumentlagerFilreferanse(id = DOKUMENTLAGERID_2.toString())
 val SVARUT_1 = SvarUtFilreferanse(id = SVARUTID, nr = SVARUT_NR)
 
 // ---------------------------------------------------------------------------
@@ -103,13 +104,13 @@ fun vedtakFattet(
 fun dokumentasjonEtterspurt(
     dokumenttype: String = DOKUMENTTYPE,
     innsendelsesfrist: String = no.nav.sosialhjelp.digisos.hendelser.event.innsendelsesfrist,
-    forvaltningsbrevId: String? = DOKUMENTLAGERID_1,
+    forvaltningsbrevId: Uuid? = DOKUMENTLAGERID_1,
     tidspunkt: String = tidspunkt_1,
 ): DokumentasjonEtterspurt =
     DokumentasjonEtterspurt(
         hendelsestidspunkt = tidspunkt,
         dokumenter = listOf(Dokumenter(dokumenttype = dokumenttype, innsendelsesfrist = innsendelsesfrist)),
-        forvaltningsbrev = forvaltningsbrevId?.let { Forvaltningsbrev(DokumentlagerFilreferanse(it)) },
+        forvaltningsbrev = forvaltningsbrevId?.let { Forvaltningsbrev(DokumentlagerFilreferanse(it.toString())) },
     )
 
 fun utbetaling(

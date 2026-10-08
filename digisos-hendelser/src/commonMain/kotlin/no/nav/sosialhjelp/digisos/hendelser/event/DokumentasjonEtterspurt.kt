@@ -12,6 +12,7 @@ import no.nav.sosialhjelp.digisos.hendelser.domain.toInstant
 import no.nav.sosialhjelp.digisos.hendelser.domain.toLocalDate
 import no.nav.sosialhjelp.filformat.digisos.soker.DokumentlagerFilreferanse
 import no.nav.sosialhjelp.filformat.digisos.soker.SvarUtFilreferanse
+import kotlin.uuid.Uuid
 import no.nav.sosialhjelp.digisos.hendelser.domain.hendelse.DokumentasjonEtterspurt as DokumentasjonEtterspurtHendelse
 import no.nav.sosialhjelp.filformat.digisos.soker.DokumentasjonEtterspurt as FilformatDokumentasjonEtterspurt
 
@@ -26,8 +27,8 @@ internal fun FoldAccumulator.apply(hendelse: FilformatDokumentasjonEtterspurt) {
     val forvaltningsbrevRef: DokumentRef? =
         hendelse.forvaltningsbrev?.referanse?.let { ref ->
             when (ref) {
-                is DokumentlagerFilreferanse -> DokumentRef.Dokumentlager(ref.id)
-                is SvarUtFilreferanse -> DokumentRef.SvarUt(ref.id, ref.nr)
+                is DokumentlagerFilreferanse -> DokumentRef.Dokumentlager(Uuid.parse(ref.id))
+                is SvarUtFilreferanse -> DokumentRef.SvarUt(Uuid.parse(ref.id), ref.nr)
             }
         }
 

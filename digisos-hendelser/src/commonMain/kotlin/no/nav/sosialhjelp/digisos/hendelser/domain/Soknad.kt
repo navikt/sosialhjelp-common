@@ -242,7 +242,9 @@ fun gruppeIdForFrist(frist: LocalDate?): String = sha256(frist.toString())
 
 /** Opaque reference to a document in Fiks */
 @JsExport
-sealed class DokumentRef(val id: Uuid) {
+sealed class DokumentRef(
+    val id: Uuid,
+) {
     class Dokumentlager(
         id: Uuid,
     ) : DokumentRef(id)
