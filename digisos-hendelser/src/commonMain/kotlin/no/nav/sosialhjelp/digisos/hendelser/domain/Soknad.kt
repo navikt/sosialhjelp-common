@@ -6,6 +6,7 @@ import kotlinx.datetime.Instant
 import kotlinx.datetime.LocalDate
 import kotlin.js.ExperimentalJsExport
 import kotlin.js.JsExport
+import kotlin.uuid.Uuid
 
 /**
  * Immutable folded state of a søknad.
@@ -241,15 +242,15 @@ fun gruppeIdForFrist(frist: LocalDate?): String = sha256(frist.toString())
 
 /** Opaque reference to a document in Fiks */
 @JsExport
-sealed interface DokumentRef {
+sealed class DokumentRef(val id: Uuid) {
     class Dokumentlager(
-        val id: String,
-    ) : DokumentRef
+        id: Uuid,
+    ) : DokumentRef(id)
 
     class SvarUt(
-        val id: String,
+        id: Uuid,
         val nr: Int,
-    ) : DokumentRef
+    ) : DokumentRef(id)
 }
 
 @JsExport

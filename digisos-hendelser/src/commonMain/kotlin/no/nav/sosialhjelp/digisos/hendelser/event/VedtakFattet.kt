@@ -8,13 +8,14 @@ import no.nav.sosialhjelp.digisos.hendelser.domain.toInstant
 import no.nav.sosialhjelp.digisos.hendelser.domain.toLocalDateOslo
 import no.nav.sosialhjelp.filformat.digisos.soker.DokumentlagerFilreferanse
 import no.nav.sosialhjelp.filformat.digisos.soker.SvarUtFilreferanse
+import kotlin.uuid.Uuid
 import no.nav.sosialhjelp.filformat.digisos.soker.VedtakFattet as FilformatVedtakFattet
 
 internal fun FoldAccumulator.apply(hendelse: FilformatVedtakFattet) {
     val dokumentRef: DokumentRef =
         when (val ref = hendelse.vedtaksfil.referanse) {
-            is DokumentlagerFilreferanse -> DokumentRef.Dokumentlager(ref.id)
-            is SvarUtFilreferanse -> DokumentRef.SvarUt(ref.id, ref.nr)
+            is DokumentlagerFilreferanse -> DokumentRef.Dokumentlager(Uuid.parse(ref.id))
+            is SvarUtFilreferanse -> DokumentRef.SvarUt(Uuid.parse(ref.id), ref.nr)
         }
 
     val utfall =
