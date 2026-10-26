@@ -1,9 +1,9 @@
 package no.nav.sosialhjelp.digisos.hendelser.domain
 
-import kotlinx.datetime.Instant
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
+import kotlin.time.Instant
 
 internal expect val OSLO: TimeZone
 

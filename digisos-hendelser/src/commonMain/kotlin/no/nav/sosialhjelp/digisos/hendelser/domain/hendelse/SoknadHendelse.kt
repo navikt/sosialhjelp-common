@@ -2,7 +2,6 @@
 
 package no.nav.sosialhjelp.digisos.hendelser.domain.hendelse
 
-import kotlinx.datetime.Instant
 import no.nav.sosialhjelp.digisos.hendelser.domain.DokumentRef
 import no.nav.sosialhjelp.digisos.hendelser.domain.NavEnhet
 import no.nav.sosialhjelp.digisos.hendelser.domain.SaksStatus
@@ -13,6 +12,7 @@ import no.nav.sosialhjelp.digisos.hendelser.domain.UtfallVedtak
 import kotlin.js.ExperimentalJsExport
 import kotlin.js.JsExport
 import kotlin.js.JsName
+import kotlin.time.Instant
 
 /**
  * Sealed hierarchy of typed domain events emitted during the fold of a søknad's hendelse stream.

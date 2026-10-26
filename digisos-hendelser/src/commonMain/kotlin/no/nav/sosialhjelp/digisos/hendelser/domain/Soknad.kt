@@ -2,10 +2,10 @@
 
 package no.nav.sosialhjelp.digisos.hendelser.domain
 
-import kotlinx.datetime.Instant
 import kotlinx.datetime.LocalDate
 import kotlin.js.ExperimentalJsExport
 import kotlin.js.JsExport
+import kotlin.time.Instant
 import kotlin.uuid.Uuid
 
 /**

@@ -1,7 +1,5 @@
 package no.nav.sosialhjelp.digisos.hendelser.event
 
-import kotlinx.datetime.Clock
-import kotlinx.datetime.Instant
 import no.nav.sosialhjelp.filformat.digisos.soker.Avsender
 import no.nav.sosialhjelp.filformat.digisos.soker.DigisosSoker
 import no.nav.sosialhjelp.filformat.digisos.soker.DokumentasjonEtterspurt
@@ -19,8 +17,10 @@ import no.nav.sosialhjelp.filformat.digisos.soker.VedtakFattet
 import no.nav.sosialhjelp.filformat.digisos.soker.Vilkar
 import no.nav.sosialhjelp.filformat.digisos.soker.hendelse.Dokumenter
 import no.nav.sosialhjelp.filformat.digisos.soker.hendelse.Vedtaksfil
+import kotlin.time.Clock
 import kotlin.time.Duration.Companion.days
 import kotlin.time.Duration.Companion.hours
+import kotlin.time.Instant
 import kotlin.uuid.Uuid
 
 // ---------------------------------------------------------------------------
