@@ -1,7 +1,6 @@
 package no.nav.sosialhjelp.digisos.hendelser.event
 
 import kotlinx.coroutines.test.runTest
-import kotlinx.datetime.Instant
 import kotlinx.serialization.SerializationException
 import no.nav.sosialhjelp.digisos.hendelser.domain.SoknadsStatus
 import no.nav.sosialhjelp.digisos.hendelser.fold.FoldResult
@@ -12,6 +11,7 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
 import kotlin.test.assertNotNull
+import kotlin.time.Instant
 import no.nav.sosialhjelp.filformat.digisos.soker.SoknadsStatus as FilformatSoknadsStatus
 
 class FoldTest {
