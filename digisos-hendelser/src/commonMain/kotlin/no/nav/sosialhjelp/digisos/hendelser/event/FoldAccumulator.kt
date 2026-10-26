@@ -1,6 +1,5 @@
 package no.nav.sosialhjelp.digisos.hendelser.event
 
-import kotlinx.datetime.Instant
 import no.nav.sosialhjelp.digisos.hendelser.domain.DatertDokument
 import no.nav.sosialhjelp.digisos.hendelser.domain.DokumentRef
 import no.nav.sosialhjelp.digisos.hendelser.domain.DokumentasjonEtterspurt
@@ -17,6 +16,7 @@ import no.nav.sosialhjelp.digisos.hendelser.domain.Vedtak
 import no.nav.sosialhjelp.digisos.hendelser.domain.Vilkar
 import no.nav.sosialhjelp.digisos.hendelser.domain.hendelse.SoknadHendelse
 import no.nav.sosialhjelp.digisos.hendelser.fold.FoldResult
+import kotlin.time.Instant
 
 /**
  * Mutable accumulator used during the fold of a søknad's hendelse stream.

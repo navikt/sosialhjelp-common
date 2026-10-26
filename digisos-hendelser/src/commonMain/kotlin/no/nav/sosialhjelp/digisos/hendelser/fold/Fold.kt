@@ -2,9 +2,7 @@
 
 package no.nav.sosialhjelp.digisos.hendelser.fold
 
-import kotlinx.datetime.Clock
 import kotlinx.datetime.DateTimeUnit
-import kotlinx.datetime.Instant
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.minus
 import kotlinx.datetime.toLocalDateTime
@@ -36,6 +34,9 @@ import no.nav.sosialhjelp.filformat.vedlegg.Vedlegg
 import kotlin.js.ExperimentalJsExport
 import kotlin.js.JsExport
 import kotlin.js.JsName
+import kotlin.time.Clock
+import kotlin.time.Clock.System
+import kotlin.time.Instant
 import kotlin.uuid.Uuid
 import no.nav.sosialhjelp.digisos.hendelser.domain.SoknadsStatus as DomainSoknadsStatus
 
@@ -122,7 +123,7 @@ class SoknadMetadata
 fun fold(
     digisosSoker: DigisosSoker?,
     metadata: SoknadMetadata,
-    clock: Clock = Clock.System,
+    clock: kotlin.time.Clock = System,
     paakrevdeVedleggProvider: () -> List<Vedlegg>,
 ): FoldResult {
     val acc =

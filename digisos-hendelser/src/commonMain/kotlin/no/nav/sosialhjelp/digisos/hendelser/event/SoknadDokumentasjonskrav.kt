@@ -1,12 +1,12 @@
 package no.nav.sosialhjelp.digisos.hendelser.event
 
-import kotlinx.datetime.Instant
 import no.nav.sosialhjelp.digisos.hendelser.domain.DokumentasjonEtterspurt
 import no.nav.sosialhjelp.digisos.hendelser.domain.Oppgavestatus
 import no.nav.sosialhjelp.digisos.hendelser.domain.gruppeIdForFrist
 import no.nav.sosialhjelp.digisos.hendelser.domain.hendelse.SoknadKravLagtTil
 import no.nav.sosialhjelp.digisos.hendelser.domain.sha256
 import no.nav.sosialhjelp.filformat.vedlegg.Vedlegg
+import kotlin.time.Instant
 
 internal fun FoldAccumulator.applySoknadKrav(
     paakrevdeVedlegg: List<Vedlegg>,
